@@ -7,4 +7,5 @@
     <string name="_1_pending_request">1 pending request</string>
     <string name="sample_timestamp">Watermark embedded at 10:00 PM May 12, 2021</string>
     <string name="sent_requests">Sent Requests</string>
+    <string name="from_album">From Album</string>
 </resources>
