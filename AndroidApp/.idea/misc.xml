@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_main.xml" value="0.17777777777777778" />
+        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.275" />
+        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.275" />
+        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_scanningcode.xml" value="0.275" />
+        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_main.xml" value="0.45" />
       </map>
     </option>
   </component>

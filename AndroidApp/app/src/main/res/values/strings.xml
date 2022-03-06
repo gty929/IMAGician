@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">IMAGician</string>
+    <string name="examine_watermark">Examine Watermark</string>
+    <string name="new_watermark">New Watermark</string>
 </resources>
