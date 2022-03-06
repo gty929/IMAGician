@@ -3,4 +3,8 @@
     <string name="examine_watermark">Examine Watermark</string>
     <string name="new_watermark">New Watermark</string>
     <string name="my_creations">My Creations</string>
+    <string name="image_bmp">image.bmp</string>
+    <string name="_1_pending_request">1 pending request</string>
+    <string name="sample_timestamp">Watermark embedded at 10:00 PM May 12, 2021</string>
+    <string name="sent_requests">Sent Requests</string>
 </resources>
