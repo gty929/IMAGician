@@ -11,4 +11,10 @@
     <string name="image_to_encode_or_decode">Image to encode or decode</string>
     <string name="image_processing">Image Processing</string>
     <string name="image_filename_jpg">Image_filename.jpg</string>
+    <string name="choose_fields_to_include">Choose Fields to Include</string>
+    <string name="filename">Filename:</string>
+    <string name="name_the_image">Name the image</string>
+    <string name="icon">Icon</string>
+    <string name="message">Message:</string>
+    <string name="message_text">this is the message. this is the message. this is the message.</string>
 </resources>
