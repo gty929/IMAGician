@@ -8,4 +8,7 @@
     <string name="sample_timestamp">Watermark embedded at 10:00 PM May 12, 2021</string>
     <string name="sent_requests">Sent Requests</string>
     <string name="from_album">From Album</string>
+    <string name="image_to_encode_or_decode">Image to encode or decode</string>
+    <string name="image_processing">Image Processing</string>
+    <string name="image_filename_jpg">Image_filename.jpg</string>
 </resources>
