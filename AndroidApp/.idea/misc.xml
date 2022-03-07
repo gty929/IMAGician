@@ -19,15 +19,20 @@
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_import_image.xml" value="0.15830800405268491" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_input_info.xml" value="0.33" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_main.xml" value="0.17777777777777778" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_processing.xml" value="0.15830800405268491" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_processing.xml" value="0.1884498480243161" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_req_detail.xml" value="0.18819655521783182" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_request_status.xml" value="0.33" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_upload_history.xml" value="0.33" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/listitem_main.xml" value="0.33" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_request_status2.xml" value="0.18819655521783182" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_upload_history.xml" value="0.3875" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/content_req_detail.xml" value="0.18819655521783182" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/fragment_first.xml" value="0.18819655521783182" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/listitem_history.xml" value="0.16445623342175067" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/listitem_main.xml" value="0.18819655521783182" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3148148148148148" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
