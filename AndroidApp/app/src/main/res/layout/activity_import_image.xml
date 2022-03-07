@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
@@ -87,10 +88,11 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="233dp"
         android:layout_height="73dp"
+        android:onClick="onClickAlbum"
         android:text="@string/from_album"
+        android:theme="@style/Button.White"
         app:cornerRadius="30dp"
         app:icon="@drawable/ic_album"
-        android:theme="@style/Button.White"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
