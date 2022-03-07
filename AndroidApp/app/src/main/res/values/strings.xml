@@ -13,6 +13,17 @@
     <string name="status_rejected">Request Rejected</string>
     <string name="status_granted">Usage Right Granted</string>
 
+    <string name="imageinfo">Image Info</string>
+    <string name="file_name">File Name</string>
+    <string name="fname">Michigan.jpg</string>
+    <string name="creator_name">Creator User Name</string>
+    <string name="cname">another_user</string>
+    <string name="phone">Phone Number</string>
+    <string name="pnumber">(734)546-9999</string>
+    <string name="timestamp">Time Stamp</string>
+    <string name="tstamp">Feb. 2, 15:40. 2022</string>
+    <string name="msg">Photo of Michigan winter</string>
+
     <string name="examine_watermark">Examine Watermark</string>
     <string name="new_watermark">New Watermark</string>
     <string name="my_creations">My Creations</string>

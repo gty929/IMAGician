@@ -7,7 +7,7 @@
     android:background="@color/blue">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/image_info_list"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@color/blue"
@@ -56,7 +56,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/image_info_list"
         app:layout_constraintVertical_bias="1.0">
 
         <ProgressBar

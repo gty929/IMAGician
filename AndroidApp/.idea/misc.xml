@@ -5,22 +5,15 @@
       <map>
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3148148148148148" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3148148148148148" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/shape_round_corner.xml" value="0.31574074074074077" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_import_image.xml" value="0.15830800405268491" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_input_info.xml" value="0.22" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_main.xml" value="0.17777777777777778" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.275" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_album.xml" value="0.4630208333333333" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_file.xml" value="0.4630208333333333" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.275" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_message.xml" value="0.4630208333333333" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_next.xml" value="0.4630208333333333" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_scanningcode.xml" value="0.275" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_send.xml" value="0.4630208333333333" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/shape_round_corner.xml" value="0.4630208333333333" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_import_image.xml" value="0.45" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_input_info.xml" value="0.45" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_new_watermark.xml" value="0.446875" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_processing.xml" value="0.375" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/listitem_creations.xml" value="0.446875" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_processing.xml" value="0.15830800405268491" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_request_status.xml" value="0.33" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_upload_history.xml" value="0.15830800405268491" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/listitem_main.xml" value="0.33" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3148148148148148" />
       </map>
     </option>
   </component>
