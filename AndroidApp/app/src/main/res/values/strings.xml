@@ -23,10 +23,17 @@
     <string name="timestamp">Time Stamp</string>
     <string name="tstamp">Feb. 2, 15:40. 2022</string>
     <string name="msg">Photo of Michigan winter Photo of Michigan winter Photo of Michigan winter Photo of Michigan winter Photo of Michigan winter</string>
+
     <string name="req_info">Request Info</string>
     <string name="req_sent_to">Request sent to:</string>
     <string name="req_msg">Thank you for sharing this beautiful photo! I’m writing a guide for tourists and I’m asking for the permission to use this photo in my article. It WILL be used to make profit and it will be published on twitter. Thank you!</string>
     <string name="req_status">REJECTED</string>
+
+    <string name="req_list">Request List</string>
+    <string name="req_by">Requested by:</string>
+    <string name="req_name">Ron</string>
+    <string name="req_msg_short">Thank you for sharing this beautiful photo! I’m...</string>
+    <string name="see_more">SEE MORE</string>
 
     <string name="examine_watermark">Examine Watermark</string>
     <string name="new_watermark">New Watermark</string>
