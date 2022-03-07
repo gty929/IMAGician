@@ -1,3 +1,20 @@
 <resources>
+    <!--
+        List of defined strings
+    -->
     <string name="app_name">IMAGician</string>
+    <string name="username">Luke_Skywalker</string>
+
+    <string name="send">Send</string>
+    <string name="confirm">Confirm</string>
+
+    <string name="ls_requests">Sent Requests</string>
+    <string name="ls_creations">My Creations</string>
+
+    <string name="op_examine">Examine Watermark</string>
+    <string name="op_create">Create Watermark</string>
+
+    <string name="status_pending">Request Pending</string>
+    <string name="status_rejected">Request Rejected</string>
+    <string name="status_granted">Usage Right Granted</string>
 </resources>
