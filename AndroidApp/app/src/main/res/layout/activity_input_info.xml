@@ -7,22 +7,21 @@
     android:background="@color/blue">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/image_info_list"
+        android:id="@+id/image_preview"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
         android:background="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imagePreview"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="16dp"
             android:contentDescription="@string/image_to_encode_or_decode"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +43,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@+id/image_info_list"
+        app:layout_constraintTop_toBottomOf="@+id/image_preview"
         app:layout_constraintVertical_bias="1.0">
 
 
@@ -113,7 +112,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:contentDescription="@string/icon"
-                        app:srcCompat="@drawable/ic_message" />
+                        app:srcCompat="@drawable/ic_outline_message_24" />
 
                     <TextView
                         android:id="@+id/message_field"
