@@ -3,18 +3,32 @@
         List of defined strings
     -->
     <string name="app_name">IMAGician</string>
+
     <string name="username">Luke_Skywalker</string>
 
     <string name="send">Send</string>
     <string name="confirm">Confirm</string>
 
-    <string name="ls_requests">Sent Requests</string>
-    <string name="ls_creations">My Creations</string>
-
-    <string name="op_examine">Examine Watermark</string>
-    <string name="op_create">Create Watermark</string>
-
     <string name="status_pending">Request Pending</string>
     <string name="status_rejected">Request Rejected</string>
     <string name="status_granted">Usage Right Granted</string>
+
+    <string name="examine_watermark">Examine Watermark</string>
+    <string name="new_watermark">New Watermark</string>
+    <string name="my_creations">My Creations</string>
+    <string name="image_bmp">image.bmp</string>
+    <string name="_1_pending_request">1 pending request</string>
+    <string name="sample_timestamp">Watermark embedded at 10:00 PM May 12, 2021</string>
+    <string name="sent_requests">Sent Requests</string>
+    <string name="from_album">From Album</string>
+    <string name="image_to_encode_or_decode">Image to encode or decode</string>
+    <string name="image_processing">Image Processing</string>
+    <string name="image_filename_jpg">Image_filename.jpg</string>
+    <string name="choose_fields_to_include">Choose Fields to Include</string>
+    <string name="filename">Filename:</string>
+    <string name="name_the_image">Name the image</string>
+    <string name="icon">Icon</string>
+    <string name="message">Message:</string>
+    <string name="message_text">this is the message. this is the message. this is the message.</string>
+
 </resources>
