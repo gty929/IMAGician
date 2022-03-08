@@ -13,6 +13,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/slide</item>
+        <item name="android:windowExitTransition">@transition/explode</item>
     </style>
 
     <style name="Button.White" parent="ThemeOverlay.AppCompat">
@@ -31,4 +38,15 @@
     <style name="Theme.IMAGician.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.IMAGician.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.IMAGician.Transition" parent="android:Theme.Material">
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/slide</item>
+        <item name="android:windowExitTransition">@transition/slide</item>
+
+    </style>
+
 </resources>
