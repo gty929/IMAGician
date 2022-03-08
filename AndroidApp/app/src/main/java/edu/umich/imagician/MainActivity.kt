@@ -18,4 +18,5 @@ class MainActivity : AppCompatActivity() {
      * @param view
      */
     fun startImportImage(view: View?) = startActivity(Intent(this, ImportImageActivity::class.java))
+
 }

@@ -8,4 +8,5 @@ class ReqDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_req_detail)
     }
+
 }
