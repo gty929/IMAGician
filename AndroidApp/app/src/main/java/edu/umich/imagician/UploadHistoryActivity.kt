@@ -11,6 +11,7 @@ class UploadHistoryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_upload_history)
     }
 
+
     fun seeMoreInfo(view: View?) = startActivity(Intent(this, ReqDetailActivity::class.java))
 
 }

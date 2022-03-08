@@ -9,9 +9,9 @@
     <string name="send">Send</string>
     <string name="confirm">Confirm</string>
 
-    <string name="status_pending">Request Pending</string>
-    <string name="status_rejected">Request Rejected</string>
-    <string name="status_granted">Usage Right Granted</string>
+    <string name="status_pending">Pending</string>
+    <string name="status_rejected">Rejected</string>
+    <string name="status_granted">Granted</string>
 
     <string name="imageinfo">Image Info</string>
     <string name="file_name">File Name</string>
