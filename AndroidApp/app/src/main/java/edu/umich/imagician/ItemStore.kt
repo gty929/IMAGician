@@ -2,19 +2,17 @@ package edu.umich.imagician
 
 import android.content.Context
 import android.util.Log
-import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley.newRequestQueue
 import org.json.JSONArray
 import org.json.JSONException
-import org.json.JSONObject
 import kotlin.reflect.full.declaredMemberProperties
 
 object RequestStore {
-    val requests = arrayListOf<ImgRequest?>()
+    val requests = arrayListOf<WatermarkRequest?>()
 
-    private val nFields = ImgRequest::class.declaredMemberProperties.size
+    private val nFields = WatermarkRequest::class.declaredMemberProperties.size
 
     private lateinit var queue: RequestQueue
     private const val serverUrl = "https://35.192.222.203/"
@@ -22,22 +20,22 @@ object RequestStore {
     fun fakeRequests() {
         requests.clear()
         for (i in 0 until 3) {
-            requests.add(ImgRequest(
-                imgPost = ImgPost(filename = "fake.bmp"),
+            requests.add(WatermarkRequest(
+                watermarkPost = WatermarkPost(filename = "fake.bmp"),
                 timestamp = "yyyy/dd/mm, time",
                 status = "Granted"
             ))
         }
         for (i in 0 until 3) {
-            requests.add(ImgRequest(
-                imgPost = ImgPost(filename = "fake.bmp"),
+            requests.add(WatermarkRequest(
+                watermarkPost = WatermarkPost(filename = "fake.bmp"),
                 timestamp = "yyyy/dd/mm, time",
                 status = "Rejected"
             ))
         }
         for (i in 0 until 3) {
-            requests.add(ImgRequest(
-                imgPost = ImgPost(filename = "fake.bmp"),
+            requests.add(WatermarkRequest(
+                watermarkPost = WatermarkPost(filename = "fake.bmp"),
                 timestamp = "yyyy/dd/mm, time",
                 status = "Pending"
             ))
@@ -52,7 +50,7 @@ object RequestStore {
                 for (i in 0 until requestsReceived.length()) {
                     val requestEntry = requestsReceived[i] as JSONArray
                     if (requestEntry.length() == nFields) {
-                        requests.add(ImgRequest(
+                        requests.add(WatermarkRequest(
                             message = requestEntry[1].toString(),
                             timestamp = requestEntry[2].toString()))
                     } else {

@@ -58,6 +58,10 @@
             android:name=".InputInfoActivity"
             android:label="@string/username"
             android:parentActivityName=".ImportImageActivity" />
+        <activity
+            android:name=".ExportImageActivity"
+            android:label="@string/username"
+            android:parentActivityName=".InputInfoActivity" />
     </application>
 
 </manifest>

@@ -8,8 +8,8 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import edu.umich.imagician.databinding.ListitemRequestBinding
 
-class RequestListAdapter(context: Context, imgRequests: ArrayList<ImgRequest?>) :
-    ArrayAdapter<ImgRequest?>(context, 0, imgRequests) {
+class RequestListAdapter(context: Context, watermarkRequests: ArrayList<WatermarkRequest?>) :
+    ArrayAdapter<WatermarkRequest?>(context, 0, watermarkRequests) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val listItemView = (convertView?.tag /* reuse binding */ ?: run {
@@ -25,7 +25,7 @@ class RequestListAdapter(context: Context, imgRequests: ArrayList<ImgRequest?>) 
                 "Pending" -> R.color.pending
                 else -> R.color.rejected
             }
-            listItemView.textView.text = imgPost?.filename
+            listItemView.textView.text = watermarkPost?.filename
             listItemView.textView2.text = status
             listItemView.textView2.setTextColor(ContextCompat.getColor(context, color))
             listItemView.timestamp.text = "Usage right requested at ".plus(timestamp)

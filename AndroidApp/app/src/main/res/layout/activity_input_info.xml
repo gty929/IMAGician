@@ -86,7 +86,7 @@
                         app:srcCompat="@drawable/ic_file" />
 
                     <TextView
-                        android:id="@+id/filename_field"
+                        android:id="@+id/filenameField"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="5dp"
@@ -94,14 +94,12 @@
                         android:text="@string/filename" />
 
                     <EditText
-                        android:id="@+id/edit_file_name"
+                        android:id="@+id/editFileName"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:autofillHints="@string/name_the_image"
                         android:ems="14"
                         android:hint="@string/name_the_image"
-                        android:inputType="text"
-                        android:text="@string/image_filename_jpg" />
+                        android:inputType="text" />
                 </TableRow>
 
                 <TableRow
@@ -117,7 +115,7 @@
                         app:srcCompat="@drawable/ic_outline_message_24" />
 
                     <TextView
-                        android:id="@+id/message_field"
+                        android:id="@+id/messageField"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingStart="5dp"
@@ -125,13 +123,13 @@
                         android:text="@string/message" />
 
                     <EditText
-                        android:id="@+id/editTextTextMultiLine"
+                        android:id="@+id/editMessage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="14"
                         android:gravity="start|top"
                         android:inputType="textMultiLine"
-                        android:text="@string/message_text"
+                        android:hint="@string/include_anything_you_want_to_say"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                 </TableRow>
