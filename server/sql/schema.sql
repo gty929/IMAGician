@@ -2,19 +2,18 @@ PRAGMA foreign_keys = ON;
 
 CREATE TABLE users(
   uid INTEGER PRIMARY KEY AUTOINCREMENT,
-  username VARCHAR(20) NOT NULL,
+  username VARCHAR(20) UNIQUE NOT NULL,
   fullname VARCHAR(40),
   email VARCHAR(40) NOT NULL,
   password VARCHAR(256) NOT NULL,
   created DATETIME DEFAULT CURRENT_TIMESTAMP,
   last_login DATETIME DEFAULT CURRENT_TIMESTAMP,
-  is_deleted BIT NOT NULL,
-  PRIMARY KEY(username)
+  is_deleted BIT NOT NULL
 );
 
 CREATE TABLE images(
-  id INTEGER AUTOINCREMENT,
-  tag INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tag INTEGER NOT NULL,
   imgname VARCHAR(64) NOT NULL,
   owner VARCHAR(20) NOT NULL,
   is_anonymous BIT NOT NULL,
@@ -23,18 +22,17 @@ CREATE TABLE images(
   public_info TEXT NOT NULL,
   private_msg TEXT,
   is_encrypted BIT,
-  filename VARCHAR(64) NOT NULL,
+  filename VARCHAR(64),
   is_deleted BIT NOT NULL,
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE authorization(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  tag INTEGER NOT NULL,
+  imgid INTEGER NOT NULL,
   username VARCHAR(20) NOT NULL,
   status VARCHAR(20) NOT NULL,
   created DATETIME DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY(tag, username),
   FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
-  FOREIGN KEY(tag) REFERENCES images(tag) ON DELETE CASCADE
+  FOREIGN KEY(imgid) REFERENCES images(id) ON DELETE CASCADE
 );
