@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/chenxi.css') }}">
+    <title>imagician</title>
+</head>
+
+<body>
+
+    <div class="title">
+        <a class="logo" href="/">
+            <img src="{{ url_for('static',filename='images/logo.png') }}" alt="logo" style="width: 20%;">
+        </a>
+        <span class="links">
+            <a href="/explore/">Explore</a> | <a href="/users/{{logname}}/">{{logname}}</a>
+        </span>
+
+        <hr>
+    </div>
+    <div class="user">
+        <br>
+        <h1>Explore</h1>
+        <br>
+        {% for nf in not_following %}
+
+        <p>
+            <img src="{{nf.user_img_url}}" class="user_image" alt="user_image" style="width: 60px;">
+            <a href="/users/{{nf.username}}/">{{nf.username}}</a>
+        </p>
+        <form action="/following/?target={{ request.path }}" method="post" enctype="multipart/form-data">
+            <input type="submit" name="follow" value="follow" />
+            <input type="hidden" name="username" value="{{nf.username}}" />
+            <input type="hidden" name="operation" value="follow" />
+        </form>
+
+
+        <br>
+        {% endfor %}
+    </div>
+    <br>
+    <br>
+    <br>
+
+
+
+</body>
+
+</html>

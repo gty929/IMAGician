@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/chenxi.css') }}">
+    <title>imagician</title>
+</head>
+
+<body>
+
+    <div class="title">
+        <a class="logo" href="/">
+            <img src="{{ url_for('static',filename='images/logo.png') }}" alt="logo" style="width: 20%;">
+        </a>
+        <span class="links">
+            <a href="/accounts/login/">login</a>
+        </span>
+        <hr>
+    </div>
+
+    <div class="account">
+        <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
+            <label for="file">Photo</label>
+            <input type="file" name="file" required />
+            <label for="fullname">Name</label>
+            <input type="text" name="fullname" required />
+            <label for="username">Username</label>
+            <input type="text" name="username" required />
+            <label for="email">Email</label>
+            <input type="text" name="email" required />
+            <label for="password">Password</label>
+            <input type="password" name="password" required />
+            <input type="submit" name="signup" value="sign up" />
+            <input type="hidden" name="operation" value="create" />
+        </form>
+
+
+        <br>
+        Have an account?
+        <span class="links">
+            <a href="/accounts/login/">Log in</a>
+        </span>
+    </div>
+    <br>
+    <br>
+    <br>
+
+
+
+</body>
+
+</html>

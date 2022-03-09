@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/chenxi.css') }}">
+    <title>imagician</title>
+</head>
+
+<body>
+
+    <div class="title">
+        <a class="logo" href="/">
+            <img src="{{ url_for('static',filename='images/logo.png') }}" alt="logo" style="width: 20%;">
+        </a>
+        <span class="links">
+            <a href="/explore/">Explore</a> | <a href="/users/{{logname}}/">{{logname}}</a>
+        </span>
+
+        <hr>
+    </div>
+
+    <div class="user">
+        <img src="{{user_img_url}}" class="user_image" alt="user_image" style="width: 60px;">
+        <a href="/users/{{logname}}/">{{logname}}</a>
+    </div>
+
+    <div class="account">
+        <form action="/accounts/?target={{ request.path }}" method="post" enctype="multipart/form-data">
+            <p>Photo <input type="file" name="file" accept="image/*" /></p>
+            <p>Name <input type="text" name="fullname" value="{{fullname}}" required /></p>
+            <p>Email <input type="text" name="email" value="{{email}}" required /></p>
+
+            <input type="submit" name="update" value="submit" />
+            <input type="hidden" name="operation" value="edit_account" />
+        </form>
+
+
+        <br>
+        <span class="links">
+            <a href="/accounts/password/">Change password</a>
+            <br>
+            <br>
+            <a href="/accounts/delete/">Delete account</a>
+        </span>
+    </div>
+    <br>
+    <br>
+    <br>
+
+
+
+</body>
+
+</html>
