@@ -47,6 +47,7 @@
                 android:layout_gravity="start"
                 android:background="@color/white"
                 android:contentDescription="@string/examine_watermark"
+                android:onClick="startImportImageForExamine"
                 android:outlineAmbientShadowColor="#7E7E7E"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +81,7 @@
                 android:background="@color/white"
                 android:contentDescription="@string/new_watermark"
 
-                android:onClick="startImportImage"
+                android:onClick="startImportImageForCreation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

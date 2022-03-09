@@ -41,7 +41,19 @@ class MainActivity : AppCompatActivity() {
      *
      * @param view
      */
-    fun startImportImage(view: View?) = startActivity(Intent(this, ImportImageActivity::class.java), ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+    fun startImportImageForCreation(view: View?) {
+        val intent = Intent(this, ImportImageActivity::class.java)
+        intent.putExtra("isCreate", true)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+    }
+
+    fun startImportImageForExamine(view: View?) {
+        val intent = Intent(this, ImportImageActivity::class.java)
+        intent.putExtra("isCreate", false)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+    }
 
     fun onClickRequest(view: View?) {
         startActivity(Intent(this, RequestStatusActivity::class.java), ActivityOptions.makeSceneTransitionAnimation(this).toBundle())

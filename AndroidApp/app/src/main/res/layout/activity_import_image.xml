@@ -42,6 +42,7 @@
                 android:layout_gravity="start"
                 android:background="@color/white"
                 android:contentDescription="@string/examine_watermark"
+                android:onClick="onClickExamine"
                 android:outlineAmbientShadowColor="#7E7E7E"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -75,6 +76,7 @@
                 android:background="@color/white"
                 android:contentDescription="@string/new_watermark"
 
+                android:onClick="onClickCreate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -103,6 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:onClick="onClickCross"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

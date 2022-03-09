@@ -52,6 +52,7 @@
             android:layout_marginTop="68dp"
             android:onClick="onClickShare"
             android:text="@string/share"
+            android:textSize="18sp"
             android:theme="@style/Button.White"
             app:cornerRadius="30dp"
             app:icon="@drawable/ic_share"

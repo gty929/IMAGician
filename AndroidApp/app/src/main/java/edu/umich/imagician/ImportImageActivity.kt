@@ -12,6 +12,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -27,11 +28,13 @@ class ImportImageActivity: AppCompatActivity()  {
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
     private lateinit var forCameraResult: ActivityResultLauncher<Uri?>
     private lateinit var forPickedResult: ActivityResultLauncher<String>
-    var imageUri: Uri? = null
+    private var imageUri: Uri? = null
+    private var isCreate = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_import_image)
-
+        isCreate = intent.extras?.getBoolean("isCreate") ?: false
+        updateExamineAndCreateButtonColor()
 
         /* prompt user for access permissions. We will be using one of Android’s standard-activity
          ActivityResultContracts to request permissions to access the camera, mic, and external
@@ -122,7 +125,10 @@ class ImportImageActivity: AppCompatActivity()  {
                         }
                         imageUri = it
                     }
-                    val intent = Intent(this, InputInfoActivity::class.java)
+                    val intent = if (isCreate)
+                        Intent(this, InputInfoActivity::class.java)
+                    else Intent(this, ExamineActivity::class.java)
+
                     intent.putExtra("IMAGE_URI", imageUri)
                     startActivity(intent)
                 } else {
@@ -165,6 +171,25 @@ class ImportImageActivity: AppCompatActivity()  {
         forPickedResult.launch("*/*")
     }
 
+    fun onClickCross(view: View?) {
+        startActivity(Intent(this, MainActivity::class.java))
+        overridePendingTransition(0, 0)
+    }
+
+    fun onClickCreate(view: View?) {
+        isCreate = true
+        updateExamineAndCreateButtonColor()
+    }
+
+    fun onClickExamine(view: View?) {
+        isCreate = false
+        updateExamineAndCreateButtonColor()
+    }
+
+    private fun updateExamineAndCreateButtonColor() {
+        findViewById<ImageButton>(R.id.scanningCodeButton).alpha =  if (isCreate) 0.2F else 1F
+        findViewById<ImageButton>(R.id.newWatermarkButton).alpha = if (isCreate) 1F else 0.2F
+    }
     /*
     This function first searches for availability of external on-device Activity capable of
     cropping. If such an Activity exists, it creates an explicit intent to redirect the user to the
