@@ -59,6 +59,11 @@ def login():
         abort(403)
 
     flask.session['username'] = username
+    
+    connection.execute(
+        "UPDATE users SET last_login=datetime('now') WHERE username = ?",
+        (username, )
+    )
     context = {"Result": "Successfully logged in!"}
     context['username'] = username
     return flask.jsonify(**context)
