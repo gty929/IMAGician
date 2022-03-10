@@ -8,7 +8,7 @@ set -Eeuo pipefail
 if [ ! -f var/imagician.sqlite3 ]; then
     ./bin/IMAGician_db create
 fi
-
+source env/bin/activate
 export FLASK_ENV=development
 export FLASK_APP=imagician
 flask run --host 0.0.0.0 --port 8000
