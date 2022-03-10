@@ -3,7 +3,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE users(
   uid INTEGER PRIMARY KEY AUTOINCREMENT,
   username VARCHAR(20) UNIQUE NOT NULL,
-  fullname VARCHAR(40),
+  fullname VARCHAR(40) NOT NULL,
   email VARCHAR(40) NOT NULL,
   phone_number VARCHAR(40) NOT NULL,
   password VARCHAR(256) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE images(
   tag INTEGER NOT NULL,
   imgname VARCHAR(64) NOT NULL,
   owner VARCHAR(20) NOT NULL,
-  checksum INT NOT NULL,
+  checksum INTEGER NOT NULL,
   created DATETIME DEFAULT CURRENT_TIMESTAMP,
   fullname_public BIT NOT NULL,
   email_public BIT NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE images(
   time_public BIT NOT NULL,
   message TEXT NOT NULL,
   message_encrypted BIT NOT NULL,
-  filename VARCHAR(64),
+  file_path VARCHAR(64),
   is_deleted BIT NOT NULL,
   FOREIGN KEY(owner) REFERENCES users(username) ON DELETE CASCADE
 );
@@ -36,6 +36,7 @@ CREATE TABLE authorization(
   username VARCHAR(20) NOT NULL,
   status VARCHAR(20) NOT NULL,
   created DATETIME DEFAULT CURRENT_TIMESTAMP,
+  is_deleted BIT NOT NULL,
   FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE,
   FOREIGN KEY(imgid) REFERENCES images(id) ON DELETE CASCADE
 );
