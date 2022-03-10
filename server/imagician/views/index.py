@@ -68,7 +68,6 @@ def login():
     context['username'] = username
     return flask.jsonify(**context)
 
-
 @imagician.app.route('/accounts/logout/', methods=['POST'])
 def logout():
     """Show logout."""
@@ -77,7 +76,6 @@ def logout():
         flask.session.pop('username', None)
     context = {"Result": "Successfully logged out!"}
     return flask.jsonify(**context)
-
 
 @imagician.app.route('/accounts/create/', methods=['POST'])
 def create_account():
@@ -126,7 +124,6 @@ def create_account():
     flask.session['username'] = username
     return flask.jsonify(**context)
 
-
 @imagician.app.route('/accounts/delete/', methods=['POST'])
 def delete_account():
     """Delete an account."""
@@ -153,7 +150,6 @@ def delete_account():
     context["Original_username"] = logname
     flask.session.pop('username', None)
     return flask.jsonify(**context)
-
 
 @imagician.app.route('/accounts/edit/', methods=['POST'])
 def edit_account():
@@ -242,3 +238,15 @@ def download_file(name):
     return flask.send_from_directory(
         imagician.app.config['UPLOAD_FOLDER'], name, as_attachment=True
     )
+
+def encrypt_password(orig_pswd):
+    """Encrypt password."""
+    algorithm = 'sha512'
+    salt = uuid.uuid4().hex
+    hash_obj = hashlib.new(algorithm)
+    password_salted = salt + orig_pswd
+    hash_obj.update(password_salted.encode('utf-8'))
+    password_hash = hash_obj.hexdigest()
+    password_db_string = "$".join([algorithm, salt, password_hash])
+    # print(password_db_string)
+    return password_db_string
