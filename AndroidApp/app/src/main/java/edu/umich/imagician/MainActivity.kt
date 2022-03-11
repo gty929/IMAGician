@@ -10,6 +10,8 @@ import android.transition.TransitionInflater
 import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import edu.umich.imagician.RequestStore.fakeRequests
 import edu.umich.imagician.RequestStore.requests
 import edu.umich.imagician.databinding.ActivityMainBinding
@@ -31,6 +33,11 @@ class MainActivity : AppCompatActivity() {
         view.requests.adapter = requestListAdapter
 
         fakeRequests()
+
+        // start python plugin
+        initPython()
+
+
 //        scene1 = Scene.getSceneForLayout(view.root, R.layout.activity_request_status, this)
 
 //        trans = TransitionInflater.from(this).inflateTransition(R.transition.slide)
@@ -57,6 +64,12 @@ class MainActivity : AppCompatActivity() {
 
     fun onClickRequest(view: View?) {
         startActivity(Intent(this, RequestStatusActivity::class.java), ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+    }
+
+    private fun initPython(){
+        if (! Python.isStarted()) {
+            Python.start(AndroidPlatform(this));
+        }
     }
 
 }

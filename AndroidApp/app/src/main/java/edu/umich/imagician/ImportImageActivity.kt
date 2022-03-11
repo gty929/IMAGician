@@ -89,7 +89,7 @@ class ImportImageActivity: AppCompatActivity()  {
                         return
                     } else {
                         val inStream = contentResolver.openInputStream(it) ?: return
-                        imageUri = mediaStoreAlloc("image/jpeg")
+                        imageUri = mediaStoreAlloc("image/png")
                         imageUri?.let {
                             val outStream = contentResolver.openOutputStream(it) ?: return
                             val buffer = ByteArray(8192)
@@ -162,9 +162,11 @@ class ImportImageActivity: AppCompatActivity()  {
         When the cameraButton is clicked, first initialize viewState.imageUri with temporary
         storage space in the MediaStore for mediaType = "image/jpeg" and then launch the contract
         with viewState.imageUri as the launch argument.
+        yyzjason: changed to png
          */
+
     fun onClickCamera(view: View?) {
-            imageUri = mediaStoreAlloc("image/jpeg")
+            imageUri = mediaStoreAlloc("image/png")
             forCameraResult.launch(imageUri)
     }
     fun onClickAlbum(view: View?) {
