@@ -12,7 +12,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
 import edu.umich.imagician.utils.toast
 import java.io.ByteArrayOutputStream
@@ -27,7 +26,8 @@ class ExportImageActivity: AppCompatActivity() {
     private var imageUri: Uri? = null
     private var newImageUri: Uri? = null
     private lateinit var progressBar: ProgressBar
-    private var hasEmbedded = AtomicBoolean()
+    private var hasEncoded = AtomicBoolean()
+    private var hasHashed = AtomicBoolean()
     private var hasUploaded = AtomicBoolean()
     private val tag = SecureRandom().generateSeed(7).toString()
 
@@ -38,7 +38,6 @@ class ExportImageActivity: AppCompatActivity() {
         imageUri = intent.getParcelableExtra("IMAGE_URI")
         watermarkPostJsonStr = intent.extras?.getString("WATERMARK_POST_JSON_STR")
         progressBar = findViewById(R.id.progressBar)
-        progressBar.max = 100
 
         // progressing state
         setViewVisibilityByState(true)
@@ -66,10 +65,12 @@ class ExportImageActivity: AppCompatActivity() {
         Thread( Runnable {
             for (i in 1..99) {
                 try {
-                    val embedFlag = hasEmbedded.get()
-                    if (embedFlag && i < 50 || hasUploaded.get()) {
+                    val embedFlag = hasEncoded.get()
+                    val hashFlag = hasHashed.get()
+                    val uploadFlag = hasUploaded.get()
+                    if (embedFlag && i < 50 || hashFlag && i < 70 || uploadFlag) {
                         Thread.sleep(5) // update the progress bar faster
-                    } else if (!embedFlag && i > 50) {
+                    } else if (!embedFlag && i >= 50 || !hashFlag && i >= 70) {
                         Thread.sleep(100) // update the progress bar slower
                     } else {
                         Thread.sleep(40) // update the progress bar at normal rate
@@ -100,27 +101,34 @@ class ExportImageActivity: AppCompatActivity() {
         val handler: Handler = Handler()
         Thread( Runnable {
             // yyzjason: LSB encode
-            var iv:ImageView = findViewById<ImageView>(R.id.imagePreview)
-            val prev_img : Bitmap = iv.drawable.toBitmap()
-            val new_img: Bitmap = StenoAlgo().encode(prev_img,tag)
+//            var iv:ImageView = findViewById<ImageView>(R.id.imagePreview)
+//            val prev_img : Bitmap = iv.drawable.toBitmap() // tyg: don't rely on the view
+            runOnUiThread {
+                toast("embedding watermark with tag $tag")
+            }
+            val prevImg: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+            val newImg: Bitmap = StegnoAlgo.encode(prevImg,tag)
             val bytes = ByteArrayOutputStream()
-            new_img.compress(Bitmap.CompressFormat.PNG, 100, bytes)
-            val path = MediaStore.Images.Media.insertImage(contentResolver, new_img, null, null)
+            newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+            val path = MediaStore.Images.Media.insertImage(contentResolver, newImg, null, null)
             newImageUri = Uri.parse(path)
 
             // yyzjason: checksum of the encoded image
-            hasEmbedded.set(true)
+            hasEncoded.set(true)
 
             // yyzjason: update the new image
-            handler.post(Runnable {
-                iv.setImageBitmap(new_img)
-            })
+//            handler.post(Runnable {
+//                iv.setImageBitmap(new_img) // tyg: the user wouldn't notice
+//            })
 
-            val checksum = StenoAlgo().getChecksum(new_img)
-
+            runOnUiThread {
+                toast("calculating checksum")
+            }
+            val checksum = StegnoAlgo.getChecksum(newImg)
+            hasHashed.set(true)
             // send data here (all fields + checksum) [TO BE UPDATED]
             runOnUiThread {
-                toast("sending $watermarkPostJsonStr")
+                toast("sending $watermarkPostJsonStr with checksum $checksum", false)
             }
             try {
                 Thread.sleep(2000) // mock network delay

@@ -13,6 +13,7 @@ import java.io.File
  * Created by Tianyao Gu on 2022/1/17.
  */
 fun Context.toast(message: String, short: Boolean = true) {
+    Log.d("toasted", message)
     Toast.makeText(this, message, if (short) Toast.LENGTH_SHORT else Toast.LENGTH_LONG).show()
 }
 

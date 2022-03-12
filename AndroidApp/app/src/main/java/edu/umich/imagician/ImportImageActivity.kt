@@ -102,7 +102,17 @@ class ImportImageActivity: AppCompatActivity()  {
                             inStream.close()
                         }
                         Log.d("imageUri", imageUri.toString())
-                        doCrop(cropIntent)
+
+
+                        if (isCreate) {
+                            doCrop(cropIntent)
+                        } else {
+                            // no need to crop
+                            val intent = Intent(this, ExamineActivity::class.java)
+                            intent.putExtra("IMAGE_URI", imageUri)
+                            startActivity(intent)
+                        }
+
                     }
                 } ?: run { Log.d("Pick media", "failed") }
             })

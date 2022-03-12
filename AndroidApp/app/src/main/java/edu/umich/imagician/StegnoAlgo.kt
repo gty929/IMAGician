@@ -1,14 +1,13 @@
 package edu.umich.imagician
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Base64.DEFAULT
 import com.chaquo.python.PyObject
 import com.chaquo.python.Python
 import java.io.ByteArrayOutputStream
 import android.util.Base64
 
 
-class StenoAlgo {
+object StegnoAlgo {
     private val py: Python = Python.getInstance()
     private val pyo: PyObject = py.getModule("lsb")
     private val chunkSize = 5 /*TO BE DETERMINED*/
