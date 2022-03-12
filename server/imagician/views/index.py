@@ -582,7 +582,7 @@ def process_one_received_request():
     """_summary_
         Required in flask.request.form:
             'reqid': the id for the request
-            'action': 'PENDING', 'AUTHORIZED' or 'REJECTED'
+            'action': 'AUTHORIZED' or 'REJECTED'
     Returns:
         403 if the user not logged in or request doesn't belong to user
         404 if the request id doesn't exist
