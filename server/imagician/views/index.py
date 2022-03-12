@@ -229,6 +229,7 @@ def get_account_info():
     context["password"] = "[HIDDEN]"
     return flask.jsonify(**context)
 
+# TODO: Change this prototype: name will be the uuid of that folder name
 @imagician.app.route("/uploads/<path:name>")
 def download_file(name):
     """Download file."""
@@ -238,6 +239,243 @@ def download_file(name):
     return flask.send_from_directory(
         imagician.app.config['UPLOAD_FOLDER'], name, as_attachment=True
     )
+
+
+# TODO:
+@imagician.app.route("/images/post_tag/", methods=['POST'])
+def post_tag():
+    """_summary_
+        Required in flask.request.form:
+            'tag': tag of the image, integer
+            'imgname': name of the image, string
+            'checksum': sha256 of the image, string
+            'fullname_public': whether the fullname is public,
+            'email_public': whether the fullname is public,
+            'phone_public': whether the phone number is public,
+            'time_public': whether the time is public,
+            'message': the enclosed message,
+            'message_encrypted': whether the message is encrypted,
+        Optional in flask.request.files:
+            'file': the enclosed file, if there is one
+    Returns:
+        403 if the user not logged in
+        409 if the tag conflicts
+    """
+    pass
+
+# TODO: get image by tag
+@imagician.app.route("/images/get_tag/<int:tag>/", methods=['GET'])
+def get_tag(tag):
+    """_summary_
+
+    Args:
+        tag (_type_): _description_
+    Returns:
+        404 if the tag doesn't exists
+        else:
+            A json of
+                'id': the id of the image, integer
+                'imgname': the name of the image, string
+                'owner': the username of the creator of the image, string
+                'checksum': the checksum of the image, string
+                'fullname': if not public, then empty string
+                'email': if not public, then empty string
+                'phone': if not public, then empty string
+                'time': if not public, then empty string
+                'message': the message
+                'message_encrypted': whether the message is encrypted
+                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'authorized': if the user is logged in, and the user has been authorized
+    """
+    pass
+
+# TODO: get image by id
+@imagician.app.route("/images/get_id/<int:id>/", methods=['GET'])
+def get_id(id):
+    """_summary_
+
+    Args:
+        id (_type_): _description_
+    Returns:
+        404 if the id doesn't exists
+        else:
+            A json of
+                'id': the id of the image, integer
+                'imgname': the name of the image, string
+                'owner': the username of the creator of the image, string
+                'checksum': the checksum of the image, string
+                'fullname': if not public, then empty string
+                'email': if not public, then empty string
+                'phone': if not public, then empty string
+                'time': if not public, then empty string
+                'message': the message
+                'message_encrypted': whether the message is encrypted
+                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'authorized': if the user is logged in, and the user has been authorized
+    """
+    pass
+
+# TODO:
+@imagician.app.route("/images/my_creation/", methods=['GET'])
+def get_all_creation():
+    """_summary_
+    Returns:
+        403 if not logged in
+        else an array of json of:
+            'image': a json of 
+                'id': the id of the image, integer
+                'imgname': the name of the image, string
+                'owner': the username of the creator of the image, string
+                'checksum': the checksum of the image, string
+                'fullname': if not public, then empty string
+                'email': if not public, then empty string
+                'phone': if not public, then empty string
+                'time': if not public, then empty string
+                'message': the message
+                'message_encrypted': whether the message is encrypted
+                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+            'requests': an array of json of
+                'id': the id of the request
+                'imgid': the id of the image
+                'username': the requester
+                'message': the request message
+                'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                'created': the time of this request
+    """
+    pass
+
+@imagician.app.route("/images/my_creation/<int:imgid>/", methods=['GET'])
+def get_one_creation(imgid):
+    """_summary_
+    Returns:
+        403 if not logged in or if img with imgid doesn't belong to the user
+        404 if imgid doesn't exist
+        else a json of:
+            'image': a json of 
+                'id': the id of the image, integer
+                'imgname': the name of the image, string
+                'owner': the username of the creator of the image, string
+                'checksum': the checksum of the image, string
+                'fullname': if not public, then empty string
+                'email': if not public, then empty string
+                'phone': if not public, then empty string
+                'time': if not public, then empty string
+                'message': the message
+                'message_encrypted': whether the message is encrypted
+                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+            'requests': an array of json of
+                'id': the id of the request
+                'imgid': the id of the image
+                'username': the requester
+                'message': the request message
+                'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                'created': the time of this request
+    """
+    pass
+
+#TODO: 
+@imagician.app.route("/requests/received_request/<int:reqid>/", methods=['GET'])
+def get_one_received_request(reqid):
+    """_summary_
+    Returns:
+        403 if not logged in or if reqid is not sent to the user
+        404 if reqid doesn't exist
+        else a json of:
+            'image': a json of 
+                'id': the id of the image, integer
+                'imgname': the name of the image, string
+                'owner': the username of the creator of the image, string
+                'checksum': the checksum of the image, string
+                'fullname': if not public, then empty string
+                'email': if not public, then empty string
+                'phone': if not public, then empty string
+                'time': if not public, then empty string
+                'message': the message
+                'message_encrypted': whether the message is encrypted
+                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+            'request': a json of
+                'id': the id of the request
+                'imgid': the id of the image
+                'username': the requester
+                'message': the request message
+                'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                'created': the time of this request
+    """
+    pass
+
+#TODO: 
+@imagician.app.route("/requests/received_request/<int:reqid>/", methods=['POST'])
+def process_one_received_request(reqid):
+    """_summary_
+        Required in flask.request.form:
+            'action': 'PENDING', 'AUTHORIZED' or 'REJECTED'
+    Returns:
+        403 if the user not logged in or request doesn't belong to user
+        404 if the request id doesn't exist
+    """
+    pass
+
+#TODO: 
+@imagician.app.route("/requests/sent_request/", methods=['GET'])
+def get_all_sent_request():
+    """_summary_
+    Returns:
+        403 if not logged in
+        else an array of json of:
+            'image': a json of 
+                'id': the id of the image, integer
+                'imgname': the name of the image, string
+                'owner': the username of the creator of the image, string
+                'checksum': the checksum of the image, string
+                'fullname': if not public, then empty string
+                'email': if not public, then empty string
+                'phone': if not public, then empty string
+                'time': if not public, then empty string
+                'message': the message
+                'message_encrypted': whether the message is encrypted
+                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+            'request': a json of
+                'id': the id of the request
+                'imgid': the id of the image
+                'username': the requester
+                'message': the request message
+                'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                'created': the time of this request
+    """
+    pass
+
+# TODO: 
+@imagician.app.route("/requests/sent_request/<int:reqid>/", methods=['GET'])
+def get_one_sent_request(reqid):
+    """_summary_
+    Returns:
+        403 if not logged in, or reqid doesn't belong to the user
+        404 if the reqid doesn't exists
+        else a json of:
+            'image': a json of 
+                'id': the id of the image, integer
+                'imgname': the name of the image, string
+                'owner': the username of the creator of the image, string
+                'checksum': the checksum of the image, string
+                'fullname': if not public, then empty string
+                'email': if not public, then empty string
+                'phone': if not public, then empty string
+                'time': if not public, then empty string
+                'message': the message
+                'message_encrypted': whether the message is encrypted
+                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+            'request': a json of
+                'id': the id of the request
+                'imgid': the id of the image
+                'username': the requester
+                'message': the request message
+                'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                'created': the time of this request
+    """
+    pass
+
+
+
 
 def encrypt_password(orig_pswd):
     """Encrypt password."""
@@ -250,3 +488,4 @@ def encrypt_password(orig_pswd):
     password_db_string = "$".join([algorithm, salt, password_hash])
     # print(password_db_string)
     return password_db_string
+
