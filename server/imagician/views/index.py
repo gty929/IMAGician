@@ -315,6 +315,68 @@ def get_id(id):
     """
     pass
 
+def get_img_by_id_helper(id):
+    """Helper for getting all the information of an image with id
+                'id': the id of the image, integer
+                'imgname': the name of the image, string
+                'owner': the username of the creator of the image, string
+                'checksum': the checksum of the image, string
+                'fullname': if not public, then empty string
+                'email': if not public, then empty string
+                'phone': if not public, then empty string
+                'time': if not public, then empty string
+                'message': the message
+                'message_encrypted': whether the message is encrypted
+                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+    """
+    # Connect to database
+    connection = imagician.model.get_db()
+    
+    # Find user info
+    cur = connection.execute(
+        "SELECT DISTINCT * "
+        "FROM images "
+        "WHERE id = ?",
+        (id, )
+    )
+    result = cur.fetchall()
+    if len(result) != 1 or result[0]["is_deleted"]:
+        abort(404)
+    img_info = result[0]
+    result = {}
+    username = img_info['owner']
+    cur = connection.execute(
+        "SELECT DISTINCT * "
+        "FROM users "
+        "WHERE username = ?",
+        (username, )
+    )
+    user_info = cur[0]
+    result['id'] = img_info['id']
+    result['imgname'] = img_info['imgname']
+    result['owner'] = img_info['owner']
+    result['checksum'] = img_info['checksum']
+    if img_info['fullname_public']:
+        result['fullname'] = user_info['fullname']
+    else:
+        result['fullname'] =''
+    if img_info['email_public']:
+        result['email'] = user_info['email']
+    else:
+        result['email'] =''
+    if img_info['phone_public']:
+        result['phone'] = user_info['phone_number']
+    else:
+        result['phone'] =''
+    if img_info['time_public']:
+        result['time'] = img_info['created']
+    else:
+        result['time'] =''
+    result['message'] = img_info['message']
+    result['message_encrypted'] = img_info['message_encrypted']
+    result['file'] = img_info['file_path']
+    return result
+
 # TODO:
 @imagician.app.route("/images/my_creation/", methods=['GET'])
 def get_all_creation():
