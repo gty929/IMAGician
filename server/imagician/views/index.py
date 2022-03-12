@@ -1,5 +1,6 @@
 """imagician index (main) view.URLs include:/."""
 
+from cmath import inf
 import os
 import pathlib
 from unittest import result
@@ -338,15 +339,15 @@ def get_id(id):
         cur = connection.execute(
             "SELECT DISTINCT * "
             "FROM authorization "
-            "WHERE imgid = ? AND username = ?",
+            "WHERE imgid = ? AND username = ? AND is_deleted != 1",
             (id, username, )
         )
         authorizations = cur.fetchall()
-        if len(authorizations) > 0:
-            for authorization in authorizations:
-                if authorization['status'] == 'AUTHORIZED':
-                    result['authorized'] = True
-                    break
+        for authorization in authorizations:
+            if authorization['status'] == 'AUTHORIZED':
+                result['authorized'] = True
+                break
+            
     
     return flask.jsonify(**result)
 
@@ -412,9 +413,8 @@ def get_img_by_id_helper(id):
     result['file'] = img_info['file_path']
     return result
 
-# TODO:
 @imagician.app.route("/images/my_creation/", methods=['GET'])
-def get_all_creation():
+def get_all_creations():
     """_summary_
     Returns:
         403 if not logged in
@@ -439,7 +439,36 @@ def get_all_creation():
                 'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
                 'created': the time of this request
     """
-    pass
+    # If not logged in, reject
+    if 'username' not in flask.session:
+        abort(403)
+    username = flask.session['username']
+    connection = imagician.model.get_db()
+    
+    # Find user info
+    cur = connection.execute(
+        "SELECT DISTINCT id "
+        "FROM images "
+        "WHERE owner = ? "
+        "ORDER BY id DESC",
+        (username, )
+    )
+    images = cur.fetchall()
+    result = []
+    for img in images:
+        imgid = img['id']
+        info = {}
+        info['image'] = get_img_by_id_helper(imgid)
+        cur = connection.execute(
+            "SELECT DISTINCT * "
+            "FROM authorization "
+            "WHERE imgid = ? AND is_deleted != 1 "
+            "ORDER BY id DESC",
+            (imgid, )
+        )
+        info['requests'] = cur.fetchall()
+        result.append(info)
+    return flask.jsonify(**result)
 
 @imagician.app.route("/images/my_creation/<int:imgid>/", methods=['GET'])
 def get_one_creation(imgid):
@@ -468,9 +497,35 @@ def get_one_creation(imgid):
                 'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
                 'created': the time of this request
     """
-    pass
+    # If not logged in, reject
+    if 'username' not in flask.session:
+        abort(403)
+    username = flask.session['username']
+    connection = imagician.model.get_db()
+    
+    cur = connection.execute(
+        "SELECT DISTINCT id "
+        "FROM images "
+        "WHERE owner = ? AND id = ?"
+        "ORDER BY id DESC",
+        (username, imgid, )
+    )
 
-#TODO: 
+    images = cur.fetchall()
+    if len(images) != 1:
+        abort(404)
+    result = {}
+    result['image'] = get_img_by_id_helper(imgid)
+    cur = connection.execute(
+        "SELECT DISTINCT * "
+        "FROM authorization "
+        "WHERE imgid = ? AND is_deleted != 1 "
+        "ORDER BY id DESC",
+        (imgid, )
+    )
+    result['requests'] = cur.fetchall()
+    return flask.jsonify(**result)
+
 @imagician.app.route("/requests/received_request/<int:reqid>/", methods=['GET'])
 def get_one_received_request(reqid):
     """_summary_
@@ -498,7 +553,28 @@ def get_one_received_request(reqid):
                 'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
                 'created': the time of this request
     """
-    pass
+    # If not logged in, reject
+    if 'username' not in flask.session:
+        abort(403)
+    username = flask.session['username']
+    
+    connection = imagician.model.get_db()
+
+    cur = connection.execute(
+        "SELECT DISTINCT a.id, a.imgid, a.username, a.message, a.status, a. created "
+        "FROM authorization a, images m "
+        "WHERE a.id = ? AND m.owner = ? AND a.imgid = m.id"
+        "ORDER BY id DESC",
+        (reqid, username )
+    )
+    requests = cur.fetchall()
+    if len(requests) != 0:
+        abort(404)
+    request = requests[0]
+    result = {}
+    result['image'] = get_img_by_id_helper(request['imgid'])
+    result['request'] = request
+    return flask.jsonify(**result)
 
 #TODO: 
 @imagician.app.route("/requests/received_request/<int:reqid>/", methods=['POST'])
@@ -512,7 +588,6 @@ def process_one_received_request(reqid):
     """
     pass
 
-#TODO: 
 @imagician.app.route("/requests/sent_request/", methods=['GET'])
 def get_all_sent_request():
     """_summary_
@@ -539,9 +614,28 @@ def get_all_sent_request():
                 'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
                 'created': the time of this request
     """
-    pass
+    # If not logged in, reject
+    if 'username' not in flask.session:
+        abort(403)
+    username = flask.session['username']
+    
+    connection = imagician.model.get_db()
+    cur = connection.execute(
+        "SELECT DISTINCT * "
+        "FROM authorization "
+        "WHERE username = ? AND is_deleted != 1 "
+        "ORDER BY id DESC",
+        (username, )
+    )
+    requests = cur.fetchall()
+    result = []
+    for request in requests:
+        info = {}
+        info['image'] = get_img_by_id_helper(request['imgid'])
+        info['request'] = request
+        result.append(info)
+    return flask.jsonify(**result)
 
-# TODO: 
 @imagician.app.route("/requests/sent_request/<int:reqid>/", methods=['GET'])
 def get_one_sent_request(reqid):
     """_summary_
@@ -569,7 +663,28 @@ def get_one_sent_request(reqid):
                 'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
                 'created': the time of this request
     """
-    pass
+    # If not logged in, reject
+    if 'username' not in flask.session:
+        abort(403)
+    username = flask.session['username']
+    
+    connection = imagician.model.get_db()
+    cur = connection.execute(
+        "SELECT DISTINCT * "
+        "FROM authorization "
+        "WHERE username = ? AND id = ? AND is_deleted != 1 "
+        "ORDER BY id DESC",
+        (username, reqid, )
+    )
+    requests = cur.fetchall()
+    if len(requests) != 1:
+        abort(404)
+    request = requests[0]
+    info = {}
+    info['image'] = get_img_by_id_helper(request['imgid'])
+    info['request'] = request
+        
+    return flask.jsonify(**info)
 
 
 
