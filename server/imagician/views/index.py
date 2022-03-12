@@ -2,6 +2,7 @@
 
 import os
 import pathlib
+from unittest import result
 import uuid
 import hashlib
 import flask
@@ -263,7 +264,6 @@ def post_tag():
     """
     pass
 
-# TODO: get image by tag
 @imagician.app.route("/images/get_tag/<int:tag>/", methods=['GET'])
 def get_tag(tag):
     """_summary_
@@ -287,9 +287,21 @@ def get_tag(tag):
                 'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
                 'authorized': if the user is logged in, and the user has been authorized
     """
-    pass
+    # Connect to database
+    connection = imagician.model.get_db()
+    
+    # Find user info
+    cur = connection.execute(
+        "SELECT DISTINCT id "
+        "FROM images "
+        "WHERE tag = ?",
+        (tag, )
+    )
+    result = cur.fetchall()
+    if len(result) > 0:
+        return get_id(result[0]['id'])
 
-# TODO: get image by id
+
 @imagician.app.route("/images/get_id/<int:id>/", methods=['GET'])
 def get_id(id):
     """_summary_
@@ -313,7 +325,30 @@ def get_id(id):
                 'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
                 'authorized': if the user is logged in, and the user has been authorized
     """
-    pass
+    result = get_img_by_id_helper(id)
+    
+    # Check authorization
+    result['authorized'] = False
+    if 'username' in flask.session:
+        username = flask.session['username']
+        # Connect to database
+        connection = imagician.model.get_db()
+        
+        # Find user info
+        cur = connection.execute(
+            "SELECT DISTINCT * "
+            "FROM authorization "
+            "WHERE imgid = ? AND username = ?",
+            (id, username, )
+        )
+        authorizations = cur.fetchall()
+        if len(authorizations) > 0:
+            for authorization in authorizations:
+                if authorization['status'] == 'AUTHORIZED':
+                    result['authorized'] = True
+                    break
+    
+    return flask.jsonify(**result)
 
 def get_img_by_id_helper(id):
     """Helper for getting all the information of an image with id
