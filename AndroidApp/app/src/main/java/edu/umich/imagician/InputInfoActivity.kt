@@ -28,12 +28,14 @@ class InputInfoActivity: AppCompatActivity()  {
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val watermarkPost = getWatermarkPost()
         // Handle item selection
         return when (item.itemId) {
             R.id.confirmMenu -> {
                 val intent = Intent(this, ExportImageActivity::class.java)
                 intent.putExtra("IMAGE_URI", imageUri)
-                intent.putExtra("WATERMARK_POST_JSON_STR", Gson().toJson(getWatermarkPost()).toString())
+                intent.putExtra("FILENAME_STR", watermarkPost.filename)
+                intent.putExtra("WATERMARK_POST_JSON_STR", Gson().toJson(watermarkPost).toString())
                 startActivity(intent)
                 true
             }
