@@ -577,10 +577,11 @@ def get_one_received_request(reqid):
     return flask.jsonify(**result)
 
 #TODO: 
-@imagician.app.route("/requests/received_request/<int:reqid>/", methods=['POST'])
-def process_one_received_request(reqid):
+@imagician.app.route("/requests/received_request/", methods=['POST'])
+def process_one_received_request():
     """_summary_
         Required in flask.request.form:
+            'reqid': the id for the request
             'action': 'PENDING', 'AUTHORIZED' or 'REJECTED'
     Returns:
         403 if the user not logged in or request doesn't belong to user
@@ -686,7 +687,18 @@ def get_one_sent_request(reqid):
         
     return flask.jsonify(**info)
 
-
+#TODO:
+@imagician.app.route("/requests/sent_request/", methods=['POST'])
+def post_request():
+    """_summary_
+        Required in flask.request.form:
+            'imgid': the id of the image
+            'message': the message
+    Returns:
+        403 if the user not logged in
+        404 if the img id doesn't exist
+    """
+    pass
 
 
 def encrypt_password(orig_pswd):
