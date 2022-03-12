@@ -19,8 +19,6 @@ import edu.umich.imagician.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
     private lateinit var requestListAdapter: RequestListAdapter
-//    private lateinit var scene1: Scene
-//    private lateinit var trans: Transition
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -37,10 +35,6 @@ class MainActivity : AppCompatActivity() {
         // start python plugin
         initPython()
 
-
-//        scene1 = Scene.getSceneForLayout(view.root, R.layout.activity_request_status, this)
-
-//        trans = TransitionInflater.from(this).inflateTransition(R.transition.slide)
     }
 
     /**
@@ -63,7 +57,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClickRequest(view: View?) {
-        startActivity(Intent(this, RequestStatusActivity::class.java), ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+        val intent = Intent(this, RequestStatusActivity::class.java)
+//        intent.putExtra("isCreate", false)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+    }
+
+    fun onClickPost(view: View?) {
+        val intent = Intent(this, UploadHistoryActivity::class.java)
+//        intent.putExtra("isCreate", false)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
     }
 
     private fun initPython(){

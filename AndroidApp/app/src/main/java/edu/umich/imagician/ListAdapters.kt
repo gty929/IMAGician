@@ -33,6 +33,33 @@ class RequestListAdapter(context: Context, watermarkRequests: ArrayList<Watermar
 
         return listItemView.root
     }
+}
+
+class PostListAdapter(context: Context, watermarkPosts: ArrayList<WatermarkPost?>) :
+    ArrayAdapter<WatermarkPost?>(context, 0, watermarkPosts) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val listItemView = (convertView?.tag /* reuse binding */ ?: run {
+            val rowView = LayoutInflater.from(context)
+                .inflate(R.layout.listitem_request, parent, false)
+            rowView.tag = ListitemRequestBinding.bind(rowView) // cache binding
+            rowView.tag
+        }) as ListitemRequestBinding
+
+        getItem(position)?.run {
+            var numPending = getPendingNum()
+            val color = when (numPending) {
+                0 -> R.color.pending
+                else -> R.color.rejected
+            }
+            listItemView.textView.text = filename
+            listItemView.textView2.text = numPending.toString().plus("pending request(s)")
+            listItemView.textView2.setTextColor(ContextCompat.getColor(context, color))
+            listItemView.timestamp.text = "Usage right requested at ".plus(timestamp)
+        }
+
+        return listItemView.root
+    }
 
 
 }

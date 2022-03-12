@@ -29,6 +29,7 @@ android {
             }
         }
         python {
+            buildPython "D:/Python38_64/python.exe" // change to your path to python3
             pip {
                 install "opencv-python"
                 install "pillow"
