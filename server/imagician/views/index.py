@@ -231,19 +231,21 @@ def get_account_info():
     context["password"] = "[HIDDEN]"
     return flask.jsonify(**context)
 
-# TODO: Change this prototype: name will be the uuid of that folder name
 @imagician.app.route("/uploads/<path:name>")
-def download_file(name):
+def download_file(uuid):
     """Download file."""
     if 'username' not in flask.session:
         abort(403)
+    upload_dir = pathlib.Path(imagician.app.config['UPLOAD_FOLDER'], uuid)
+    if len(os.listdir(upload_dir)) > 0:
+        file_path = os.path.abspath(os.listdir(upload_dir)[0])
+        filename = os.path.basename(file_path)
 
     return flask.send_from_directory(
-        imagician.app.config['UPLOAD_FOLDER'], name, as_attachment=True
+        upload_dir, filename, as_attachment=True
     )
 
 
-# TODO:
 @imagician.app.route("/images/post_tag/", methods=['POST'])
 def post_tag():
     """_summary_
@@ -263,7 +265,45 @@ def post_tag():
         403 if the user not logged in
         409 if the tag conflicts
     """
-    pass
+    if 'username' not in flask.session:
+        abort(403)
+    username = flask.session['username']
+    
+    tag = flask.request.form['tag']
+    imgname = flask.request.form['imgname']
+    checksum = flask.request.form['checksum']
+    fullname_public = flask.request.form['fullname_public']
+    email_public = flask.request.form['email_public']
+    phone_public = flask.request.form['phone_public']
+    time_public = flask.request.form['time_public']
+    message = flask.request.form['message']
+    message_encrypted = flask.request.form['message_encrypted']
+
+    connection = imagician.model.get_db()
+    
+    if 'file' in flask.request.files:
+        filename = flask.request.files['file']
+    else:
+        filename = ""
+
+    cur = connection.execute(
+        "SELECT * FROM images WHERE tag = ?",
+        (flask.request.form['tag'], )
+    )
+
+    if len(cur.fetchall()) > 0:
+        abort(409)
+    
+    connection.execute(
+        "INSERT INTO images(tag, imgname, owner, checksum, fullname_public, ",
+        "email_public, phone_public, time_public, message, message_encrypted, ", 
+        "file_path, is_deleted) ",
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)",
+        (tag, imgname, username, checksum, fullname_public, email_public, 
+        phone_public, time_public, message, message_encrypted, filename, )
+    )
+    context = {}
+    return flask.jsonify(**context)
 
 @imagician.app.route("/images/get_tag/<int:tag>/", methods=['GET'])
 def get_tag(tag):
@@ -576,18 +616,39 @@ def get_one_received_request(reqid):
     result['request'] = request
     return flask.jsonify(**result)
 
-#TODO: 
 @imagician.app.route("/requests/received_request/", methods=['POST'])
 def process_one_received_request():
     """_summary_
         Required in flask.request.form:
             'reqid': the id for the request
-            'action': 'PENDING', 'AUTHORIZED' or 'REJECTED'
+            'action': 'AUTHORIZED' or 'REJECTED'
     Returns:
         403 if the user not logged in or request doesn't belong to user
         404 if the request id doesn't exist
     """
-    pass
+    # If not logged in, reject
+    if 'username' not in flask.session:
+        abort(403)
+    logname = flask.session['username']
+    reqid = flask.request.form['reqid']
+    action = flask.request.form['action']
+    
+    # Sanity check: make sure req exists
+    connection = get_db()
+    cur = connection.execute(
+        "SELECT * FROM authorization WHERE id = ?",
+        (reqid, )
+    )
+    if len(cur.fetchall()) < 1:
+        abort(404)
+
+    cur = connection.execute(
+        "UPDATE authorization SET status = ? WHERE id = ?",
+        (action, reqid, )
+    )
+
+    context = {}
+    return flask.jsonify(**context)
 
 @imagician.app.route("/requests/sent_request/", methods=['GET'])
 def get_all_sent_request():
@@ -687,7 +748,6 @@ def get_one_sent_request(reqid):
         
     return flask.jsonify(**info)
 
-#TODO:
 @imagician.app.route("/requests/sent_request/", methods=['POST'])
 def post_request():
     """_summary_
@@ -698,8 +758,24 @@ def post_request():
         403 if the user not logged in
         404 if the img id doesn't exist
     """
-    pass
+    # If not logged in, reject
+    if 'username' not in flask.session:
+        abort(403)
+    logname = flask.session['username']
+    imgid = flask.request.form['imgid']
+    message = flask.request.form['message']
 
+    get_img_by_id_helper(imgid)
+
+    connection = imagician.model.get_db()
+    connection.execute(
+        "INSERT INTO authorization(imgid, username, message, status, is_deleted) "
+        "VALUES (?, ?, ?, ?, 0)",
+        (imgid, logname, message, "PENDING", )
+    )
+
+    context = {}
+    return flask.jsonify(**context)
 
 def encrypt_password(orig_pswd):
     """Encrypt password."""
