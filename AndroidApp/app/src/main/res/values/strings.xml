@@ -16,8 +16,10 @@
     <string name="imageinfo">Image Info</string>
     <string name="file_name">File Name</string>
     <string name="fname">Michigan.jpg</string>
-    <string name="creator_name">Creator User Name</string>
+    <string name="creator_name">Username</string>
     <string name="cname">another_user</string>
+    <string name="real_name">Real Name</string>
+    <string name="email_addr">Email Address</string>
     <string name="phone">Phone Number</string>
     <string name="pnumber">(734)546-9999</string>
     <string name="timestamp">Time Stamp</string>
