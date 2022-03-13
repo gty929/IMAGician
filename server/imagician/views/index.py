@@ -231,7 +231,7 @@ def get_account_info():
     context["password"] = "[HIDDEN]"
     return flask.jsonify(**context)
 
-@imagician.app.route("/uploads/<path:name>")
+@imagician.app.route("/uploads/<string:uuid>/")
 def download_file(uuid):
     """Download file."""
     if 'username' not in flask.session:
@@ -282,9 +282,15 @@ def post_tag():
     connection = imagician.model.get_db()
     
     if 'file' in flask.request.files:
-        filename = flask.request.files['file']
+        filename = flask.request.files['file'].filename
+        folder_name = uuid.uuid4().hex
+        folder = imagician.app.config["UPLOAD_FOLDER"]/pathlib.Path(folder_name)
+        folder.mkdir(parents=False, exist_ok=False)
+        file_pth = folder/filename
+        flask.request.files['file'].save(file_pth)
+        
     else:
-        filename = ""
+        folder_name = ""
 
     cur = connection.execute(
         "SELECT * FROM images WHERE tag = ?",
@@ -295,17 +301,18 @@ def post_tag():
         abort(409)
     
     connection.execute(
-        "INSERT INTO images(tag, imgname, owner, checksum, fullname_public, ",
-        "email_public, phone_public, time_public, message, message_encrypted, ", 
-        "file_path, is_deleted) ",
+        "INSERT INTO images(tag, imgname, owner, checksum, fullname_public, "
+        "email_public, phone_public, time_public, message, message_encrypted, "
+        "file_path, is_deleted) "
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)",
         (tag, imgname, username, checksum, fullname_public, email_public, 
-        phone_public, time_public, message, message_encrypted, filename, )
+        phone_public, time_public, message, message_encrypted, folder_name, )
     )
     context = {}
     return flask.jsonify(**context)
 
-@imagician.app.route("/images/get_tag/<int:tag>/", methods=['GET'])
+
+@imagician.app.route("/images/get_tag/<string:tag>/", methods=['GET'])
 def get_tag(tag):
     """_summary_
 
@@ -325,7 +332,8 @@ def get_tag(tag):
                 'time': if not public, then empty string
                 'message': the message
                 'message_encrypted': whether the message is encrypted
-                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'file': the name of the enclosed file. empty if no enclosed file. 
                 'authorized': if the user is logged in, and the user has been authorized
     """
     # Connect to database
@@ -363,7 +371,8 @@ def get_id(id):
                 'time': if not public, then empty string
                 'message': the message
                 'message_encrypted': whether the message is encrypted
-                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'file': the name of the enclosed file. empty if no enclosed file. 
                 'authorized': if the user is logged in, and the user has been authorized
     """
     result = get_img_by_id_helper(id)
@@ -373,20 +382,23 @@ def get_id(id):
     if 'username' in flask.session:
         username = flask.session['username']
         # Connect to database
-        connection = imagician.model.get_db()
-        
-        # Find user info
-        cur = connection.execute(
-            "SELECT DISTINCT * "
-            "FROM authorization "
-            "WHERE imgid = ? AND username = ? AND is_deleted != 1",
-            (id, username, )
-        )
-        authorizations = cur.fetchall()
-        for authorization in authorizations:
-            if authorization['status'] == 'AUTHORIZED':
-                result['authorized'] = True
-                break
+        if username == result['owner']:
+            result['authorized'] = True
+        else:
+            connection = imagician.model.get_db()
+            
+            # Find user info
+            cur = connection.execute(
+                "SELECT DISTINCT * "
+                "FROM authorization "
+                "WHERE imgid = ? AND username = ? AND is_deleted != 1",
+                (id, username, )
+            )
+            authorizations = cur.fetchall()
+            for authorization in authorizations:
+                if authorization['status'] == 'AUTHORIZED':
+                    result['authorized'] = True
+                    break
             
     
     return flask.jsonify(**result)
@@ -403,7 +415,8 @@ def get_img_by_id_helper(id):
                 'time': if not public, then empty string
                 'message': the message
                 'message_encrypted': whether the message is encrypted
-                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'file': the name of the enclosed file. empty if no enclosed file. 
     """
     # Connect to database
     connection = imagician.model.get_db()
@@ -427,7 +440,7 @@ def get_img_by_id_helper(id):
         "WHERE username = ?",
         (username, )
     )
-    user_info = cur[0]
+    user_info = cur.fetchall()[0]
     result['id'] = img_info['id']
     result['imgname'] = img_info['imgname']
     result['owner'] = img_info['owner']
@@ -450,7 +463,13 @@ def get_img_by_id_helper(id):
         result['time'] =''
     result['message'] = img_info['message']
     result['message_encrypted'] = img_info['message_encrypted']
-    result['file'] = img_info['file_path']
+    result['folder'] = img_info['file_path']
+    result['file'] = ''
+    if result['folder'] != '':
+        upload_dir = pathlib.Path(imagician.app.config['UPLOAD_FOLDER'], result['folder'])
+        if len(os.listdir(upload_dir)) > 0:
+            file_path = os.path.abspath(os.listdir(upload_dir)[0])
+            result['file']  = os.path.basename(file_path)
     return result
 
 @imagician.app.route("/images/my_creation/", methods=['GET'])
@@ -458,26 +477,28 @@ def get_all_creations():
     """_summary_
     Returns:
         403 if not logged in
-        else an array of json of:
-            'image': a json of 
-                'id': the id of the image, integer
-                'imgname': the name of the image, string
-                'owner': the username of the creator of the image, string
-                'checksum': the checksum of the image, string
-                'fullname': if not public, then empty string
-                'email': if not public, then empty string
-                'phone': if not public, then empty string
-                'time': if not public, then empty string
-                'message': the message
-                'message_encrypted': whether the message is encrypted
-                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
-            'requests': an array of json of
-                'id': the id of the request
-                'imgid': the id of the image
-                'username': the requester
-                'message': the request message
-                'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
-                'created': the time of this request
+        else a json of
+            'result': an array of json of:
+                    'image': a json of 
+                        'id': the id of the image, integer
+                        'imgname': the name of the image, string
+                        'owner': the username of the creator of the image, string
+                        'checksum': the checksum of the image, string
+                        'fullname': if not public, then empty string
+                        'email': if not public, then empty string
+                        'phone': if not public, then empty string
+                        'time': if not public, then empty string
+                        'message': the message
+                        'message_encrypted': whether the message is encrypted
+                        'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                        'file': the name of the enclosed file. empty if no enclosed file. 
+                    'requests': an array of json of
+                        'id': the id of the request
+                        'imgid': the id of the image
+                        'username': the requester
+                        'message': the request message
+                        'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                        'created': the time of this request
     """
     # If not logged in, reject
     if 'username' not in flask.session:
@@ -508,7 +529,7 @@ def get_all_creations():
         )
         info['requests'] = cur.fetchall()
         result.append(info)
-    return flask.jsonify(**result)
+    return flask.jsonify(**{'result':result})
 
 @imagician.app.route("/images/my_creation/<int:imgid>/", methods=['GET'])
 def get_one_creation(imgid):
@@ -528,7 +549,8 @@ def get_one_creation(imgid):
                 'time': if not public, then empty string
                 'message': the message
                 'message_encrypted': whether the message is encrypted
-                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'file': the name of the enclosed file. empty if no enclosed file.  
             'requests': an array of json of
                 'id': the id of the request
                 'imgid': the id of the image
@@ -584,7 +606,8 @@ def get_one_received_request(reqid):
                 'time': if not public, then empty string
                 'message': the message
                 'message_encrypted': whether the message is encrypted
-                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'file': the name of the enclosed file. empty if no enclosed file. 
             'request': a json of
                 'id': the id of the request
                 'imgid': the id of the image
@@ -601,14 +624,13 @@ def get_one_received_request(reqid):
     connection = imagician.model.get_db()
 
     cur = connection.execute(
-        "SELECT DISTINCT a.id, a.imgid, a.username, a.message, a.status, a. created "
+        "SELECT DISTINCT a.id, a.imgid, a.username, a.message, a.status, a.created "
         "FROM authorization a, images m "
-        "WHERE a.id = ? AND m.owner = ? AND a.imgid = m.id"
-        "ORDER BY id DESC",
+        "WHERE a.id = ? AND m.owner = ? AND a.imgid = m.id",
         (reqid, username )
     )
     requests = cur.fetchall()
-    if len(requests) != 0:
+    if len(requests) != 1:
         abort(404)
     request = requests[0]
     result = {}
@@ -642,7 +664,7 @@ def process_one_received_request():
     if len(cur.fetchall()) < 1:
         abort(404)
 
-    cur = connection.execute(
+    connection.execute(
         "UPDATE authorization SET status = ? WHERE id = ?",
         (action, reqid, )
     )
@@ -655,26 +677,28 @@ def get_all_sent_request():
     """_summary_
     Returns:
         403 if not logged in
-        else an array of json of:
-            'image': a json of 
-                'id': the id of the image, integer
-                'imgname': the name of the image, string
-                'owner': the username of the creator of the image, string
-                'checksum': the checksum of the image, string
-                'fullname': if not public, then empty string
-                'email': if not public, then empty string
-                'phone': if not public, then empty string
-                'time': if not public, then empty string
-                'message': the message
-                'message_encrypted': whether the message is encrypted
-                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
-            'request': a json of
-                'id': the id of the request
-                'imgid': the id of the image
-                'username': the requester
-                'message': the request message
-                'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
-                'created': the time of this request
+        else a json of
+            'result': an array of json of:
+                'image': a json of 
+                    'id': the id of the image, integer
+                    'imgname': the name of the image, string
+                    'owner': the username of the creator of the image, string
+                    'checksum': the checksum of the image, string
+                    'fullname': if not public, then empty string
+                    'email': if not public, then empty string
+                    'phone': if not public, then empty string
+                    'time': if not public, then empty string
+                    'message': the message
+                    'message_encrypted': whether the message is encrypted
+                    'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                    'file': the name of the enclosed file. empty if no enclosed file. 
+                'request': a json of
+                    'id': the id of the request
+                    'imgid': the id of the image
+                    'username': the requester
+                    'message': the request message
+                    'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                    'created': the time of this request
     """
     # If not logged in, reject
     if 'username' not in flask.session:
@@ -696,7 +720,7 @@ def get_all_sent_request():
         info['image'] = get_img_by_id_helper(request['imgid'])
         info['request'] = request
         result.append(info)
-    return flask.jsonify(**result)
+    return flask.jsonify(**{'result':result})
 
 @imagician.app.route("/requests/sent_request/<int:reqid>/", methods=['GET'])
 def get_one_sent_request(reqid):
@@ -716,7 +740,8 @@ def get_one_sent_request(reqid):
                 'time': if not public, then empty string
                 'message': the message
                 'message_encrypted': whether the message is encrypted
-                'file': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
+                'file': the name of the enclosed file. empty if no enclosed file. 
             'request': a json of
                 'id': the id of the request
                 'imgid': the id of the image
@@ -725,6 +750,7 @@ def get_one_sent_request(reqid):
                 'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
                 'created': the time of this request
     """
+    print("Here")
     # If not logged in, reject
     if 'username' not in flask.session:
         abort(403)
@@ -748,7 +774,7 @@ def get_one_sent_request(reqid):
         
     return flask.jsonify(**info)
 
-@imagician.app.route("/requests/sent_request/", methods=['POST'])
+@imagician.app.route("/requests/post_request/", methods=['POST'])
 def post_request():
     """_summary_
         Required in flask.request.form:
