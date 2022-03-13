@@ -28,6 +28,7 @@ class InputInfoActivity: AppCompatActivity()  {
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // finish selection
         val watermarkPost = getWatermarkPost()
         // Handle item selection
         return when (item.itemId) {

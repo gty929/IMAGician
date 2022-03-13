@@ -91,9 +91,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="589dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -116,16 +115,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ListView
-                android:id="@+id/creations"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/refreshPosts"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="#E6E6E6"
+                android:paddingHorizontal="8dp"
+                android:paddingTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/my_creations"
-                tools:ignore="DuplicateSpeakableTextCheck" />
+                app:layout_constraintTop_toBottomOf="@id/my_creations">
+
+                <ListView
+                    android:id="@+id/creations"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="#E6E6E6"
+                    app:layout_constraintTop_toBottomOf="@+id/my_creations"
+                    tools:ignore="DuplicateSpeakableTextCheck" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -145,16 +153,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ListView
-                android:id="@+id/requests"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/refreshRequests"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="#E6E6E6"
+                android:paddingHorizontal="8dp"
+                android:paddingTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sent_requests" />
+                app:layout_constraintTop_toBottomOf="@id/sent_requests">
+
+                <ListView
+                    android:id="@+id/requests"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="#E6E6E6" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
