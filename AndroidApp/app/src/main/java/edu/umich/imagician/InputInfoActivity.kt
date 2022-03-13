@@ -9,9 +9,7 @@ import android.os.Message
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
@@ -23,13 +21,22 @@ import java.util.*
 class InputInfoActivity: AppCompatActivity()  {
     var imageUri: Uri? = null
     lateinit var timestampCheckBox: CheckBox
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input_info)
         imageUri = intent.getParcelableExtra("IMAGE_URI")
         findViewById<ImageView>(R.id.imagePreview).setImageURI(imageUri)
         timestampCheckBox = findViewById(R.id.timestampCheckBox)
+
         findViewById<CheckBox>(R.id.usernameCheckBox).text = LoginManager.currUsername
+
+        LoginManager.currEmail?.let { findViewById<CheckBox>(R.id.emailCheckBox).text = it } ?:
+        findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.emailRow))
+
+        LoginManager.currPhone?.let { findViewById<CheckBox>(R.id.phoneCheckBox).text = it } ?:
+        findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.phoneRow))
+
         startTimestampThread()
 
     }
@@ -61,6 +68,9 @@ class InputInfoActivity: AppCompatActivity()  {
         post.filename = findViewById<EditText>(R.id.editFileName).text.toString()
         post.message = findViewById<EditText>(R.id.editMessage).text.toString()
         post.timestampFlag = timestampCheckBox.isChecked
+        post.usernameFlag = findViewById<CheckBox>(R.id.usernameCheckBox).isChecked
+        post.emailFlag = findViewById<CheckBox>(R.id.emailCheckBox)?.isChecked ?: false
+        post.phoneFlag = findViewById<CheckBox>(R.id.phoneCheckBox)?.isChecked ?: false
         return post
     }
 

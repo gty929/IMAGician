@@ -189,8 +189,10 @@ class ImportImageActivity: AppCompatActivity()  {
     }
 
     fun onClickCreate(view: View?) {
-        isCreate = true
-        updateExamineAndCreateButtonColor()
+        if (LoginManager.isLoggedIn) {
+            isCreate = true
+            updateExamineAndCreateButtonColor()
+        }
     }
 
     fun onClickExamine(view: View?) {

@@ -37,6 +37,8 @@ class UserInfoActivity : AppCompatActivity() {
         updateButton.setOnClickListener {
             MainScope().launch {
                 if (true /**TODO*/) {
+                    LoginManager.currEmail = emailInput.text.let { if (it.isEmpty()) null else it.toString()}
+                    LoginManager.currPhone = phoneInput.text.let { if (it.isEmpty()) null else it.toString()}
                     toast("Your information has been updated")
                 }
 
