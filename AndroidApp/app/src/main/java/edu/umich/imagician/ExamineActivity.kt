@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import edu.umich.imagician.utils.initPython
 import edu.umich.imagician.utils.toast
 import java.util.concurrent.atomic.AtomicBoolean
 

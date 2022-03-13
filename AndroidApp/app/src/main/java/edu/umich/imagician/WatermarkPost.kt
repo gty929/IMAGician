@@ -1,13 +1,28 @@
 package edu.umich.imagician
 
+import java.sql.Timestamp
+
 // Class of post
 
-class WatermarkPost (var username: String? = null,
+class WatermarkPost (var id: Int? = null,
+                     var username: String? = null,
                      var filename: String? = null,
+                     var phoneNumber: String? = null,
                      var uri: String? = null,
                      var message: String? = null,
-                     var timestampFlag: Boolean = false
-) {
-    private lateinit var watermarkRequestList: ArrayList<WatermarkRequest>
+                     var timestampFlag: Boolean = false,
+                     var timestamp: String? = null,
+                     var numPending: Int? = null,
+                     var detailed: Boolean = false) {
+    private lateinit var pendingRequestList: ArrayList<WatermarkRequest>
+
+    fun getPendingNum() : Int? {
+        numPending = 0
+        if (this::pendingRequestList.isInitialized) {
+            numPending = pendingRequestList.size
+        }
+        return numPending
+    }
+
 
 }

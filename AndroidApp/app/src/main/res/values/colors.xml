@@ -11,6 +11,8 @@
 
     <color name="granted">#33691E</color>
     <color name="rejected">#CF1B1B</color>
+
     <color name="dark_red">#8B0000</color>
-    <color name="pending">#0B36E4</color>
+    <color name="pending">#FF616161</color>
+
 </resources>

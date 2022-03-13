@@ -1,28 +1,26 @@
 package edu.umich.imagician
 
-import android.app.ActivityOptions
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.transition.Scene
-import android.transition.Transition
-import android.transition.TransitionInflater
-import android.transition.TransitionManager
 import android.view.*
 import android.widget.ImageButton
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
-import com.google.gson.Gson
-import edu.umich.imagician.RequestStore.fakeRequests
-import edu.umich.imagician.RequestStore.requests
+import android.view.View
+import edu.umich.imagician.ItemStore.fakeItems
+import edu.umich.imagician.ItemStore.posts
+import edu.umich.imagician.ItemStore.requests
+
 import edu.umich.imagician.databinding.ActivityMainBinding
+import edu.umich.imagician.utils.initPython
 import edu.umich.imagician.utils.toast
 
 class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
     private lateinit var requestListAdapter: RequestListAdapter
-//    private lateinit var scene1: Scene
-//    private lateinit var trans: Transition
+    private lateinit var postListAdapter: PostListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -35,17 +33,30 @@ class MainActivity : AppCompatActivity() {
             findViewById<ImageButton>(R.id.newWatermarkButton).alpha = 0.2F // cannot create new watermark
         }
         requestListAdapter = RequestListAdapter(this, requests)
+        postListAdapter = PostListAdapter(this, posts)
         view.requests.adapter = requestListAdapter
+        view.creations.adapter = postListAdapter
 
-        fakeRequests()
+        // setup refreshContainer
+        view.refreshRequests.setOnRefreshListener {
+            refreshReq()
+        }
+        view.refreshPosts.setOnRefreshListener {
+            refreshPos()
+        }
 
         // start python plugin
-        initPython()
+        initPython(this)
+        refreshPos()
+        refreshReq()
 
+        view.requests.setOnItemClickListener { parent, view, position, id ->
+            onClickRequest(view, position)
+        }
+        view.creations.setOnItemClickListener { parent, view, position, id ->
+            onClickCreation(view, position)
+        }
 
-//        scene1 = Scene.getSceneForLayout(view.root, R.layout.activity_request_status, this)
-
-//        trans = TransitionInflater.from(this).inflateTransition(R.transition.slide)
     }
 
     /**
@@ -72,15 +83,21 @@ class MainActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
     }
 
-    fun onClickRequest(view: View?) {
-        startActivity(Intent(this, RequestStatusActivity::class.java), ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+    fun onClickRequest(view: View?, index: Int) {
+        val intent = Intent(this, RequestStatusActivity::class.java)
+        intent.putExtra("index", index)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
     }
 
-    private fun initPython(){
-        if (! Python.isStarted()) {
-            Python.start(AndroidPlatform(this));
-        }
+    fun onClickCreation(view: View?, index: Int) {
+        val intent = Intent(this, UploadHistoryActivity::class.java)
+        intent.putExtra("index", index)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
@@ -106,5 +123,38 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun refreshReq() {
+//        getRequests(applicationContext) {
+//            runOnUiThread {
+//                // inform the list adapter that data set has changed
+//                // so that it can redraw the screen.
+//                requestListAdapter.notifyDataSetChanged()
+//            }
+//            // stop the refreshing animation upon completion:
+//            Handler().postDelayed(Runnable {
+//                view.swipe.isRefreshing = false
+//            }, 4000)
+//        }
+        fakeItems()
+        view.refreshRequests.isRefreshing = false
+    }
+
+    private fun refreshPos() {
+//        getPosts(applicationContext) {
+//            runOnUiThread {
+//                // inform the list adapter that data set has changed
+//                // so that it can redraw the screen.
+//                postListAdapter.notifyDataSetChanged()
+//            }
+//            // stop the refreshing animation upon completion:
+//            Handler().postDelayed(Runnable {
+//                view.swipe.isRefreshing = false
+//            }, 4000)
+//        }
+        fakeItems()
+        view.refreshPosts.isRefreshing = false
+    }
+
 
 }

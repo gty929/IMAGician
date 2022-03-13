@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import java.io.File
 
 /**
@@ -49,5 +51,11 @@ fun Uri.toFile(context: Context): File? {
         }
     }
     return null
+}
+
+fun initPython(context: Context){
+    if (! Python.isStarted()) {
+        Python.start(AndroidPlatform(context));
+    }
 }
 

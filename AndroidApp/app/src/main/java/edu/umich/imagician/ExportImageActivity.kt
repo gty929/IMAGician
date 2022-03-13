@@ -34,7 +34,6 @@ class ExportImageActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_export_image)
-
         imageUri = intent.getParcelableExtra("IMAGE_URI")
         watermarkPostJsonStr = intent.extras?.getString("WATERMARK_POST_JSON_STR")
         progressBar = findViewById(R.id.progressBar)
