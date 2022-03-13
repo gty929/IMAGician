@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
         val loginSignupBtn = findViewById<Button>(R.id.userinfo_update_btn)
         val usernameInput = findViewById<EditText>(R.id.username_input)
         val passwordInput = findViewById<EditText>(R.id.password_input)
-        val passwordStrengthHint = findViewById<ConstraintLayout>(R.id.password_strength_hint)
+        val passwordStrengthHint = findViewById<ConstraintLayout>(R.id.LinearLayout)
         passwordInput.addTextChangedListener(this)
 
         login.setOnClickListener {

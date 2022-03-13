@@ -60,8 +60,7 @@
             android:parentActivityName=".ImportImageActivity" />
         <activity
             android:name=".ExportImageActivity"
-            android:label="Export"
-            android:parentActivityName=".InputInfoActivity" />
+            android:label="Export" />
         <activity
             android:name=".ExamineActivity"
             android:label="Scanning Image"

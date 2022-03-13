@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -13,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import edu.umich.imagician.utils.mediaStoreAlloc
 import edu.umich.imagician.utils.toast
 import java.io.ByteArrayOutputStream
 import java.security.SecureRandom
@@ -109,10 +111,18 @@ class ExportImageActivity: AppCompatActivity() {
             val newImg: Bitmap = StegnoAlgo.encode(prevImg,tag)
             val bytes = ByteArrayOutputStream()
             newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
-            val path = MediaStore.Images.Media.insertImage(contentResolver, newImg, null, null)
-            newImageUri = Uri.parse(path)
 
-            // yyzjason: checksum of the encoded image
+            newImageUri = mediaStoreAlloc(contentResolver, "image/png")
+            newImageUri?.let { it ->
+                contentResolver.openOutputStream(it)?.let {
+                    it.write(bytes.toByteArray())
+                    it.close()
+                }
+            }
+            Log.d("New Image Uri", newImageUri?.toString() ?: "")
+//            val path = MediaStore.Images.Media.insertImage(contentResolver, newImg, null, null)
+//            newImageUri = Uri.parse(path)
+
             hasEncoded.set(true)
 
             // yyzjason: update the new image

@@ -14,4 +14,8 @@ public interface NetworkAPIs {
     suspend fun login(@Body requestBody:RequestBody): Response<ResponseBody>
     @POST("signup/")
     suspend fun signup(@Body requestBody:RequestBody): Response<ResponseBody>
+    @POST("updateUserInfo/")
+    suspend fun updateUserInfo(@Body requestBody:RequestBody): Response<ResponseBody>
+    @POST("postWatermark/")
+    suspend fun postWatermark(@Body requestBody:RequestBody): Response<ResponseBody>
 }

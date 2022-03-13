@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.login_menu, menu)
         if (LoginManager.isLoggedIn) {
-            menu.findItem(R.id.loginMenu).title = LoginManager.currUsername
+            menu.findItem(R.id.loginMenu).title = LoginManager.info.username
         }
 
         return true

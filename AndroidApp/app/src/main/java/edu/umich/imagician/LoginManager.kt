@@ -2,6 +2,7 @@ package edu.umich.imagician
 
 import android.content.Context
 import android.util.Log
+import com.google.gson.Gson
 import edu.umich.imagician.RetrofitManager.networkAPIs
 import edu.umich.imagician.RetrofitManager.retrofitExCatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,9 +22,7 @@ import java.time.Instant
  */
 object LoginManager {
     var isLoggedIn = false
-    var currUsername: String? = null
-    var currEmail: String? = null
-    var currPhone: String? = null
+    var info = UserInfo()
     var expiration = Instant.EPOCH
     var cookie: String? = null
         get() {
@@ -75,7 +74,7 @@ object LoginManager {
 
                 cookie?.let {
                     isLoggedIn = true
-                    currUsername = username
+                    info.username = username
                     save(context)
                 }
 
@@ -84,7 +83,7 @@ object LoginManager {
                 cookie = "1234"
                 expiration = Instant.now().plusSeconds(86400)
                 isLoggedIn = true
-                currUsername = username
+                info.username = username
                 Log.d("mock", "mocking login success")
                 save(context)
 
@@ -95,9 +94,42 @@ object LoginManager {
         return isLoggedIn
     }
 
+    @ExperimentalCoroutinesApi
+    suspend fun updateUserInfo(context: Context, newInfo: UserInfo): Boolean {
+        if (!isLoggedIn) {
+            Log.e("LoginManager:", "not logged in")
+            return false
+        }
+        if (cookie == null) {
+            Log.e("LoginManager:", "cookie not found")
+            return false
+        }
+        if (newInfo.username != info.username) {
+            Log.e("LoginManager:", "username has changed, which should be impossible")
+            return false
+        }
+        val requestBody = cookieWrapper(newInfo.username, cookie, newInfo).toRequestBody("application/json".toMediaType())
+        return withContext(retrofitExCatcher) {
+            // Use Retrofit's suspending POST request and wait for the response
+            var response: Response<ResponseBody>? = null
+            try {
+                response = networkAPIs.updateUserInfo(requestBody)
+            } catch (e: Exception) {
+                Log.e("login", "update failed", e)
+            }
+            if (response != null && response.isSuccessful) {
+                info = newInfo
+                return@withContext true
+            } else {
+                Log.e("update user info", response?.errorBody()?.string() ?: "Retrofit error")
+                return@withContext false
+            }
+
+        }
+    }
 
     fun logout(context: Context): Boolean {
-        currUsername = null
+        info.username = null
         isLoggedIn = false
         delete(context)
         return true
@@ -122,7 +154,7 @@ object LoginManager {
         }
     }
 
-    fun save(context: Context) {
+    private fun save(context: Context) {
         cookie?.let {
             Log.d("save", "saving")
             val idVal = cookie+expiration.toString()
@@ -132,7 +164,7 @@ object LoginManager {
         }
     }
 
-    fun delete(context: Context) {
+    private fun delete(context: Context) {
         val folder = File(context.getFilesDir().getParent()?.toString() + "/shared_prefs/")
         val files = folder.list()
         files?.forEach {
@@ -140,6 +172,14 @@ object LoginManager {
                 .edit().clear().apply() // clear each preference file from memory
             File(folder, it).delete()   // delete the file
         }
+    }
+
+    private fun cookieWrapper(username:String?, cookie: String?, data: Any?): String {
+        return JSONObject(mapOf(
+            "username" to username,
+            "cookie" to cookie,
+            "data" to Gson().toJson(data).toString()
+        )).toString()
     }
 
 }

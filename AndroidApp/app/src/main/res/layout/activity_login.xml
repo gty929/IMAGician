@@ -140,7 +140,7 @@
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/password_strength_hint"
+                            android:id="@+id/LinearLayout"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:padding="16dp">

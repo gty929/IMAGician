@@ -1,9 +1,13 @@
 package edu.umich.imagician.utils
 
 import android.app.Notification
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -11,6 +15,10 @@ import android.widget.Toast
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import java.io.File
+import android.os.FileUtils
+
+
+
 
 /**
  * Created by Tianyao Gu on 2022/1/17.
@@ -52,6 +60,23 @@ fun Uri.toFile(context: Context): File? {
     }
     return null
 }
+
+/*
+    allocate space in the MediaStore to store the picture/video
+     */
+fun mediaStoreAlloc(contentResolver: ContentResolver, mediaType: String): Uri? {
+    val values = ContentValues()
+    values.put(MediaStore.MediaColumns.MIME_TYPE, mediaType)
+    values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+
+    return contentResolver.insert(
+        if (mediaType.contains("video"))
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        else
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        values)
+}
+
 
 fun initPython(context: Context){
     if (! Python.isStarted()) {

@@ -29,12 +29,12 @@ class InputInfoActivity: AppCompatActivity()  {
         findViewById<ImageView>(R.id.imagePreview).setImageURI(imageUri)
         timestampCheckBox = findViewById(R.id.timestampCheckBox)
 
-        findViewById<CheckBox>(R.id.usernameCheckBox).text = LoginManager.currUsername
+        findViewById<CheckBox>(R.id.usernameCheckBox).text = LoginManager.info.username
 
-        LoginManager.currEmail?.let { findViewById<CheckBox>(R.id.emailCheckBox).text = it } ?:
+        LoginManager.info.email?.let { findViewById<CheckBox>(R.id.emailCheckBox).text = it } ?:
         findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.emailRow))
 
-        LoginManager.currPhone?.let { findViewById<CheckBox>(R.id.phoneCheckBox).text = it } ?:
+        LoginManager.info.phone?.let { findViewById<CheckBox>(R.id.phoneCheckBox).text = it } ?:
         findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.phoneRow))
 
         startTimestampThread()
@@ -64,7 +64,7 @@ class InputInfoActivity: AppCompatActivity()  {
 
     private fun getWatermarkPost(): WatermarkPost {
         val post = WatermarkPost()
-        post.username = LoginManager.currUsername
+        post.username = LoginManager.info.username
         post.filename = findViewById<EditText>(R.id.editFileName).text.toString()
         post.message = findViewById<EditText>(R.id.editMessage).text.toString()
         post.timestampFlag = timestampCheckBox.isChecked

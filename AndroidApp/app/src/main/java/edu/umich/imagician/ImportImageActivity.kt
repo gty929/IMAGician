@@ -12,10 +12,13 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import edu.umich.imagician.utils.mediaStoreAlloc
 
 import edu.umich.imagician.utils.toast
 
@@ -88,28 +91,27 @@ class ImportImageActivity: AppCompatActivity()  {
                     if (it.toString().contains("video")) {
                         return
                     } else {
-                        val inStream = contentResolver.openInputStream(it) ?: return
-                        imageUri = mediaStoreAlloc("image/png")
-                        imageUri?.let {
-                            val outStream = contentResolver.openOutputStream(it) ?: return
-                            val buffer = ByteArray(8192)
-                            var read: Int
-                            while (inStream.read(buffer).also{ read = it } != -1) {
-                                outStream.write(buffer, 0, read)
-                            }
-                            outStream.flush()
-                            outStream.close()
-                            inStream.close()
-                        }
-                        Log.d("imageUri", imageUri.toString())
-
-
                         if (isCreate) {
+                            val inStream = contentResolver.openInputStream(it) ?: return
+                            imageUri = mediaStoreAlloc(contentResolver, "image/png")
+                            imageUri?.let {
+                                val outStream = contentResolver.openOutputStream(it) ?: return
+                                val buffer = ByteArray(8192)
+                                var read: Int
+                                while (inStream.read(buffer).also{ read = it } != -1) {
+                                    outStream.write(buffer, 0, read)
+                                }
+                                outStream.flush()
+                                outStream.close()
+                                inStream.close()
+                            }
+                            Log.d("imageUri", imageUri.toString())
+
                             doCrop(cropIntent)
                         } else {
                             // no need to crop
                             val intent = Intent(this, ExamineActivity::class.java)
-                            intent.putExtra("IMAGE_URI", imageUri)
+                            intent.putExtra("IMAGE_URI", it)
                             startActivity(intent)
                         }
 
@@ -176,7 +178,7 @@ class ImportImageActivity: AppCompatActivity()  {
          */
 
     fun onClickCamera(view: View?) {
-            imageUri = mediaStoreAlloc("image/png")
+            imageUri = mediaStoreAlloc(contentResolver,"image/png")
             forCameraResult.launch(imageUri)
     }
     fun onClickAlbum(view: View?) {
@@ -203,6 +205,7 @@ class ImportImageActivity: AppCompatActivity()  {
     private fun updateExamineAndCreateButtonColor() {
         findViewById<ImageButton>(R.id.scanningCodeButton).alpha =  if (isCreate) 0.2F else 1F
         findViewById<ImageButton>(R.id.newWatermarkButton).alpha = if (isCreate) 1F else 0.2F
+        findViewById<Button>(R.id.from_camera).isVisible = isCreate
     }
     /*
     This function first searches for availability of external on-device Activity capable of
@@ -252,20 +255,6 @@ class ImportImageActivity: AppCompatActivity()  {
         }
     }
 
-    /*
-    allocate space in the MediaStore to store the picture/video
-     */
-    private fun mediaStoreAlloc(mediaType: String): Uri? {
-        val values = ContentValues()
-        values.put(MediaStore.MediaColumns.MIME_TYPE, mediaType)
-        values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
 
-        return contentResolver.insert(
-            if (mediaType.contains("video"))
-                MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-            else
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            values)
-    }
 
 }

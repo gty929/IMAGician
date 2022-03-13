@@ -6,18 +6,17 @@ package edu.umich.imagician
 
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import edu.umich.imagician.utils.toast
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 
+@ExperimentalCoroutinesApi
 class UserInfoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,17 +29,32 @@ class UserInfoActivity : AppCompatActivity() {
         val updateButton = findViewById<Button>(R.id.userinfo_update_btn)
         val logoutButton = findViewById<Button>(R.id.userinfo_logout_btn)
 
-        usernameInput.setText(LoginManager.currUsername)
-        emailInput.setText(LoginManager.currEmail)
-        phoneInput.setText(LoginManager.currPhone)
+        usernameInput.setText(LoginManager.info.username)
+        emailInput.setText(LoginManager.info.email)
+        phoneInput.setText(LoginManager.info.phone)
 
         updateButton.setOnClickListener {
             MainScope().launch {
-                if (true /**TODO*/) {
-                    LoginManager.currEmail = emailInput.text.let { if (it.isEmpty()) null else it.toString()}
-                    LoginManager.currPhone = phoneInput.text.let { if (it.isEmpty()) null else it.toString()}
+                val newInfo = UserInfo(
+                    username = LoginManager.info.username,
+                    email = emailInput.text.let { if (it.isEmpty()) null else it.toString()},
+                    phone = phoneInput.text.let { if (it.isEmpty()) null else it.toString()}
+                )
+                if (LoginManager.updateUserInfo(context, newInfo)) {
                     toast("Your information has been updated")
+                } else {
+
+                    /** mock */
+                    LoginManager.info = newInfo
+                    /** mock */
+
+
+                    toast("Some error occurs please try again")
                 }
+
+
+
+
 
             }
         }
