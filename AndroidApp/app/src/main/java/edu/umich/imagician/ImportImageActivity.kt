@@ -91,29 +91,29 @@ class ImportImageActivity: AppCompatActivity()  {
                     if (it.toString().contains("video")) {
                         return
                     } else {
-                        if (isCreate) {
-                            val inStream = contentResolver.openInputStream(it) ?: return
-                            imageUri = mediaStoreAlloc(contentResolver, "image/png")
-                            imageUri?.let {
-                                val outStream = contentResolver.openOutputStream(it) ?: return
-                                val buffer = ByteArray(8192)
-                                var read: Int
-                                while (inStream.read(buffer).also{ read = it } != -1) {
-                                    outStream.write(buffer, 0, read)
-                                }
-                                outStream.flush()
-                                outStream.close()
-                                inStream.close()
-                            }
-                            Log.d("imageUri", imageUri.toString())
-
-                            doCrop(cropIntent)
-                        } else {
+//                        if (isCreate) {
+//                            val inStream = contentResolver.openInputStream(it) ?: return
+//                            imageUri = mediaStoreAlloc(contentResolver, "image/png")
+//                            imageUri?.let {
+//                                val outStream = contentResolver.openOutputStream(it) ?: return
+//                                val buffer = ByteArray(8192)
+//                                var read: Int
+//                                while (inStream.read(buffer).also{ read = it } != -1) {
+//                                    outStream.write(buffer, 0, read)
+//                                }
+//                                outStream.flush()
+//                                outStream.close()
+//                                inStream.close()
+//                            }
+//                            Log.d("imageUri", imageUri.toString())
+//
+//                            doCrop(cropIntent)
+//                        } else {
                             // no need to crop
-                            val intent = Intent(this, ExamineActivity::class.java)
+                            val intent = if (isCreate) Intent(this, ExportImageActivity::class.java) else Intent(this, ExamineActivity::class.java)
                             intent.putExtra("IMAGE_URI", it)
                             startActivity(intent)
-                        }
+//                        }
 
                     }
                 } ?: run { Log.d("Pick media", "failed") }
