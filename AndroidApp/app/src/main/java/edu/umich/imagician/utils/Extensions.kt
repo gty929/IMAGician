@@ -64,11 +64,13 @@ fun Uri.toFile(context: Context): File? {
 /*
     allocate space in the MediaStore to store the picture/video
      */
-fun mediaStoreAlloc(contentResolver: ContentResolver, mediaType: String): Uri? {
+fun mediaStoreAlloc(contentResolver: ContentResolver, mediaType: String, filename: String? = null): Uri? {
     val values = ContentValues()
     values.put(MediaStore.MediaColumns.MIME_TYPE, mediaType)
     values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-
+    filename.let {
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, it);
+    }
     return contentResolver.insert(
         if (mediaType.contains("video"))
             MediaStore.Video.Media.EXTERNAL_CONTENT_URI

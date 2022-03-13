@@ -27,6 +27,7 @@ class ExportImageActivity: AppCompatActivity() {
     private var watermarkPostJsonStr: String? = null
     private var imageUri: Uri? = null
     private var newImageUri: Uri? = null
+    private var filename: String? = null
     private lateinit var progressBar: ProgressBar
     private var hasEncoded = AtomicBoolean()
     private var hasHashed = AtomicBoolean()
@@ -45,7 +46,8 @@ class ExportImageActivity: AppCompatActivity() {
 
         // set top bar
         findViewById<ImageView>(R.id.imagePreview).setImageURI(imageUri)
-        findViewById<TextView>(R.id.imageFilename).text = intent.extras?.getString("FILENAME_STR")
+        filename = intent.extras?.getString("FILENAME_STR")
+        findViewById<TextView>(R.id.imageFilename).text = filename
         mockProgressBar()
 
         embedWatermark(tag)
@@ -112,7 +114,7 @@ class ExportImageActivity: AppCompatActivity() {
             val bytes = ByteArrayOutputStream()
             newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
 
-            newImageUri = mediaStoreAlloc(contentResolver, "image/png")
+            newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$filename$tag.png")
             newImageUri?.let { it ->
                 contentResolver.openOutputStream(it)?.let {
                     it.write(bytes.toByteArray())
