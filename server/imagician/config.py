@@ -12,7 +12,7 @@ SESSION_COOKIE_NAME = 'login'
 # File Upload to var/uploads/
 IMAGician_ROOT = pathlib.Path(__file__).resolve().parent.parent
 UPLOAD_FOLDER = IMAGician_ROOT/'var'/'uploads'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'pdf', 'zip'])
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 
 # Database file is var/imagician.sqlite3

@@ -3,12 +3,10 @@
 from cmath import inf
 import os
 import pathlib
-from unittest import result
 import uuid
 import hashlib
 import flask
 from flask import abort
-import arrow
 import imagician
 from imagician.model import get_db
 
@@ -234,13 +232,14 @@ def get_account_info():
 @imagician.app.route("/uploads/<string:uuid>/")
 def download_file(uuid):
     """Download file."""
-    if 'username' not in flask.session:
-        abort(403)
     upload_dir = pathlib.Path(imagician.app.config['UPLOAD_FOLDER'], uuid)
+    if not os.path.isdir(upload_dir):
+        abort(404)
     if len(os.listdir(upload_dir)) > 0:
         file_path = os.path.abspath(os.listdir(upload_dir)[0])
         filename = os.path.basename(file_path)
-
+    else:
+        abort(404)
     return flask.send_from_directory(
         upload_dir, filename, as_attachment=True
     )
@@ -250,7 +249,7 @@ def download_file(uuid):
 def post_tag():
     """_summary_
         Required in flask.request.form:
-            'tag': tag of the image, integer
+            'tag': tag of the image, string
             'imgname': name of the image, string
             'checksum': sha256 of the image, string
             'fullname_public': whether the fullname is public,
@@ -349,7 +348,8 @@ def get_tag(tag):
     result = cur.fetchall()
     if len(result) > 0:
         return get_id(result[0]['id'])
-
+    else:
+        abort(404)
 
 @imagician.app.route("/images/get_id/<int:id>/", methods=['GET'])
 def get_id(id):
