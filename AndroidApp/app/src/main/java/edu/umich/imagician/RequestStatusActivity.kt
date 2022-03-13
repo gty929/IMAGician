@@ -3,10 +3,6 @@ package edu.umich.imagician
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.CheckBox
-import android.widget.TableLayout
-import android.widget.TableRow
 import edu.umich.imagician.ItemStore.getRequestDetail
 import edu.umich.imagician.ItemStore.requests
 import edu.umich.imagician.databinding.ActivityRequestStatusBinding
@@ -33,7 +29,7 @@ class RequestStatusActivity : AppCompatActivity() {
 //        findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.emailRow))
         watermarkRequest = requests[index]!!
         watermarkPost = watermarkRequest.watermarkPost!!
-        // required 
+        // required
         view.jpg.text = watermarkPost.filename
 
         // optionals
