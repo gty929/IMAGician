@@ -4,7 +4,7 @@ import java.sql.Timestamp
 
 // Class of post
 
-class WatermarkPost (var id: Int? = null,
+data class WatermarkPost (var id: Int? = null,
                      var username: String? = null,
                      var filename: String? = null,
                      var phoneNumber: String? = null,

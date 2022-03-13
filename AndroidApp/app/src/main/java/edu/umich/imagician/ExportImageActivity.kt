@@ -16,6 +16,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import edu.umich.imagician.utils.mediaStoreAlloc
 import edu.umich.imagician.utils.toast
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.security.SecureRandom
 import java.util.concurrent.atomic.AtomicBoolean
@@ -23,6 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * Created by Tianyao Gu on 2022/3/8.
  */
+@ExperimentalCoroutinesApi
 class ExportImageActivity: AppCompatActivity() {
     private var watermarkPostJsonStr: String? = null
     private var imageUri: Uri? = null
@@ -141,12 +145,17 @@ class ExportImageActivity: AppCompatActivity() {
             runOnUiThread {
                 toast("sending $watermarkPostJsonStr with checksum $checksum", false)
             }
-            try {
-                Thread.sleep(2000) // mock network delay
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
+            val context = this
+            MainScope().launch {
+                ItemStore.postDataAfterLogin(context, watermarkPostJsonStr?:"")
+                hasUploaded.set(true)
             }
-            hasUploaded.set(true)
+//            try {
+//                Thread.sleep(2000) // mock network delay
+//            } catch (e: InterruptedException) {
+//                e.printStackTrace()
+//            }
+
         }).start()
     }
 

@@ -2,7 +2,7 @@ package edu.umich.imagician
 
 // Class of request
 
-class WatermarkRequest (var id: Int? = null,
+data class WatermarkRequest (var id: Int? = null,
                         var watermarkPost: WatermarkPost? = null,
                         var sender: String? = null,
                         var message: String? = null,

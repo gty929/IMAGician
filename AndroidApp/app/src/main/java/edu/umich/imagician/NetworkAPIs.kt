@@ -9,7 +9,7 @@ import retrofit2.http.POST;
 /**
  * Created by Tianyao Gu on 2022/3/12.
  */
-public interface NetworkAPIs {
+interface NetworkAPIs {
     @POST("login/")
     suspend fun login(@Body requestBody:RequestBody): Response<ResponseBody>
     @POST("signup/")
