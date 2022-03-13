@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageView"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_centerHorizontal="true"
+                android:elevation="9dp"
+                android:src="@drawable/sigin_boy_img"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="3dp" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="63dp"
+                android:elevation="0dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="100" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/linearLayout1"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/login_signup_txt"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:gravity="center_horizontal"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="24dp"
+                            android:textStyle="bold" />
+
+
+                        <EditText
+                            android:id="@+id/username_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawableStart="@drawable/ic_outline_person_24"
+                            android:drawablePadding="16dp"
+                            android:inputType="none"
+                            android:maxLines="1"
+                            android:text="@string/username"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp" />
+
+
+                        <EditText
+                            android:id="@+id/email_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawableStart="@drawable/ic_email_light_blue_24dp"
+                            android:drawablePadding="16dp"
+                            android:hint="Click to add an email"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/phone_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawableStart="@drawable/ic_baseline_phone_android_24"
+                            android:drawablePadding="16dp"
+                            android:hint="Click to add a phone number"
+                            android:inputType="phone"
+                            android:maxLines="1"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp" />
+
+                        <Button
+                            android:id="@+id/userinfo_update_btn"
+                            android:layout_width="210dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="@drawable/buttonshape_blue"
+                            android:drawableStart="@drawable/ic_touch_app_white_24dp"
+                            android:drawableLeft="@drawable/ic_touch_app_white_24dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp"
+                            android:text="Update"
+                            android:textAllCaps="false"
+                            android:textColor="#fff"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/userinfo_logout_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@drawable/buttonshape_blue"
+                            android:drawableStart="@drawable/ic_touch_app_white_24dp"
+                            android:drawableLeft="@drawable/ic_touch_app_white_24dp"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp"
+                            android:text="Log out"
+                            android:textAllCaps="false"
+                            android:textColor="#fff"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:theme="@style/Button.Red" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

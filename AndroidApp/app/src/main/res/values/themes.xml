@@ -30,6 +30,14 @@
 
     </style>
 
+    <style name="Button.Red" parent="ThemeOverlay.AppCompat">
+        <item name="colorPrimary">@color/dark_red</item>
+        <item name="colorPrimaryVariant">@color/dark_red</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+
+    </style>
+
     <style name="Theme.IMAGician.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

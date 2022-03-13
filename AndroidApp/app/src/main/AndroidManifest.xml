@@ -52,20 +52,28 @@
         <activity
             android:name=".ImportImageActivity"
             android:exported="true"
-            android:label="@string/username"
+            android:label="Select an Image"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".InputInfoActivity"
-            android:label="@string/username"
+            android:label="Edit Watermark"
             android:parentActivityName=".ImportImageActivity" />
         <activity
             android:name=".ExportImageActivity"
-            android:label="@string/username"
+            android:label="Export"
             android:parentActivityName=".InputInfoActivity" />
         <activity
             android:name=".ExamineActivity"
-            android:label="@string/username"
+            android:label="Scanning Image"
             android:parentActivityName=".ImportImageActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="Login"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".UserInfoActivity"
+            android:label="User Info"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

@@ -48,10 +48,10 @@
     <string name="image_processing">Image Processing</string>
     <string name="image_filename_jpg">Image_filename.jpg</string>
     <string name="choose_fields_to_include">Choose Fields to Include</string>
-    <string name="filename">Filename:</string>
-    <string name="name_the_image">Name the image</string>
+    <string name="title_">Title:</string>
+    <string name="name_watermark">Name the watermark</string>
     <string name="icon">Icon</string>
-    <string name="message">Message:</string>
+    <string name="message_">Message:</string>
     <string name="message_text">this is the message. this is the message. this is the message.</string>
     <string name="title_activity_req_detail">ReqDetailActivity</string>
 
@@ -61,5 +61,15 @@
     <string name="watermark_embedded">Watermark Embedded</string>
     <string name="share">Share</string>
     <string name="include_anything_you_want_to_say">Include anything you want to say</string>
+    <string name="timestamp_">Timestamp:</string>
+    <string name="mock_timestamp">March 12, 2022 14:53</string>
+    <string name="username_">Username:</string>
+    <string name="log_in">Log In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="password_strength_very_strong">VERY STRONG</string>
+    <string name="password_strength_strong">STRONG</string>
+    <string name="password_strength_medium">MEDIUM</string>
+    <string name="password_strength_weak">WEAK</string>
 
 </resources>

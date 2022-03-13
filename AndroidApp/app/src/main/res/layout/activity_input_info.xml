@@ -72,6 +72,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp">
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/personIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/icon"
+                        app:srcCompat="@drawable/ic_outline_person_24" />
+
+                    <TextView
+                        android:id="@+id/usernameField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/username_" />
+
+                    <CheckBox
+                        android:id="@+id/usernameCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/username" />
+
+
+                </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -91,14 +119,14 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
-                        android:text="@string/filename" />
+                        android:text="@string/title_" />
 
                     <EditText
                         android:id="@+id/editFileName"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:ems="14"
-                        android:hint="@string/name_the_image"
+                        android:hint="@string/name_watermark"
                         android:inputType="text" />
                 </TableRow>
 
@@ -120,7 +148,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
-                        android:text="@string/message" />
+                        android:text="@string/message_" />
 
                     <EditText
                         android:id="@+id/editMessage"
@@ -133,7 +161,34 @@
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                 </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical">
 
+                    <ImageView
+                        android:id="@+id/timestampIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/icon"
+                        app:srcCompat="@drawable/ic_outline_access_time_24" />
+
+                    <TextView
+                        android:id="@+id/timestampField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/timestamp_" />
+
+                    <CheckBox
+                        android:id="@+id/timestampCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mock_timestamp" />
+
+
+                </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />

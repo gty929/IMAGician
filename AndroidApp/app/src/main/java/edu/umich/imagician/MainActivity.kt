@@ -8,13 +8,15 @@ import android.transition.Scene
 import android.transition.Transition
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.ImageButton
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import com.google.gson.Gson
 import edu.umich.imagician.RequestStore.fakeRequests
 import edu.umich.imagician.RequestStore.requests
 import edu.umich.imagician.databinding.ActivityMainBinding
+import edu.umich.imagician.utils.toast
 
 class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
@@ -28,7 +30,10 @@ class MainActivity : AppCompatActivity() {
 
         view = ActivityMainBinding.inflate(layoutInflater)
         setContentView(view.root)
-
+        if (!LoginManager.isLoggedIn) {
+            LoginManager.open(this)
+            findViewById<ImageButton>(R.id.newWatermarkButton).alpha = 0.2F // cannot create new watermark
+        }
         requestListAdapter = RequestListAdapter(this, requests)
         view.requests.adapter = requestListAdapter
 
@@ -49,10 +54,15 @@ class MainActivity : AppCompatActivity() {
      * @param view
      */
     fun startImportImageForCreation(view: View?) {
-        val intent = Intent(this, ImportImageActivity::class.java)
-        intent.putExtra("isCreate", true)
-        startActivity(intent)
-        overridePendingTransition(0, 0)
+        if (LoginManager.isLoggedIn) {
+            val intent = Intent(this, ImportImageActivity::class.java)
+            intent.putExtra("isCreate", true)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+        } else {
+            toast("You need to login first.")
+        }
+
     }
 
     fun startImportImageForExamine(view: View?) {
@@ -69,6 +79,31 @@ class MainActivity : AppCompatActivity() {
     private fun initPython(){
         if (! Python.isStarted()) {
             Python.start(AndroidPlatform(this));
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.login_menu, menu)
+        if (LoginManager.isLoggedIn) {
+            menu.findItem(R.id.loginMenu).title = LoginManager.currUsername
+        }
+
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.loginMenu -> {
+
+                val intent = if (LoginManager.isLoggedIn)
+                    Intent(this, UserInfoActivity::class.java)
+                else Intent(this, LoginActivity::class.java)
+
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
