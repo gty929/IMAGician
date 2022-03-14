@@ -12,12 +12,14 @@ import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * Created by Tianyao Gu on 2022/3/6.
  */
+@ExperimentalCoroutinesApi
 class InputInfoActivity: AppCompatActivity()  {
     var imageUri: Uri? = null
     lateinit var timestampCheckBox: CheckBox
@@ -47,14 +49,14 @@ class InputInfoActivity: AppCompatActivity()  {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // finish selection
-        val watermarkPost = getWatermarkPost()
+        setWatermarkPost()
         // Handle item selection
         return when (item.itemId) {
             R.id.confirmMenu -> {
                 val intent = Intent(this, ExportImageActivity::class.java)
                 intent.putExtra("IMAGE_URI", imageUri)
-                intent.putExtra("FILENAME_STR", watermarkPost.filename)
-                intent.putExtra("WATERMARK_POST_JSON_STR", Gson().toJson(watermarkPost).toString())
+//                intent.putExtra("FILENAME_STR", WatermarkPost.post.filename)
+//                intent.putExtra("WATERMARK_POST_JSON_STR", Gson().toJson(watermarkPost).toString())
                 startActivity(intent)
                 true
             }
@@ -62,8 +64,8 @@ class InputInfoActivity: AppCompatActivity()  {
         }
     }
 
-    private fun getWatermarkPost(): WatermarkPost {
-        val post = WatermarkPost()
+    private fun setWatermarkPost() {
+        val post = WatermarkPost.post
         post.username = LoginManager.info.username
         post.filename = findViewById<EditText>(R.id.editFileName).text.toString()
         post.message = findViewById<EditText>(R.id.editMessage).text.toString()
@@ -71,7 +73,6 @@ class InputInfoActivity: AppCompatActivity()  {
         post.usernameFlag = findViewById<CheckBox>(R.id.usernameCheckBox).isChecked
         post.emailFlag = findViewById<CheckBox>(R.id.emailCheckBox)?.isChecked ?: false
         post.phoneFlag = findViewById<CheckBox>(R.id.phoneCheckBox)?.isChecked ?: false
-        return post
     }
 
     private fun startTimestampThread(){

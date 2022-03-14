@@ -4,7 +4,7 @@ import java.sql.Timestamp
 
 // Class of post
 
-class WatermarkPost (var id: Int? = null,
+data class WatermarkPost (var id: Int? = null,
                      var username: String? = null,
                      var realName: String? = null,
                      var filename: String? = null,
@@ -19,8 +19,13 @@ class WatermarkPost (var id: Int? = null,
                      var phoneFlag: Boolean = false,
                      var timestamp: String? = null,
                      var numPending: Int? = null,
+                     var checksum: String? = null,
                      var detailed: Boolean = false) {
+
     val pendingRequestList = arrayListOf<WatermarkRequest?>()
 
+    companion object CompanionObject {
+        val post = WatermarkPost()
+    }
 
 }

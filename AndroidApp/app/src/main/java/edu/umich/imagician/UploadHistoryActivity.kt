@@ -1,20 +1,23 @@
 package edu.umich.imagician
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import androidx.core.view.isVisible
 import edu.umich.imagician.databinding.ActivityUploadHistoryBinding
+import edu.umich.imagician.databinding.ItemRequestInfoBinding
+import edu.umich.imagician.databinding.TestListitemBinding
 import edu.umich.imagician.utils.toast
 
 class UploadHistoryActivity : AppCompatActivity() {
-    private lateinit var view: ActivityUploadHistoryBinding
+//    private lateinit var view: ActivityUploadHistoryBinding
+    private lateinit var view: TestListitemBinding
     private lateinit var watermarkPost: WatermarkPost
     private lateinit var historyListAdapter: HistoryListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        view = ActivityUploadHistoryBinding.inflate(layoutInflater)
+//        view = ActivityUploadHistoryBinding.inflate(layoutInflater)
+        view = TestListitemBinding.inflate(layoutInflater)
         setContentView(view.root)
         var index = intent.getIntExtra("index", -1)
         if (index == -1) {
@@ -23,13 +26,16 @@ class UploadHistoryActivity : AppCompatActivity() {
         showPost(index)
     }
 
-    fun seeMoreInfo(view: View?) = startActivity(Intent(this, ReqDetailActivity::class.java))
+    fun seeMore(index: Int) {
+        view.reqList.isVisible = false
+        val watermarkRequest = historyListAdapter.getItem(index)
+
+    }
 
     private fun showPost(index: Int) {
         ItemStore.getPostDetail(index)
         watermarkPost = ItemStore.posts[index]!!
-        historyListAdapter = HistoryListAdapter(this, watermarkPost.pendingRequestList)
-        view.reqList.adapter = historyListAdapter
+        historyListAdapter = HistoryListAdapter(this, watermarkPost.pendingRequestList, this::seeMore)
 
         // required
         view.jpg.text = watermarkPost.filename
@@ -47,5 +53,9 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.imageInfo.removeView(view.tsRow)
         watermarkPost.message?.let { view.msg.text = it } ?:
         view.imageInfo.removeView(view.msgRow)
+
+        // history requests
+        view.reqList.adapter = historyListAdapter
+
     }
 }

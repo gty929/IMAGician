@@ -3,6 +3,7 @@ package edu.umich.imagician
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import edu.umich.imagician.ItemStore.getRequestDetail
 import edu.umich.imagician.ItemStore.requests
 import edu.umich.imagician.databinding.ActivityRequestStatusBinding
@@ -25,10 +26,11 @@ class RequestStatusActivity : AppCompatActivity() {
 
     private fun showRequest(index: Int) {
         getRequestDetail(index)
-//        LoginManager.info.email?.let { findViewById<CheckBox>(R.id.emailCheckBox).text = it } ?:
-//        findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.emailRow))
         watermarkRequest = requests[index]!!
         watermarkPost = watermarkRequest.watermarkPost!!
+
+        // Image Info Fields
+
         // required
         view.jpg.text = watermarkPost.filename
 
@@ -45,6 +47,17 @@ class RequestStatusActivity : AppCompatActivity() {
         view.imageInfo.removeView(view.tsRow)
         watermarkPost.message?.let { view.msg.text = it } ?:
         view.imageInfo.removeView(view.msgRow)
+
+        // Request Info Fields
+        view.textView17.text = watermarkPost.username ?: "Anonymous"
+        view.textView15.text = watermarkRequest.message
+        view.status.text = watermarkRequest.status
+        val color = when (watermarkRequest.status) {
+            "GRANTED" -> R.color.granted
+            "PENDING" -> R.color.pending
+            else -> R.color.rejected
+        }
+        view.status.setBackgroundColor(ContextCompat.getColor(this, color))
     }
 
 }

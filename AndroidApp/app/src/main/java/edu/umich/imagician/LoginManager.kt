@@ -8,6 +8,7 @@ import edu.umich.imagician.RetrofitManager.retrofitExCatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import org.json.JSONException
@@ -108,7 +109,7 @@ object LoginManager {
             Log.e("LoginManager:", "username has changed, which should be impossible")
             return false
         }
-        val requestBody = cookieWrapper(newInfo.username, cookie, newInfo).toRequestBody("application/json".toMediaType())
+        val requestBody = cookieWrapper(newInfo)
         return withContext(retrofitExCatcher) {
             // Use Retrofit's suspending POST request and wait for the response
             var response: Response<ResponseBody>? = null
@@ -174,12 +175,12 @@ object LoginManager {
         }
     }
 
-    private fun cookieWrapper(username:String?, cookie: String?, data: Any?): String {
+    fun cookieWrapper(data: Any?): RequestBody {
         return JSONObject(mapOf(
-            "username" to username,
+            "username" to info.username,
             "cookie" to cookie,
-            "data" to Gson().toJson(data).toString()
-        )).toString()
+            "data" to if (data is String) data else Gson().toJson(data).toString()
+        )).toString().toRequestBody("application/json".toMediaType())
     }
 
 }
