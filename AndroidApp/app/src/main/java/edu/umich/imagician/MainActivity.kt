@@ -6,9 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageButton
-import com.chaquo.python.Python
-import com.chaquo.python.android.AndroidPlatform
 import android.view.View
+import androidx.appcompat.view.menu.ActionMenuItemView
 import edu.umich.imagician.ItemStore.fakeItems
 import edu.umich.imagician.ItemStore.posts
 import edu.umich.imagician.ItemStore.requests
@@ -16,7 +15,9 @@ import edu.umich.imagician.ItemStore.requests
 import edu.umich.imagician.databinding.ActivityMainBinding
 import edu.umich.imagician.utils.initPython
 import edu.umich.imagician.utils.toast
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
     private lateinit var view: ActivityMainBinding
     private lateinit var requestListAdapter: RequestListAdapter
@@ -29,9 +30,19 @@ class MainActivity : AppCompatActivity() {
         view = ActivityMainBinding.inflate(layoutInflater)
         setContentView(view.root)
         if (!LoginManager.isLoggedIn) {
-            LoginManager.open(this)
-            findViewById<ImageButton>(R.id.newWatermarkButton).alpha = 0.2F // cannot create new watermark
+            LoginManager.open(this
+            ) { success ->
+                if (success) {
+                    invalidateOptionsMenu()
+//                findViewById<ActionMenuItemView>(R.id.loginMenuItem).setText(LoginManager.info.username)
+                } else {
+                    findViewById<ImageButton>(R.id.newWatermarkButton).alpha =
+                        0.2F // cannot create new watermark
+                }
+            }
+
         }
+
         requestListAdapter = RequestListAdapter(this, requests)
         postListAdapter = PostListAdapter(this, posts)
         view.requests.adapter = requestListAdapter
@@ -98,12 +109,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.login_menu, menu)
         if (LoginManager.isLoggedIn) {
-            menu.findItem(R.id.loginMenu).title = LoginManager.info.username
+            menu.findItem(R.id.loginMenuItem).title = LoginManager.info.username
         }
 
         return true
@@ -111,7 +121,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         return when (item.itemId) {
-            R.id.loginMenu -> {
+            R.id.loginMenuItem -> {
 
                 val intent = if (LoginManager.isLoggedIn)
                     Intent(this, UserInfoActivity::class.java)
@@ -123,6 +133,7 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 
     private fun refreshReq() {
 //        getRequests(applicationContext) {

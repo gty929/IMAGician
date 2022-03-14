@@ -255,6 +255,10 @@ class ImportImageActivity: AppCompatActivity()  {
         }
     }
 
+    override fun onPause() {
+        overridePendingTransition(0, 0)
+        super.onPause()
+    }
 
 
 }

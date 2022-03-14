@@ -14,7 +14,7 @@
         android:text="@string/from_camera"
         android:theme="@style/Button.White"
         app:cornerRadius="30dp"
-        app:icon="@drawable/ic_album"
+        app:icon="@drawable/ic_camera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
