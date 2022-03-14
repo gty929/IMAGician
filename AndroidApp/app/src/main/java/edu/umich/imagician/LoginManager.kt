@@ -6,21 +6,25 @@ import com.google.gson.Gson
 import edu.umich.imagician.RetrofitManager.networkAPIs
 import edu.umich.imagician.RetrofitManager.retrofitExCatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
 import java.io.File
 import java.lang.Exception
 import java.time.Instant
+import java.io.IOException
+
 
 /**
  * Created by Tianyao Gu on 2022/3/12.
  */
+@ExperimentalCoroutinesApi
 object LoginManager {
     var isLoggedIn = false
     var info = UserInfo()
@@ -43,11 +47,11 @@ object LoginManager {
             Log.e("LoginManager:", "already logged in")
             return false
         }
-        val jsonObj = mapOf(
-            "username" to username,
-            "password" to password
-        )
-        val requestBody = JSONObject(jsonObj).toString().toRequestBody("application/json".toMediaType())
+
+        val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("username", username)
+            .addFormDataPart("password", password).build()
+//        val requestBody = JSONObject(jsonObj).toString().toRequestBody("application/json".toMediaType())
 
         withContext(retrofitExCatcher) {
             // Use Retrofit's suspending POST request and wait for the response
@@ -58,35 +62,17 @@ object LoginManager {
                 Log.e("login", if (isSignUp) "signup failed" else "login failed", e)
             }
             if (response != null && response.isSuccessful) {
-                val responseObj = JSONObject(response.body()?.string() ?: "")
-                // obtain chatterID from back end
-                cookie = try {
-                    responseObj.getString("cookie")
-                } catch (e: JSONException) {
-                    null
-                }
-                expiration = Instant.now().plusSeconds(
-                    try {
-                        responseObj.getLong("lifetime")
-                    } catch (e: JSONException) {
-                        0L
-                    }
-                )
-
-                cookie?.let {
-                    isLoggedIn = true
+                response.headers()["Set-Cookie"]?.let {
+                    cookie = it
                     info.username = username
+                    expiration = Instant.now().plusSeconds(21*86400)
+                    isLoggedIn = true
                     save(context)
+                    onGetCookie(context)
                 }
+
 
             } else {
-                /*mock */
-                cookie = "1234"
-                expiration = Instant.now().plusSeconds(86400)
-                isLoggedIn = true
-                info.username = username
-                Log.d("mock", "mocking login success")
-                save(context)
 
                 Log.e("login", response?.errorBody()?.string() ?: "Retrofit error")
             }
@@ -109,7 +95,10 @@ object LoginManager {
             Log.e("LoginManager:", "username has changed, which should be impossible")
             return false
         }
-        val requestBody = cookieWrapper(newInfo)
+//        val requestBody = cookieWrapper(newInfo)
+        val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("email", info.email?:"")
+            .addFormDataPart("password", info.phone?:"").build()
         return withContext(retrofitExCatcher) {
             // Use Retrofit's suspending POST request and wait for the response
             var response: Response<ResponseBody>? = null
@@ -129,8 +118,31 @@ object LoginManager {
         }
     }
 
+    @ExperimentalCoroutinesApi
+    suspend fun getUserInfo(context: Context): Boolean {
+
+        return withContext(retrofitExCatcher) {
+            // Use Retrofit's suspending POST request and wait for the response
+            var response: Response<ResponseBody>? = null
+            try {
+                response = networkAPIs.getUserInfo()
+            } catch (e: Exception) {
+                Log.e("login", "get user info failed", e)
+            }
+            if (response != null && response.isSuccessful) {
+                info = Gson().fromJson(response.body()?.string() ?: "", UserInfo::class.java)
+                isLoggedIn = true
+                return@withContext true
+            } else {
+                Log.e("update user info", response?.errorBody()?.string() ?: "Retrofit error")
+                return@withContext false
+            }
+
+        }
+    }
+
     fun logout(context: Context): Boolean {
-        info.username = null
+        info = UserInfo()
         isLoggedIn = false
         delete(context)
         return true
@@ -139,7 +151,7 @@ object LoginManager {
     /*
     * search for cookie on the device
     * */
-    fun open(context: Context) {
+    fun open(context: Context, callback: (success:Boolean)->Unit) {
         if (expiration != Instant.EPOCH) { // this is not first launch
             return
         }
@@ -148,6 +160,7 @@ object LoginManager {
                 .getString(KEY_NAME, null)?.let {
                     expiration = Instant.parse(it.takeLast(INSTANT_LENGTH))
                     cookie = it.dropLast(INSTANT_LENGTH)
+                    onGetCookie(context, callback)
                     Log.d("get cookie", "Cookie: $cookie, Expiration: $expiration")
                 }
         } catch (e: Exception) {
@@ -155,7 +168,17 @@ object LoginManager {
         }
     }
 
-    private fun save(context: Context) {
+    private fun onGetCookie(context: Context, callback: ((success:Boolean)->Unit)? = null) {
+        RetrofitManager.update(cookie)
+        MainScope().launch {
+            getUserInfo(context)
+            if (callback != null) {
+                callback(isLoggedIn)
+            }
+        }
+    }
+
+    fun save(context: Context) {
         cookie?.let {
             Log.d("save", "saving")
             val idVal = cookie+expiration.toString()

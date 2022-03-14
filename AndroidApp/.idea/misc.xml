@@ -4,30 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3148148148148148" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_baseline_phone_android_24.xml" value="0.19166666666666668" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_baseline_rounded_corner_24.xml" value="0.19166666666666668" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_electronicsignature.xml" value="0.19166666666666668" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_email_light_blue_24dp.xml" value="0.19166666666666668" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_file.xml" value="0.19166666666666668" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_home.xml" value="0.19166666666666668" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3148148148148148" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_outline_access_time_24.xml" value="0.19166666666666668" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_outline_message_24.xml" value="0.19166666666666668" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_outline_person_24.xml" value="0.19166666666666668" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/drawable/ic_outline_person_search_24.xml" value="0.2462962962962963" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_examine.xml" value="0.2537037037037037" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_export_image.xml" value="0.2537037037037037" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_import_image.xml" value="0.3875" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_input_info.xml" value="0.2537037037037037" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_main.xml" value="0.21927083333333333" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_req_detail.xml" value="0.3875" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_request_status.xml" value="0.27395833333333336" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_request_status2.xml" value="0.27395833333333336" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_upload_history.xml" value="0.27395833333333336" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_userinfo.xml" value="0.2537037037037037" />
+        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/activity_request_status.xml" value="0.33" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/listitem_history.xml" value="0.3875" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/listitem_infoline.xml" value="0.27395833333333336" />
-        <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/listitem_infomsg.xml" value="0.27395833333333336" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/listitem_main.xml" value="0.3875" />
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/layout/listitem_request.xml" value="0.33" />
         <entry key="..\:/Users/THINKPAD/Desktop/Document/UM/Winter2022/EECS441/IMAGician/AndroidApp/app/src/main/res/layout/activity_export_image.xml" value="0.4" />
@@ -37,6 +19,7 @@
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/buttonshape.xml" value="0.25885416666666666" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/buttonshape_red.xml" value="0.25885416666666666" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_album.xml" value="0.4630208333333333" />
+        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_camera.xml" value="0.4630208333333333" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_email_light_blue_24dp.xml" value="0.25885416666666666" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_file.xml" value="0.4630208333333333" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.275" />
@@ -64,6 +47,7 @@
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/menus.xml" value="0.25625" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/menu/confirm_menu.xml" value="0.335" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/menu/login_menu.xml" value="0.25677083333333334" />
+        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/xml/network_security_config.xml" value="0.18854166666666666" />
       </map>
     </option>
   </component>

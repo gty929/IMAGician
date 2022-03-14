@@ -17,10 +17,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import edu.umich.imagician.utils.PasswordStrength
 import edu.umich.imagician.utils.toast
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 
+@ExperimentalCoroutinesApi
 class LoginActivity : AppCompatActivity(), TextWatcher {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +77,8 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
                         )
                     ) {
                         startActivity(Intent(context, MainActivity::class.java))
+                    } else {
+                        toast("Wrong password or username") //TODO add network failure case
                     }
 
                 }
