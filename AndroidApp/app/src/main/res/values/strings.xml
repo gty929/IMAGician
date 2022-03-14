@@ -31,7 +31,7 @@
     <string name="req_msg">Thank you for sharing this beautiful photo! I’m writing a guide for tourists and I’m asking for the permission to use this photo in my article. It WILL be used to make profit and it will be published on twitter. Thank you! </string>
     <string name="req_status">REJECTED</string>
 
-    <string name="req_list">Request List</string>
+    <string name="req_list">Request: </string>
     <string name="req_by">Requested by:</string>
     <string name="req_name">Ron</string>
     <string name="req_msg_short">Thank you for sharing this beautiful photo! I’m...</string>

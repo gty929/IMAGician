@@ -25,11 +25,11 @@ class UploadHistoryActivity : AppCompatActivity() {
         }
         view.buttonBack.setOnClickListener {
             view.reqInfoPad.isVisible = false
-            view.reqList.isVisible = true
+            view.refreshReqs.isVisible = true
         }
         view.buttonCancel.setOnClickListener {
             view.reqInfoPad.isVisible = false
-            view.reqList.isVisible = true
+            view.refreshReqs.isVisible = true
         }
         view.buttonGrant.setOnClickListener {
             watermarkRequest.status = "GRANTED"
@@ -40,6 +40,10 @@ class UploadHistoryActivity : AppCompatActivity() {
             watermarkRequest.status = "REJECTED"
             postUpdateStatus()
             showStatus(reqIndex)
+        }
+
+        view.refreshReqs.setOnRefreshListener {
+            showPost(index)
         }
 
         showPost(index)
@@ -53,7 +57,7 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.textView17.text = watermarkRequest.sender
         view.textView15.text = watermarkRequest.message
 
-        view.reqList.isVisible = false
+        view.refreshReqs.isVisible = false
         view.reqInfoPad.isVisible = true
         if (watermarkRequest.status != "PENDING") {
             showStatus(idx)
@@ -86,6 +90,8 @@ class UploadHistoryActivity : AppCompatActivity() {
 
         // history requests
         view.reqList.adapter = historyListAdapter
+
+        view.refreshReqs.isRefreshing = false
     }
 
     private fun showOpts() {
