@@ -4,6 +4,7 @@ set -Eeuo pipefail
 set -x
 
 python3 -m venv env
+pip install --upgrade pip setuptools wheel
 
 source env/bin/activate
 
