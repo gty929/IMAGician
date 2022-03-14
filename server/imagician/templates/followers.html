@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/chenxi.css') }}">
+    <title>insta485</title>
+</head>
+
+<body>
+
+    <div class="title">
+        <a class="logo" href="/">
+            <img src="{{ url_for('static',filename='images/logo.png') }}" alt="logo" style="width: 20%;">
+        </a>
+        <span class="links">
+            <a href="/explore/">Explore</a> | <a href="/users/{{logname}}/">{{logname}}</a>
+        </span>
+
+        <hr>
+    </div>
+    <div class="user">
+        <br>
+        <h1>Followers</h1>
+        <br>
+        {% for follower in followers %}
+
+        <p>
+            <img src="{{follower.user_img_url}}" class="user_image" alt="user_image" style="width: 60px;">
+            <a href="/users/{{follower.username}}/">{{follower.username}}</a>
+        </p>
+        {% if logname == follower.username %}
+
+        {% elif follower.logname_follows_username %}
+        following
+        <form action="/following/?target={{ request.path }}" method="post" enctype="multipart/form-data">
+            <input type="submit" name="unfollow" value="unfollow" />
+            <input type="hidden" name="username" value="{{username}}" />
+            <input type="hidden" name="operation" value="unfollow" />
+        </form>
+        {% else %}
+        not following
+        <form action="/following/?target={{ request.path }}" method="post" enctype="multipart/form-data">
+            <input type="submit" name="follow" value="follow" />
+            <input type="hidden" name="username" value="{{username}}" />
+            <input type="hidden" name="operation" value="follow" />
+        </form>
+        {% endif %}
+
+        <br>
+        {% endfor %}
+    </div>
+    <br>
+    <br>
+    <br>
+
+
+
+</body>
+
+</html>

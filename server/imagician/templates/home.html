@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/chenxi.css') }}">
+        <title>insta485</title>
+    </head>
+
+    <body>
+        
+        <div class="title">
+            <a class="logo" href="/">
+                <img src="{{ url_for('static',filename='images/logo.png') }}" alt="logo" style="width: 20%;">
+            </a>
+            <span class="links">
+                <a href="/explore/">Explore</a> | <a href="/users/{{logname}}/">{{logname}}</a>
+            </span>
+            
+            <hr>
+        </div>
+        <br>
+
+        <div class="posts">
+            {% for post in posts %}
+            <div class="post">
+                <a href="/users/{{post.owner}}/">
+                    <img src="{{post.owner_img_url}}" class="user_image" alt="user_image">
+                    <span class="user_name">{{post.owner}}</span>
+                </a>
+                <a href="/posts/{{post.postid}}/">
+                    <span class="time_since">{{post.timestamp}}</span>
+                </a>
+                <img src="{{post.img_url}}" class="post_image" alt="post_image">
+
+                <div class="comments">
+                    <br>
+                    {% if post.likes == 1 %}
+                        <p>{{post.likes}} like</p>
+                    {% else %}
+                        <p>{{post.likes}} likes</p>
+                    {% endif %}
+                    {% for comment in post.comments %}
+                    <p><a href="/users/{{comment.owner}}/">{{comment.owner}}</a> {{comment.text}}</p>
+                    {% endfor %}
+                    {% if post.user_liked %}
+                        <form action="/likes/?target={{ request.path }}" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="operation" value="unlike"/>
+                            <input type="hidden" name="postid" value="{{post.postid}}"/>
+                            <input type="submit" name="unlike" value="unlike"/>
+                        </form>
+                    {% else %}
+                        <form action="/likes/?target={{ request.path }}" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="operation" value="like"/>
+                            <input type="hidden" name="postid" value="{{post.postid}}"/>
+                            <input type="submit" name="like" value="like"/>
+                        </form>
+                    {% endif %}
+                    <form action="/comments/?target={{ request.path }}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="operation" value="create"/>
+                        <input type="hidden" name="postid" value="{{post.postid}}"/>
+                        <input type="text" name="text" required/>
+                        <input type="submit" name="comment" value="comment"/>
+                    </form>
+                </div>
+            </div>
+
+            <br>
+            {% endfor %}
+            
+
+
+
+        </div>
+        <br>
+        <br>
+        <br>
+
+        
+
+    </body>
+</html>
+
+<!-- This is a comment -->
