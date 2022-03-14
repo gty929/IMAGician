@@ -110,7 +110,7 @@ class ImportImageActivity: AppCompatActivity()  {
 //                            doCrop(cropIntent)
 //                        } else {
                             // no need to crop
-                            val intent = if (isCreate) Intent(this, ExportImageActivity::class.java) else Intent(this, ExamineActivity::class.java)
+                            val intent = if (isCreate) Intent(this, InputInfoActivity::class.java) else Intent(this, ExamineActivity::class.java)
                             intent.putExtra("IMAGE_URI", it)
                             startActivity(intent)
 //                        }
