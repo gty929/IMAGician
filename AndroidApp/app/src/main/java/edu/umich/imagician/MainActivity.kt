@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
             ) { success ->
                 if (success) {
                     invalidateOptionsMenu()
+                    refreshPos()
+                    refreshReq()
 //                findViewById<ActionMenuItemView>(R.id.loginMenuItem).setText(LoginManager.info.username)
                 } else {
                     findViewById<ImageButton>(R.id.newWatermarkButton).alpha =

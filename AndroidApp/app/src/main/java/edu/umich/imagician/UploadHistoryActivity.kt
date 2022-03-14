@@ -50,7 +50,7 @@ class UploadHistoryActivity : AppCompatActivity() {
     }
 
     fun seeMore(idx: Int) {
-        toast("index clicked: $idx")
+//        toast("index clicked: $idx")
         reqIndex = idx
         watermarkRequest = watermarkPost.pendingRequestList[reqIndex]!!
         // Request Info Fields

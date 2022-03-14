@@ -98,7 +98,7 @@ object LoginManager {
 //        val requestBody = cookieWrapper(newInfo)
         val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("email", info.email?:"")
-            .addFormDataPart("password", info.phone?:"").build()
+            .addFormDataPart("phone", info.phone?:"").build()
         return withContext(retrofitExCatcher) {
             // Use Retrofit's suspending POST request and wait for the response
             var response: Response<ResponseBody>? = null
