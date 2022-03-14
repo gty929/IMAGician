@@ -80,22 +80,16 @@ def logout():
 @imagician.app.route('/accounts/create/', methods=['POST'])
 def create_account():
     """Create a new account."""
-    # If already logged in, reject
-    if 'username' in flask.session:
-        abort(409)
 
     # Parse argument
     if 'username' not in flask.request.form \
-        or 'password' not in flask.request.form \
-        or 'fullname' not in flask.request.form \
-        or 'email' not in flask.request.form \
-            or 'phone_number' not in flask.request.form:
+        or 'password' not in flask.request.form:
         abort(400)
     username = flask.request.form['username']
     password = flask.request.form['password']
-    fullname = flask.request.form['fullname']
-    email = flask.request.form['email']
-    phone = flask.request.form['phone_number']
+    fullname = flask.request.form['full_name'] if 'full_name' in flask.request.form else ''
+    email = flask.request.form['email'] if 'email' in flask.request.form else ''
+    phone = flask.request.form['phone_number'] if 'phone_number' in flask.request.form else ''
     
     # Sanity check: make sure username not exist
     connection = get_db()
@@ -174,10 +168,10 @@ def edit_account():
         abort(403)
         
     user_info = user_info[0]
-    if "fullname" not in flask.request.form:
+    if "full_name" not in flask.request.form:
         fullname = user_info['fullname']
     else:
-        fullname = flask.request.form['fullname']
+        fullname = flask.request.form['full_name']
     
     if "email" not in flask.request.form:
         email = user_info['email']
@@ -216,17 +210,16 @@ def get_account_info():
     
     # Find user info
     cur = connection.execute(
-        "SELECT DISTINCT * "
+        "SELECT DISTINCT username, fullname, email, phone_number, created, last_login "
         "FROM users "
-        "WHERE username = ?",
+        "WHERE username = ? AND is_deleted = 0",
         (logname, )
     )
     user_info = cur.fetchall()
-    if len(user_info) != 1 or user_info[0]["is_deleted"]:
+    if len(user_info) != 1:
         abort(403)
         
     context = user_info[0]
-    context["password"] = "[HIDDEN]"
     return flask.jsonify(**context)
 
 @imagician.app.route("/uploads/<string:uuid>/")
@@ -271,14 +264,22 @@ def post_tag():
     tag = flask.request.form['tag']
     imgname = flask.request.form['imgname']
     checksum = flask.request.form['checksum']
-    fullname_public = flask.request.form['fullname_public']
-    email_public = flask.request.form['email_public']
-    phone_public = flask.request.form['phone_public']
-    time_public = flask.request.form['time_public']
+    fullname_public = flask.request.form['fullname_public'] if 'fullname_public' in flask.request.form else 0
+    email_public = flask.request.form['email_public'] if 'email_public' in flask.request.form else 0
+    phone_public = flask.request.form['phone_public'] if 'phone_public' in flask.request.form else 0
+    time_public = flask.request.form['time_public'] if 'time_public' in flask.request.form else 0
     message = flask.request.form['message']
     message_encrypted = flask.request.form['message_encrypted']
 
     connection = imagician.model.get_db()
+    
+    cur = connection.execute(
+        "SELECT * FROM images WHERE tag = ?",
+        (flask.request.form['tag'], )
+    )
+
+    if len(cur.fetchall()) > 0:
+        abort(409)
     
     if 'file' in flask.request.files:
         filename = flask.request.files['file'].filename
@@ -291,14 +292,6 @@ def post_tag():
     else:
         folder_name = ""
 
-    cur = connection.execute(
-        "SELECT * FROM images WHERE tag = ?",
-        (flask.request.form['tag'], )
-    )
-
-    if len(cur.fetchall()) > 0:
-        abort(409)
-    
     connection.execute(
         "INSERT INTO images(tag, imgname, owner, checksum, fullname_public, "
         "email_public, phone_public, time_public, message, message_encrypted, "
@@ -321,7 +314,6 @@ def get_tag(tag):
         404 if the tag doesn't exists
         else:
             A json of
-                'id': the id of the image, integer
                 'imgname': the name of the image, string
                 'owner': the username of the creator of the image, string
                 'checksum': the checksum of the image, string
@@ -334,48 +326,9 @@ def get_tag(tag):
                 'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
                 'file': the name of the enclosed file. empty if no enclosed file. 
                 'authorized': if the user is logged in, and the user has been authorized
+                'tag': the tag of the image
     """
-    # Connect to database
-    connection = imagician.model.get_db()
-    
-    # Find user info
-    cur = connection.execute(
-        "SELECT DISTINCT id "
-        "FROM images "
-        "WHERE tag = ?",
-        (tag, )
-    )
-    result = cur.fetchall()
-    if len(result) > 0:
-        return get_id(result[0]['id'])
-    else:
-        abort(404)
-
-@imagician.app.route("/images/get_id/<int:id>/", methods=['GET'])
-def get_id(id):
-    """_summary_
-
-    Args:
-        id (_type_): _description_
-    Returns:
-        404 if the id doesn't exists
-        else:
-            A json of
-                'id': the id of the image, integer
-                'imgname': the name of the image, string
-                'owner': the username of the creator of the image, string
-                'checksum': the checksum of the image, string
-                'fullname': if not public, then empty string
-                'email': if not public, then empty string
-                'phone': if not public, then empty string
-                'time': if not public, then empty string
-                'message': the message
-                'message_encrypted': whether the message is encrypted
-                'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
-                'file': the name of the enclosed file. empty if no enclosed file. 
-                'authorized': if the user is logged in, and the user has been authorized
-    """
-    result = get_img_by_id_helper(id)
+    result = get_img_by_tag_helper(tag)
     
     # Check authorization
     result['authorized'] = False
@@ -391,21 +344,18 @@ def get_id(id):
             cur = connection.execute(
                 "SELECT DISTINCT * "
                 "FROM authorization "
-                "WHERE imgid = ? AND username = ? AND is_deleted != 1",
-                (id, username, )
+                "WHERE imgtag = ? AND username = ? AND is_deleted != 1",
+                (tag, username, )
             )
             authorizations = cur.fetchall()
             for authorization in authorizations:
-                if authorization['status'] == 'AUTHORIZED':
+                if authorization['status'] == 'GRANTED':
                     result['authorized'] = True
                     break
-            
-    
     return flask.jsonify(**result)
 
-def get_img_by_id_helper(id):
+def get_img_by_tag_helper(tag):
     """Helper for getting all the information of an image with id
-                'id': the id of the image, integer
                 'imgname': the name of the image, string
                 'owner': the username of the creator of the image, string
                 'checksum': the checksum of the image, string
@@ -417,6 +367,7 @@ def get_img_by_id_helper(id):
                 'message_encrypted': whether the message is encrypted
                 'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
                 'file': the name of the enclosed file. empty if no enclosed file. 
+                'tag': the tag of the image
     """
     # Connect to database
     connection = imagician.model.get_db()
@@ -425,11 +376,11 @@ def get_img_by_id_helper(id):
     cur = connection.execute(
         "SELECT DISTINCT * "
         "FROM images "
-        "WHERE id = ?",
-        (id, )
+        "WHERE tag = ? AND is_deleted != 1",
+        (tag, )
     )
     result = cur.fetchall()
-    if len(result) != 1 or result[0]["is_deleted"]:
+    if len(result) != 1:
         abort(404)
     img_info = result[0]
     result = {}
@@ -441,7 +392,6 @@ def get_img_by_id_helper(id):
         (username, )
     )
     user_info = cur.fetchall()[0]
-    result['id'] = img_info['id']
     result['imgname'] = img_info['imgname']
     result['owner'] = img_info['owner']
     result['checksum'] = img_info['checksum']
@@ -464,6 +414,7 @@ def get_img_by_id_helper(id):
     result['message'] = img_info['message']
     result['message_encrypted'] = img_info['message_encrypted']
     result['folder'] = img_info['file_path']
+    result['tag'] = img_info['tag']
     result['file'] = ''
     if result['folder'] != '':
         upload_dir = pathlib.Path(imagician.app.config['UPLOAD_FOLDER'], result['folder'])
@@ -480,7 +431,6 @@ def get_all_creations():
         else a json of
             'result': an array of json of:
                     'image': a json of 
-                        'id': the id of the image, integer
                         'imgname': the name of the image, string
                         'owner': the username of the creator of the image, string
                         'checksum': the checksum of the image, string
@@ -494,10 +444,10 @@ def get_all_creations():
                         'file': the name of the enclosed file. empty if no enclosed file. 
                     'requests': an array of json of
                         'id': the id of the request
-                        'imgid': the id of the image
+                        'imgtag': the tag of the image
                         'username': the requester
                         'message': the request message
-                        'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                        'status": 'PENDING', 'GRANTED' or 'REJECTED'
                         'created': the time of this request
     """
     # If not logged in, reject
@@ -508,38 +458,37 @@ def get_all_creations():
     
     # Find user info
     cur = connection.execute(
-        "SELECT DISTINCT id "
+        "SELECT DISTINCT tag "
         "FROM images "
         "WHERE owner = ? "
-        "ORDER BY id DESC",
+        "ORDER BY created DESC",
         (username, )
     )
     images = cur.fetchall()
     result = []
     for img in images:
-        imgid = img['id']
+        tag = img['tag']
         info = {}
-        info['image'] = get_img_by_id_helper(imgid)
+        info['image'] = get_img_by_tag_helper(tag)
         cur = connection.execute(
-            "SELECT DISTINCT * "
+            "SELECT DISTINCT created, id, imgtag, message, status, username "
             "FROM authorization "
-            "WHERE imgid = ? AND is_deleted != 1 "
+            "WHERE imgtag = ? AND is_deleted != 1 "
             "ORDER BY id DESC",
-            (imgid, )
+            (tag, )
         )
         info['requests'] = cur.fetchall()
         result.append(info)
     return flask.jsonify(**{'result':result})
 
-@imagician.app.route("/images/my_creation/<int:imgid>/", methods=['GET'])
-def get_one_creation(imgid):
+@imagician.app.route("/images/my_creation/<string:tag>/", methods=['GET'])
+def get_one_creation(tag):
     """_summary_
     Returns:
         403 if not logged in or if img with imgid doesn't belong to the user
         404 if imgid doesn't exist
         else a json of:
             'image': a json of 
-                'id': the id of the image, integer
                 'imgname': the name of the image, string
                 'owner': the username of the creator of the image, string
                 'checksum': the checksum of the image, string
@@ -553,10 +502,10 @@ def get_one_creation(imgid):
                 'file': the name of the enclosed file. empty if no enclosed file.  
             'requests': an array of json of
                 'id': the id of the request
-                'imgid': the id of the image
+                'imgtag': the id of the image
                 'username': the requester
                 'message': the request message
-                'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                'status": 'PENDING', 'GRANTED' or 'REJECTED'
                 'created': the time of this request
     """
     # If not logged in, reject
@@ -566,24 +515,23 @@ def get_one_creation(imgid):
     connection = imagician.model.get_db()
     
     cur = connection.execute(
-        "SELECT DISTINCT id "
+        "SELECT DISTINCT tag "
         "FROM images "
-        "WHERE owner = ? AND id = ?"
-        "ORDER BY id DESC",
-        (username, imgid, )
+        "WHERE owner = ? AND tag = ? AND is_deleted != 1",
+        (username, tag, )
     )
 
     images = cur.fetchall()
     if len(images) != 1:
         abort(404)
     result = {}
-    result['image'] = get_img_by_id_helper(imgid)
+    result['image'] = get_img_by_tag_helper(tag)
     cur = connection.execute(
-        "SELECT DISTINCT * "
+        "SELECT DISTINCT created, id, imgtag, message, status, username "
         "FROM authorization "
-        "WHERE imgid = ? AND is_deleted != 1 "
+        "WHERE imgtag = ? AND is_deleted != 1 "
         "ORDER BY id DESC",
-        (imgid, )
+        (tag, )
     )
     result['requests'] = cur.fetchall()
     return flask.jsonify(**result)
@@ -596,7 +544,6 @@ def get_one_received_request(reqid):
         404 if reqid doesn't exist
         else a json of:
             'image': a json of 
-                'id': the id of the image, integer
                 'imgname': the name of the image, string
                 'owner': the username of the creator of the image, string
                 'checksum': the checksum of the image, string
@@ -608,12 +555,13 @@ def get_one_received_request(reqid):
                 'message_encrypted': whether the message is encrypted
                 'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
                 'file': the name of the enclosed file. empty if no enclosed file. 
+                'tag': the tag of the image
             'request': a json of
                 'id': the id of the request
-                'imgid': the id of the image
+                'imgtag': the tag of the image
                 'username': the requester
                 'message': the request message
-                'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                'status": 'PENDING', 'GRANTED' or 'REJECTED'
                 'created': the time of this request
     """
     # If not logged in, reject
@@ -624,17 +572,17 @@ def get_one_received_request(reqid):
     connection = imagician.model.get_db()
 
     cur = connection.execute(
-        "SELECT DISTINCT a.id, a.imgid, a.username, a.message, a.status, a.created "
+        "SELECT DISTINCT a.id, a.imgtag, a.username, a.message, a.status, a.created "
         "FROM authorization a, images m "
-        "WHERE a.id = ? AND m.owner = ? AND a.imgid = m.id",
-        (reqid, username )
+        "WHERE a.id = ? AND m.owner = ? AND a.imgtag = m.tag AND a.is_deleted != 1 AND m.is_deleted !=1",
+        (reqid, username, )
     )
     requests = cur.fetchall()
     if len(requests) != 1:
         abort(404)
     request = requests[0]
     result = {}
-    result['image'] = get_img_by_id_helper(request['imgid'])
+    result['image'] = get_img_by_tag_helper(request['imgtag'])
     result['request'] = request
     return flask.jsonify(**result)
 
@@ -643,7 +591,7 @@ def process_one_received_request():
     """_summary_
         Required in flask.request.form:
             'reqid': the id for the request
-            'action': 'AUTHORIZED' or 'REJECTED'
+            'action': 'GRANTED' or 'REJECTED'
     Returns:
         403 if the user not logged in or request doesn't belong to user
         404 if the request id doesn't exist
@@ -658,8 +606,10 @@ def process_one_received_request():
     # Sanity check: make sure req exists
     connection = get_db()
     cur = connection.execute(
-        "SELECT * FROM authorization WHERE id = ?",
-        (reqid, )
+        "SELECT DISTINCT * "
+        "FROM authorization a, images m "
+        "WHERE a.id = ? AND m.owner = ? AND a.imgtag = m.tag AND a.is_deleted != 1 AND m.is_deleted !=1",
+        (reqid, logname, )
     )
     if len(cur.fetchall()) < 1:
         abort(404)
@@ -680,7 +630,6 @@ def get_all_sent_request():
         else a json of
             'result': an array of json of:
                 'image': a json of 
-                    'id': the id of the image, integer
                     'imgname': the name of the image, string
                     'owner': the username of the creator of the image, string
                     'checksum': the checksum of the image, string
@@ -692,12 +641,13 @@ def get_all_sent_request():
                     'message_encrypted': whether the message is encrypted
                     'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
                     'file': the name of the enclosed file. empty if no enclosed file. 
+                    'tag': the tag of the image
                 'request': a json of
                     'id': the id of the request
-                    'imgid': the id of the image
+                    'imgtag': the tag of the image
                     'username': the requester
                     'message': the request message
-                    'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                    'status": 'PENDING', 'GRANTED' or 'REJECTED'
                     'created': the time of this request
     """
     # If not logged in, reject
@@ -707,7 +657,7 @@ def get_all_sent_request():
     
     connection = imagician.model.get_db()
     cur = connection.execute(
-        "SELECT DISTINCT * "
+        "SELECT DISTINCT created, id, imgtag, message, status, username "
         "FROM authorization "
         "WHERE username = ? AND is_deleted != 1 "
         "ORDER BY id DESC",
@@ -717,7 +667,7 @@ def get_all_sent_request():
     result = []
     for request in requests:
         info = {}
-        info['image'] = get_img_by_id_helper(request['imgid'])
+        info['image'] = get_img_by_tag_helper(request['imgtag'])
         info['request'] = request
         result.append(info)
     return flask.jsonify(**{'result':result})
@@ -747,7 +697,7 @@ def get_one_sent_request(reqid):
                 'imgid': the id of the image
                 'username': the requester
                 'message': the request message
-                'status": 'PENDING', 'AUTHORIZED' or 'REJECTED'
+                'status": 'PENDING', 'GRANTED' or 'REJECTED'
                 'created': the time of this request
     """
     print("Here")
@@ -758,7 +708,7 @@ def get_one_sent_request(reqid):
     
     connection = imagician.model.get_db()
     cur = connection.execute(
-        "SELECT DISTINCT * "
+        "SELECT DISTINCT created, id, imgtag, message, status, username "
         "FROM authorization "
         "WHERE username = ? AND id = ? AND is_deleted != 1 "
         "ORDER BY id DESC",
@@ -769,7 +719,7 @@ def get_one_sent_request(reqid):
         abort(404)
     request = requests[0]
     info = {}
-    info['image'] = get_img_by_id_helper(request['imgid'])
+    info['image'] = get_img_by_tag_helper(request['imgtag'])
     info['request'] = request
         
     return flask.jsonify(**info)
@@ -778,7 +728,7 @@ def get_one_sent_request(reqid):
 def post_request():
     """_summary_
         Required in flask.request.form:
-            'imgid': the id of the image
+            'imgtag': the id of the image
             'message': the message
     Returns:
         403 if the user not logged in
@@ -788,16 +738,16 @@ def post_request():
     if 'username' not in flask.session:
         abort(403)
     logname = flask.session['username']
-    imgid = flask.request.form['imgid']
+    imgtag = flask.request.form['imgtag']
     message = flask.request.form['message']
 
-    get_img_by_id_helper(imgid)
+    get_img_by_tag_helper(imgtag)
 
     connection = imagician.model.get_db()
     connection.execute(
-        "INSERT INTO authorization(imgid, username, message, status, is_deleted) "
+        "INSERT INTO authorization(imgtag, username, message, status, is_deleted) "
         "VALUES (?, ?, ?, ?, 0)",
-        (imgid, logname, message, "PENDING", )
+        (imgtag, logname, message, "PENDING", )
     )
 
     context = {}

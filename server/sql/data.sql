@@ -13,10 +13,16 @@ INSERT INTO images(tag, imgname, owner, checksum, fullname_public, email_public,
 VALUES
 ('123456', 'placeholder_1.png', 'hechenxi','114514',1,0,0,0,'Hello world', 0,'',0),
 ('314159', 'placeholder_2.png', 'hechenxi','114514',1,1,0,0,'Hello world Again', 0,'2ec7cf8ae158b3b1f40065abfb33e81143707842',0),
-('142857', 'placeholder_3.png', 'liuxs','114514',0,0,0,1,'Hello world by lxs', 0,'',0);
+('87wrnx', 'placeholder_3.png', 'panyu','114514',0,0,0,1,'Hello world by py', 0,'',0),
+('1fserv7', 'placeholder_4.png', 'tyg','114514',0,0,0,1,'Hello world by gty', 0,'',0),
+('142857', 'placeholder_4.png', 'liuxs','114514',0,0,0,1,'Hello world by lxs', 0,'',0),
+('w837r9her', 'placeholder_5.png', 'liuxs','114514',0,0,0,1,'Hello world by lxs again', 0,'',0);
 
-INSERT INTO authorization(imgid, username, message, status, is_deleted)
+INSERT INTO authorization(imgtag, username, message, status, is_deleted)
 VALUES
-(1, 'yyzjason','I want to have access', 'PENDING', 0),
-(1, 'panyu', 'I want to have access', 'AUTHORIZED', 0),
-(1, 'korolxu', 'I want to have access', 'REJECTED', 0);
+('123456', 'tyg','I want to have access', 'PENDING', 0),
+('314159', 'yyzjason','I want to have access', 'PENDING', 0),
+('314159', 'panyu', 'I want to have access', 'GRANTED', 0),
+('142857', 'panyu', 'I want to have access', 'GRANTED', 0),
+('w837r9her', 'korolxu', 'I want to have access', 'REJECTED', 0),
+('314159', 'korolxu', 'I want to have access', 'REJECTED', 0);
