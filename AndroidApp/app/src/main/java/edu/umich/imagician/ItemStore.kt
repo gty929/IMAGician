@@ -132,6 +132,10 @@ object ItemStore {
             sender = "Ron",
             message = "dsdsds"
         ))
+        watermarkPost?.pendingRequestList?.add(WatermarkRequest(
+            sender = "Him",
+            message = "dsrgggggdsds"
+        ))
     }
 
     fun getRequestDetail(index: Int) {

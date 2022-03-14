@@ -1,6 +1,7 @@
 package edu.umich.imagician
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import androidx.core.content.ContextCompat
 import edu.umich.imagician.databinding.ListitemHistoryBinding
 import edu.umich.imagician.databinding.ListitemRequestBinding
 import edu.umich.imagician.databinding.ListitemUploadBinding
+import edu.umich.imagician.utils.toast
+import kotlin.math.log
 
 class RequestListAdapter(context: Context, watermarkRequests: ArrayList<WatermarkRequest?>) :
     ArrayAdapter<WatermarkRequest?>(context, 0, watermarkRequests) {

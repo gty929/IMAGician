@@ -2,34 +2,64 @@ package edu.umich.imagician
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import edu.umich.imagician.databinding.ActivityUploadHistoryBinding
-import edu.umich.imagician.databinding.ItemRequestInfoBinding
-import edu.umich.imagician.databinding.TestListitemBinding
 import edu.umich.imagician.utils.toast
 
 class UploadHistoryActivity : AppCompatActivity() {
-//    private lateinit var view: ActivityUploadHistoryBinding
-    private lateinit var view: TestListitemBinding
+    private lateinit var view: ActivityUploadHistoryBinding
     private lateinit var watermarkPost: WatermarkPost
     private lateinit var historyListAdapter: HistoryListAdapter
+    private lateinit var watermarkRequest: WatermarkRequest
+    private var reqIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        view = ActivityUploadHistoryBinding.inflate(layoutInflater)
-        view = TestListitemBinding.inflate(layoutInflater)
+        view = ActivityUploadHistoryBinding.inflate(layoutInflater)
         setContentView(view.root)
         var index = intent.getIntExtra("index", -1)
         if (index == -1) {
             toast("Error: incorrect post index!")
         }
+        view.buttonBack.setOnClickListener {
+            view.reqInfoPad.isVisible = false
+            view.reqList.isVisible = true
+        }
+        view.buttonCancel.setOnClickListener {
+            view.reqInfoPad.isVisible = false
+            view.reqList.isVisible = true
+        }
+        view.buttonGrant.setOnClickListener {
+            watermarkRequest.status = "GRANTED"
+            postUpdateStatus()
+            showStatus(reqIndex)
+        }
+        view.buttonReject.setOnClickListener {
+            watermarkRequest.status = "REJECTED"
+            postUpdateStatus()
+            showStatus(reqIndex)
+        }
+
         showPost(index)
     }
 
-    fun seeMore(index: Int) {
-        view.reqList.isVisible = false
-        val watermarkRequest = historyListAdapter.getItem(index)
+    fun seeMore(idx: Int) {
+        toast("index clicked: $idx")
+        reqIndex = idx
+        watermarkRequest = watermarkPost.pendingRequestList[reqIndex]!!
+        // Request Info Fields
+        view.textView17.text = watermarkRequest.sender
+        view.textView15.text = watermarkRequest.message
 
+        view.reqList.isVisible = false
+        view.reqInfoPad.isVisible = true
+        if (watermarkRequest.status != "PENDING") {
+            showStatus(idx)
+        } else {
+            showOpts()
+        }
     }
 
     private fun showPost(index: Int) {
@@ -56,6 +86,28 @@ class UploadHistoryActivity : AppCompatActivity() {
 
         // history requests
         view.reqList.adapter = historyListAdapter
+    }
 
+    private fun showOpts() {
+        view.ops.isVisible = true
+        view.status.isVisible = false
+        view.buttonBack.isVisible = false
+    }
+
+    private fun showStatus(idx: Int) {
+        view.ops.isVisible = false
+        view.status.text = watermarkRequest.status
+        val color = when (watermarkRequest.status) {
+            "GRANTED" -> R.color.granted
+            else -> R.color.rejected
+        }
+        view.status.setBackgroundColor(ContextCompat.getColor(this, color))
+        view.status.isVisible = true
+        view.buttonBack.isVisible = true
+    }
+
+    private fun postUpdateStatus() {
+        // post change to server
+        toast("Update status to be ${watermarkRequest.status}")
     }
 }

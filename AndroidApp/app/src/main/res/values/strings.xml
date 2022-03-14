@@ -36,6 +36,10 @@
     <string name="req_name">Ron</string>
     <string name="req_msg_short">Thank you for sharing this beautiful photo! I’m...</string>
     <string name="see_more">SEE MORE</string>
+    <string name="op_grant">GRANT</string>
+    <string name="op_reject">REJECT</string>
+    <string name="op_cancel">Cancel</string>
+    <string name="op_back">Back</string>
 
     <string name="examine_watermark">Examine Watermark</string>
     <string name="new_watermark">New Watermark</string>
