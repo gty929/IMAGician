@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import com.google.gson.Gson
 import edu.umich.imagician.utils.mediaStoreAlloc
 import edu.umich.imagician.utils.toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 @ExperimentalCoroutinesApi
 class ExportImageActivity: AppCompatActivity() {
-    private var watermarkPostJsonStr: String? = null
+//    private var watermarkPostJsonStr: String? = null
     private var imageUri: Uri? = null
     private var newImageUri: Uri? = null
     private var filename: String? = null
@@ -42,7 +43,7 @@ class ExportImageActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_export_image)
         imageUri = intent.getParcelableExtra("IMAGE_URI")
-        watermarkPostJsonStr = intent.extras?.getString("WATERMARK_POST_JSON_STR")
+//        watermarkPostJsonStr = intent.extras?.getString("WATERMARK_POST_JSON_STR")
         progressBar = findViewById(R.id.progressBar)
 
         // progressing state
@@ -50,7 +51,8 @@ class ExportImageActivity: AppCompatActivity() {
 
         // set top bar
         findViewById<ImageView>(R.id.imagePreview).setImageURI(imageUri)
-        filename = intent.extras?.getString("FILENAME_STR")
+//        filename = intent.extras?.getString("FILENAME_STR")
+        filename = WatermarkPost.post.filename
         findViewById<TextView>(R.id.imageFilename).text = filename
         mockProgressBar()
 
@@ -140,14 +142,15 @@ class ExportImageActivity: AppCompatActivity() {
                 toast("calculating checksum")
             }
             val checksum = StegnoAlgo.getChecksum(newImg)
+            WatermarkPost.post.checksum = checksum
             hasHashed.set(true)
             // send data here (all fields + checksum) [TO BE UPDATED]
             runOnUiThread {
-                toast("sending $watermarkPostJsonStr with checksum $checksum", false)
+                toast("sending watermark with checksum $checksum", false)
             }
             val context = this
             MainScope().launch {
-                ItemStore.postDataAfterLogin(context, watermarkPostJsonStr?:"")
+                ItemStore.postDataAfterLogin(context, WatermarkPost.post)
                 hasUploaded.set(true)
             }
 //            try {

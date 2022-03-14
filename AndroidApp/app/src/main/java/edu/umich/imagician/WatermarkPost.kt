@@ -19,9 +19,13 @@ data class WatermarkPost (var id: Int? = null,
                      var phoneFlag: Boolean = false,
                      var timestamp: String? = null,
                      var numPending: Int? = null,
+                     var checksum: String? = null,
                      var detailed: Boolean = false) {
     private lateinit var pendingRequestList: ArrayList<WatermarkRequest>
 
+    companion object CompanionObject {
+        val post = WatermarkPost()
+    }
     fun getPendingNum() : Int? {
         numPending = 0
         if (this::pendingRequestList.isInitialized) {

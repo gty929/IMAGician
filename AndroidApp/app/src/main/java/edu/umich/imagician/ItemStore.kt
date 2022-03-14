@@ -5,10 +5,10 @@ import android.util.Log
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley.newRequestQueue
+import com.google.gson.Gson
+import edu.umich.imagician.utils.toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONException
@@ -148,6 +148,8 @@ object ItemStore {
         val requestBody = LoginManager.cookieWrapper(data)
         return withContext(RetrofitManager.retrofitExCatcher) {
             // Use Retrofit's suspending POST request and wait for the response
+            Log.d("Post send","Sending ${Gson().toJson(data)}")
+
             var response: Response<ResponseBody>? = null
             try {
                 response = RetrofitManager.networkAPIs.updateUserInfo(requestBody)
