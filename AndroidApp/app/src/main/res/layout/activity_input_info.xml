@@ -130,8 +130,9 @@
                         android:layout_height="wrap_content"
                         android:ems="14"
                         android:gravity="start|top"
-                        android:inputType="textMultiLine"
                         android:hint="@string/include_anything_you_want_to_say"
+                        android:inputType="textMultiLine"
+                        android:maxLength="100"
                         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                 </TableRow>

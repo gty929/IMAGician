@@ -35,7 +35,7 @@ object ItemStore {
                 WatermarkRequest(
                 watermarkPost = WatermarkPost(filename = "fake.bmp"),
                 timestamp = "yyyy/dd/mm, time",
-                status = "Granted"
+                status = "GRANTED"
             ))
             posts.add(WatermarkPost(
                 filename = "image.bmp",
@@ -47,7 +47,7 @@ object ItemStore {
             requests.add(WatermarkRequest(
                 watermarkPost = WatermarkPost(filename = "fake.bmp"),
                 timestamp = "yyyy/dd/mm, time",
-                status = "Rejected"
+                status = "REJECTED"
             ))
             posts.add(WatermarkPost(
                     filename = "image.bmp",
@@ -59,7 +59,7 @@ object ItemStore {
             requests.add(WatermarkRequest(
                 watermarkPost = WatermarkPost(filename = "fake.bmp"),
                 timestamp = "yyyy/dd/mm, time",
-                status = "Pending"
+                status = "PENDING"
             ))
             posts.add(WatermarkPost(
                     filename = "image.bmp",
@@ -127,7 +127,11 @@ object ItemStore {
     }
 
     fun getPostDetail(index: Int) {
-
+        var watermarkPost = posts[index]
+        watermarkPost?.pendingRequestList?.add(WatermarkRequest(
+            sender = "Ron",
+            message = "dsdsds"
+        ))
     }
 
     fun getRequestDetail(index: Int) {

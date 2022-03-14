@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/chenxi.css') }}">
+    <title>insta485</title>
+</head>
+
+<body>
+
+    <div class="title">
+        <a class="logo" href="/">
+            <img src="{{ url_for('static',filename='images/logo.png') }}" alt="logo" style="width: 20%;">
+        </a>
+        <span class="links">
+            <a href="/accounts/login/">login</a>
+        </span>
+        <hr>
+    </div>
+
+    <div class="account">
+        <br>
+        <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
+            <input type="text" name="username" placeholder="username" required />
+            <input type="password" name="password" placeholder="password" required />
+            <input type="submit" value="login" />
+            <input type="hidden" name="operation" value="login" />
+        </form>
+        <br>
+        Don't have an account?
+        <span class="links">
+            <a href="/accounts/create/">Sign up</a>
+        </span>
+    </div>
+    <br>
+    <br>
+    <br>
+
+
+
+</body>
+
+</html>

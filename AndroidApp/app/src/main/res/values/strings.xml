@@ -28,7 +28,7 @@
 
     <string name="req_info">Request Info</string>
     <string name="req_sent_to">Request sent to:</string>
-    <string name="req_msg">Thank you for sharing this beautiful photo! I’m writing a guide for tourists and I’m asking for the permission to use this photo in my article. It WILL be used to make profit and it will be published on twitter. Thank you!</string>
+    <string name="req_msg">Thank you for sharing this beautiful photo! I’m writing a guide for tourists and I’m asking for the permission to use this photo in my article. It WILL be used to make profit and it will be published on twitter. Thank you! </string>
     <string name="req_status">REJECTED</string>
 
     <string name="req_list">Request List</string>

@@ -1,0 +1,50 @@
+#!/bin/bash
+# imagiciandb
+# Stop on errors
+# See https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -Eeuo pipefail
+
+# Sanity check command line options
+usage() {
+  echo "Usage: $0 (create|destroy|reset|dump)"
+}
+if [ $# -ne 1 ]; then
+  usage
+  exit 1
+fi
+# Parse argument.  $1 is the first argument
+case $1 in
+  "create")
+    if test -f "var/imagician.sqlite3"; then
+        echo "Error: database already exists"
+        exit 1
+    fi
+    mkdir -p var/uploads
+    sqlite3 var/imagician.sqlite3 < sql/schema.sql
+    sqlite3 var/imagician.sqlite3 < sql/data.sql
+    cp -r sql/uploads/* var/uploads/
+    ;;
+  "destroy")
+    rm -rf var/imagician.sqlite3 var/uploads
+    ;;
+  "reset")
+    rm -rf var/imagician.sqlite3 var/uploads
+    mkdir -p var/uploads
+    sqlite3 var/imagician.sqlite3 < sql/schema.sql
+    sqlite3 var/imagician.sqlite3 < sql/data.sql
+    cp -r sql/uploads/* var/uploads/
+    ;;
+  "dump")
+    echo "********************************************************"
+    sqlite3 -batch -line var/imagician.sqlite3 'SELECT * FROM users'
+    echo "********************************************************"
+    sqlite3 -batch -line var/imagician.sqlite3 'SELECT * FROM images'
+    echo "********************************************************"
+    sqlite3 -batch -line var/imagician.sqlite3 'SELECT * FROM authorization'
+    echo "********************************************************"
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac

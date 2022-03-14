@@ -21,18 +21,11 @@ data class WatermarkPost (var id: Int? = null,
                      var numPending: Int? = null,
                      var checksum: String? = null,
                      var detailed: Boolean = false) {
-    private lateinit var pendingRequestList: ArrayList<WatermarkRequest>
+
+    val pendingRequestList = arrayListOf<WatermarkRequest?>()
 
     companion object CompanionObject {
         val post = WatermarkPost()
     }
-    fun getPendingNum() : Int? {
-        numPending = 0
-        if (this::pendingRequestList.isInitialized) {
-            numPending = pendingRequestList.size
-        }
-        return numPending
-    }
-
 
 }

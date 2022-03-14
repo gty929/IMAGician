@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
+import edu.umich.imagician.databinding.ListitemHistoryBinding
 import edu.umich.imagician.databinding.ListitemRequestBinding
 import edu.umich.imagician.databinding.ListitemUploadBinding
 
@@ -22,8 +23,8 @@ class RequestListAdapter(context: Context, watermarkRequests: ArrayList<Watermar
 
         getItem(position)?.run {
             val color = when (status) {
-                "Granted" -> R.color.granted
-                "Pending" -> R.color.pending
+                "GRANTED" -> R.color.granted
+                "PENDING" -> R.color.pending
                 else -> R.color.rejected
             }
             listItemView.textView.text = watermarkPost?.filename
@@ -61,6 +62,33 @@ class PostListAdapter(context: Context, watermarkPosts: ArrayList<WatermarkPost?
 
         return listItemView.root
     }
-
-
 }
+
+class HistoryListAdapter(
+    context: Context,
+    watermarkRequests: ArrayList<WatermarkRequest?>,
+    val seeMore: (index: Int) -> Unit
+) :
+    ArrayAdapter<WatermarkRequest?>(context, 0, watermarkRequests) {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+
+        val listItemView = (convertView?.tag /* reuse binding */ ?: run {
+            val rowView = LayoutInflater.from(context)
+                .inflate(R.layout.listitem_history, parent, false)
+            rowView.tag = ListitemHistoryBinding.bind(rowView)
+            rowView.tag
+        }) as ListitemHistoryBinding
+
+        listItemView.button.setOnClickListener {
+            seeMore(position)
+        }
+
+        getItem(position)?.run {
+            listItemView.requester.text = sender
+            listItemView.msg.text = message
+        }
+
+        return listItemView.root
+    }
+}
+

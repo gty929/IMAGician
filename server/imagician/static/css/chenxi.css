@@ -1,0 +1,132 @@
+.title .links { 
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
+    font-size: 150%;
+}
+
+a:link, a:visited {
+    color: black; 
+    background-color: transparent; 
+    text-decoration: none;
+    font-weight:bold;
+}
+
+
+a:hover, a:active {
+    color: black;
+    background-color: transparent;
+    text-decoration: underline;
+    font-weight:bold;
+}
+
+.posts .post{
+    border:1px solid gray;
+    width: 600px; 
+    margin: auto;
+    font-family: Tahoma;
+}
+
+.posts .post .post_image{
+    position: relative;
+    left: 5px;
+    top: 25px;
+    width: 590px;
+}
+
+.posts .post .user_image{
+    position: relative;
+    
+    left: 20px;
+    top: 20px;
+    width: 60px;
+}
+
+.posts .post .user_name{
+    position: relative;
+    left: 25px;
+    bottom: 5px;
+}
+
+.posts .post .time_since{
+    float: right;
+    margin-top: 40px;
+    margin-right: 20px;
+    color:gray;
+}
+
+.posts .post .comments{
+    margin: auto;
+    width: 580px;
+
+}
+
+.user{
+    width: 800px; 
+    margin: auto;
+    font-family: Tahoma;
+}
+
+.account{
+    width: 800px; 
+    margin: auto;
+    font-family: Tahoma;
+}
+
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: Tahoma;
+}
+
+input[type=password], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: Tahoma;
+}
+
+/* Style the submit button */
+input[type=submit] {
+  width: 100%;
+  background-color: #5a5a5a;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: Tahoma;
+}
+
+/* Add a background color to the submit button on mouse-over */
+input[type=submit]:hover {
+  background-color: #2e2e2e;
+}
+
+/* Style the submit button */
+input[type=file] {
+  width: 100%;
+  background-color: #5a5a5a;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: Tahoma;
+}
+
+/* Add a background color to the submit button on mouse-over */
+input[type=file]:hover {
+  background-color: #2e2e2e;
+}
