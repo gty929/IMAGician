@@ -22,7 +22,7 @@ INSERT INTO authorization(imgtag, username, message, status, is_deleted)
 VALUES
 ('123456', 'tyg','I want to have access', 'PENDING', 0),
 ('314159', 'yyzjason','I want to have access', 'PENDING', 0),
-('314159', 'panyu', 'I want to have access', 'GRANTED', 0),
+('314159', 'panyu', 'I want to have access', 'PENDING', 0),
 ('142857', 'panyu', 'I want to have access', 'GRANTED', 0),
 ('w837r9her', 'korolxu', 'I want to have access', 'REJECTED', 0),
 ('314159', 'korolxu', 'I want to have access', 'REJECTED', 0);

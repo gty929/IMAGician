@@ -442,6 +442,8 @@ def get_all_creations():
                         'message_encrypted': whether the message is encrypted
                         'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
                         'file': the name of the enclosed file. empty if no enclosed file. 
+                        'tag': the tag of the image
+                        'num_pending': number of pending requests
                     'requests': an array of json of
                         'id': the id of the request
                         'imgtag': the tag of the image
@@ -470,6 +472,7 @@ def get_all_creations():
         tag = img['tag']
         info = {}
         info['image'] = get_img_by_tag_helper(tag)
+        info['image']['num_pending'] = 0
         cur = connection.execute(
             "SELECT DISTINCT created, id, imgtag, message, status, username "
             "FROM authorization "
@@ -478,6 +481,9 @@ def get_all_creations():
             (tag, )
         )
         info['requests'] = cur.fetchall()
+        for request in info['requests']:
+            if request['status'] == 'PENDING':
+                info['image']['num_pending'] += 1
         result.append(info)
     return flask.jsonify(**{'result':result})
 
@@ -499,7 +505,8 @@ def get_one_creation(tag):
                 'message': the message
                 'message_encrypted': whether the message is encrypted
                 'folder': the folder name where the enclosed file is stored. empty if no enclosed file. 
-                'file': the name of the enclosed file. empty if no enclosed file.  
+                'tag': the tag of the image
+                'num_pending': number of pending requests
             'requests': an array of json of
                 'id': the id of the request
                 'imgtag': the id of the image
@@ -526,6 +533,7 @@ def get_one_creation(tag):
         abort(404)
     result = {}
     result['image'] = get_img_by_tag_helper(tag)
+    result['image']['num_pending'] = 0
     cur = connection.execute(
         "SELECT DISTINCT created, id, imgtag, message, status, username "
         "FROM authorization "
@@ -534,6 +542,9 @@ def get_one_creation(tag):
         (tag, )
     )
     result['requests'] = cur.fetchall()
+    for request in result['requests']:
+            if request['status'] == 'PENDING':
+                result['image']['num_pending'] += 1
     return flask.jsonify(**result)
 
 @imagician.app.route("/requests/received_request/<int:reqid>/", methods=['GET'])

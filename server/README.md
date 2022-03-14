@@ -109,10 +109,11 @@ This URL returns all the information (including the request information) of all 
         6. `imgname`, string: the name of the image.
         7. `message`, string: the enclosed message.
         8. `message_encrypted`, bool: true if the message is cyphertext, else false.
-        9. `owner`, string: the username of the creator.
-        10. `phone`, string: the phone number of the creator. Empty string if the creator didn't disclose this info.
-        11. `tag`, string: the tag of the image.
-        12. `time`, string: the time when the info of image was stored, sample: "2022-03-13 04:15:52". Empty string if the creator didn't disclose this info.
+        9. `num_pending`, integer: the number of pending request for this image.
+        10. `owner`, string: the username of the creator.
+        11. `phone`, string: the phone number of the creator. Empty string if the creator didn't disclose this info.
+        12. `tag`, string: the tag of the image.
+        13. `time`, string: the time when the info of image was stored, sample: "2022-03-13 04:15:52". Empty string if the creator didn't disclose this info.
     2. `requests`, an array of json. Each element of that array is in the form:
         1. `created`: the time when this request was created, sample: "2022-03-13 04:15:52".
         2. `id`: the request id of this request.
