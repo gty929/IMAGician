@@ -1,11 +1,21 @@
 package edu.umich.imagician
 
+import android.util.Log
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import retrofit2.Response
+import java.lang.Exception
+import java.sql.Timestamp
 
 // Class of post
 
-data class WatermarkPost (var id: Int? = null,
+class WatermarkPost (var id: Int? = null,
                      var username: String? = null,
                      var realName: String? = null,
                      var filename: String? = null,
@@ -21,7 +31,7 @@ data class WatermarkPost (var id: Int? = null,
                      var timestamp: String? = null,
                      var numPending: Int? = null,
                      var checksum: String? = null,
-                     var detailed: Boolean = false) {
+                     var detailed: Boolean = false): Sendable {
 
     val pendingRequestList = arrayListOf<WatermarkRequest?>()
 
@@ -29,9 +39,16 @@ data class WatermarkPost (var id: Int? = null,
         val post = WatermarkPost()
     }
 
-    fun toFormData() : MultipartBody {
-        val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-        return requestBody.build()
+    override suspend fun send(request: RequestBody): Response<ResponseBody>? {
+        return RetrofitManager.networkAPIs.postWatermark(request)
     }
+
+    override fun getRequestBodyBuilder(): MultipartBody.Builder {
+        return MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("username", this.username?:"")
+            .addFormDataPart("realname", this.realName?:"")
+    }
+
+    override fun parse(jsonObjectStr: String) {  }
 
 }
