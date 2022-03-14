@@ -120,7 +120,11 @@ object ItemStore {
     }
 
     fun getPostDetail(index: Int) {
-
+        var watermarkPost = posts[index]
+        watermarkPost?.pendingRequestList?.add(WatermarkRequest(
+            sender = "Ron",
+            message = "dsdsds"
+        ))
     }
 
     fun getRequestDetail(index: Int) {

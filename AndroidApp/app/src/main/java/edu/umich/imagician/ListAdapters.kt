@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
+import edu.umich.imagician.databinding.ListitemHistoryBinding
 import edu.umich.imagician.databinding.ListitemRequestBinding
 import edu.umich.imagician.databinding.ListitemUploadBinding
 
@@ -61,6 +62,26 @@ class PostListAdapter(context: Context, watermarkPosts: ArrayList<WatermarkPost?
 
         return listItemView.root
     }
-
-
 }
+
+class HistoryListAdapter(context: Context, watermarkRequests: ArrayList<WatermarkRequest?>) :
+    ArrayAdapter<WatermarkRequest?>(context, 0, watermarkRequests) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+
+        val listItemView = (convertView?.tag /* reuse binding */ ?: run {
+            val rowView = LayoutInflater.from(context)
+                .inflate(R.layout.listitem_history, parent, false)
+            rowView.tag = ListitemHistoryBinding.bind(rowView)
+            rowView.tag
+        }) as ListitemHistoryBinding
+
+        getItem(position)?.run {
+            listItemView.requester.text = sender
+            listItemView.msg.text = message
+        }
+
+        return listItemView.root
+    }
+}
+

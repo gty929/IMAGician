@@ -20,15 +20,7 @@ class WatermarkPost (var id: Int? = null,
                      var timestamp: String? = null,
                      var numPending: Int? = null,
                      var detailed: Boolean = false) {
-    private lateinit var pendingRequestList: ArrayList<WatermarkRequest>
-
-    fun getPendingNum() : Int? {
-        numPending = 0
-        if (this::pendingRequestList.isInitialized) {
-            numPending = pendingRequestList.size
-        }
-        return numPending
-    }
+    val pendingRequestList = arrayListOf<WatermarkRequest?>()
 
 
 }

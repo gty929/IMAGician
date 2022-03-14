@@ -10,6 +10,8 @@ import edu.umich.imagician.utils.toast
 class UploadHistoryActivity : AppCompatActivity() {
     private lateinit var view: ActivityUploadHistoryBinding
     private lateinit var watermarkPost: WatermarkPost
+    private lateinit var historyListAdapter: HistoryListAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         view = ActivityUploadHistoryBinding.inflate(layoutInflater)
@@ -24,10 +26,11 @@ class UploadHistoryActivity : AppCompatActivity() {
     fun seeMoreInfo(view: View?) = startActivity(Intent(this, ReqDetailActivity::class.java))
 
     private fun showPost(index: Int) {
-        ItemStore.getRequestDetail(index)
-//        LoginManager.info.email?.let { findViewById<CheckBox>(R.id.emailCheckBox).text = it } ?:
-//        findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.emailRow))
+        ItemStore.getPostDetail(index)
         watermarkPost = ItemStore.posts[index]!!
+        historyListAdapter = HistoryListAdapter(this, watermarkPost.pendingRequestList)
+        view.reqList.adapter = historyListAdapter
+
         // required
         view.jpg.text = watermarkPost.filename
 
