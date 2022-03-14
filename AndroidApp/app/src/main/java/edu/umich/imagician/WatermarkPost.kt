@@ -1,6 +1,7 @@
 package edu.umich.imagician
 
-import java.sql.Timestamp
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 // Class of post
 
@@ -26,6 +27,11 @@ data class WatermarkPost (var id: Int? = null,
 
     companion object CompanionObject {
         val post = WatermarkPost()
+    }
+
+    fun toFormData() : MultipartBody {
+        val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+        return requestBody.build()
     }
 
 }

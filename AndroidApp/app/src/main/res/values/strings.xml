@@ -61,6 +61,8 @@
     <string name="message_text">this is the message. this is the message. this is the message.</string>
     <string name="title_activity_req_detail">ReqDetailActivity</string>
 
+    <string name="embed_info">Embedded Info:</string>
+
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="save_to_album">Save to Album</string>

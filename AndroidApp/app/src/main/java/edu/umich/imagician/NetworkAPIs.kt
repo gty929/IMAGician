@@ -23,5 +23,5 @@ interface NetworkAPIs {
     @POST("postWatermark/")
     suspend fun postWatermark(@Body requestBody:RequestBody): Response<ResponseBody>
     @GET("requestWatermark/")
-    suspend fun requestWatermark(@Body requestBody: RequestBody): Response<ResponseBody>
+    suspend fun requestWatermark(): Response<ResponseBody>
 }
