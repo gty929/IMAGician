@@ -182,7 +182,10 @@ object ItemStore {
         }
     }
 
-    // http wrapper for both post and get
+    /** http wrapper for both post and get
+     * should add a callback to handle the return code
+     * the fields within data can be modified
+     * */
     suspend fun httpCall(data: Sendable, callback: (returnCode:Int) -> Unit) {
         MainScope().launch {
             withContext(RetrofitManager.retrofitExCatcher) {
