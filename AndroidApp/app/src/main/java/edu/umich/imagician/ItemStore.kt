@@ -8,6 +8,8 @@ import com.android.volley.toolbox.Volley.newRequestQueue
 import com.google.gson.Gson
 import edu.umich.imagician.utils.toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import org.json.JSONArray
@@ -177,6 +179,38 @@ object ItemStore {
                 return@withContext false
             }
 
+        }
+    }
+
+    // http wrapper for both post and get
+    suspend fun httpCall(data: Sendable, callback: (returnCode:Int) -> Unit) {
+        MainScope().launch {
+            withContext(RetrofitManager.retrofitExCatcher) {
+                // Use Retrofit's suspending POST request and wait for the response
+                var returnCode = 0
+                var response: Response<ResponseBody>? = null
+                try {
+                    response = data.send(data.getRequestBodyBuilder().build())
+                } catch (e: Exception) {
+                    Log.e("send", "send failed", e)
+                }
+                if (response != null) {
+                    returnCode = response.code()
+                    try {
+                        if (response.isSuccessful) {
+                            data.parse(response.body().toString())
+                        } else {
+                            Log.e("http failure response", response.errorBody().toString())
+                        }
+
+                    } catch (e: Exception) {
+                        Log.e("response parse exception", e.toString())
+                    }
+
+                }
+                callback(returnCode)
+
+            }
         }
     }
 }
