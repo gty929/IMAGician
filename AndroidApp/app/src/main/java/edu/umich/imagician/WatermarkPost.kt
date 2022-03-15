@@ -37,7 +37,7 @@ class WatermarkPost (var tag: String? = null,
     lateinit var body: MultipartBody.Builder
 
     companion object CompanionObject {
-        val post = WatermarkPost()
+        var post = WatermarkPost()
     }
 
     override suspend fun send(request: RequestBody): Response<ResponseBody>? {
@@ -80,7 +80,7 @@ class WatermarkPost (var tag: String? = null,
     private fun parseAll(jsonObjectStr: String) {
         try {
             val obj = JSONObject(jsonObjectStr)
-            val f = { api:ApiStrings -> try {obj.getString(api.field)} catch (e: Exception) {null} }
+            val f = { api:ApiStrings -> try {obj.getString(api.field).let { if (it.isEmpty()) null else it }} catch (e: Exception) {null} }
 //            if (tag != f(TAG)) { throw error("Incorrect tag!") }
 
             authorized = (obj.getInt("authorized") == 1)

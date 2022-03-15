@@ -22,6 +22,8 @@ class DisplayInfoActivity : AppCompatActivity() {
         isModified = intent.getBooleanExtra("isModified", false)
         imageUri = intent.getParcelableExtra("IMAGE_URI")
         view.imageShow.setImageURI(imageUri)
+        view.chipEnter.text = "Encrypted, click to enter the password"
+        view.chipDl.text = "Download"
         showEmbeddedInfo()
     }
 

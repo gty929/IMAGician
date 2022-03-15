@@ -95,10 +95,8 @@ class ExamineActivity: AppCompatActivity() {
 //            } catch (e: InterruptedException) {
 //                e.printStackTrace()
 //            }
-            val watermarkPost = WatermarkPost.post
-            watermarkPost.tag = tag
-            watermarkPost.mode = Sendable.Mode.EMPTY // query by tag
-            ItemStore.httpCall(watermarkPost) { code ->
+            WatermarkPost.post = WatermarkPost(tag=tag, mode = Sendable.Mode.EMPTY)
+            ItemStore.httpCall(WatermarkPost.post) { code ->
                 if (code != 200) if (code != 200) toast("Upload fails $code")
                 hasRetrieved.set(true)
             }
@@ -108,7 +106,7 @@ class ExamineActivity: AppCompatActivity() {
             val checksum = StegnoAlgo.getChecksum(img)
             // check the checksum
             // checksum of the post is the correct one (unmodified)
-            isModified = (checksum != watermarkPost.checksum)
+            isModified = (checksum != WatermarkPost.post.checksum)
             hasChecked.set(true)
             runOnUiThread {
                 toast("checksum = $checksum", false)

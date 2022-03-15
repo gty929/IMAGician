@@ -10,8 +10,8 @@
         android:id="@+id/image_preview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:background="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -447,7 +447,7 @@
 
                     <TextView
                         android:id="@+id/msg"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:layout_marginBottom="16dp"
@@ -460,6 +460,7 @@
                         android:textColor="@color/black"
                         android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/msg_icon" />
 
@@ -475,7 +476,7 @@
                         android:textSize="16sp"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/msg"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/msg_icon"
                         tools:text="Encrypted, click to enter the password" />
@@ -487,11 +488,9 @@
                         android:layout_marginTop="3dp"
                         android:layout_marginBottom="16dp"
                         android:background="@drawable/rounded_corner_view"
-                        android:ems="10"
                         android:hint="Enter your password here"
                         android:inputType="textPassword"
                         android:minHeight="50dp"
-                        android:paddingHorizontal="10dp"
                         android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

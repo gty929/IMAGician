@@ -65,14 +65,15 @@ class InputInfoActivity: AppCompatActivity()  {
     }
 
     private fun setWatermarkPost() {
-        val post = WatermarkPost.post
-        post.username = LoginManager.info.username
-        post.filename = findViewById<EditText>(R.id.editFileName).text.toString()
-        post.message = findViewById<EditText>(R.id.editMessage).text.toString()
-        post.timestampFlag = timestampCheckBox.isChecked
-        post.usernameFlag = findViewById<CheckBox>(R.id.usernameCheckBox).isChecked
-        post.emailFlag = findViewById<CheckBox>(R.id.emailCheckBox)?.isChecked ?: false
-        post.phoneFlag = findViewById<CheckBox>(R.id.phoneCheckBox)?.isChecked ?: false
+        WatermarkPost.post = WatermarkPost(
+            username = LoginManager.info.username,
+            filename = findViewById<EditText>(R.id.editFileName).text.toString(),
+            message = findViewById<EditText>(R.id.editMessage).text.toString(),
+            timestampFlag = timestampCheckBox.isChecked,
+            usernameFlag = findViewById<CheckBox>(R.id.usernameCheckBox).isChecked,
+            emailFlag = findViewById<CheckBox>(R.id.emailCheckBox)?.isChecked ?: false,
+            phoneFlag = findViewById<CheckBox>(R.id.phoneCheckBox)?.isChecked ?: false
+        )
     }
 
     private fun startTimestampThread(){

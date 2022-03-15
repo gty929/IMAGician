@@ -19,7 +19,7 @@ class WatermarkRequest (var id: Int? = null,
                         var mode: Mode = Mode.IDLE) : Sendable {
 
     companion object CompanionObject {
-        val post = WatermarkRequest()
+        var post = WatermarkRequest()
     }
 
     override suspend fun send(request: RequestBody): Response<ResponseBody>? {
