@@ -214,7 +214,6 @@
                         android:background="@drawable/rounded_corner_view"
                         android:ems="10"
                         android:hint="Enter your message here"
-                        android:hintTextColor="#795548"
                         android:inputType="textMultiLine"
                         android:minHeight="250dp"
                         android:paddingHorizontal="10dp"

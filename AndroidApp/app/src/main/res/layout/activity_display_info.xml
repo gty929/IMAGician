@@ -487,7 +487,6 @@
                         android:background="@drawable/rounded_corner_view"
                         android:ems="10"
                         android:hint="Enter your password here"
-                        android:hintTextColor="#795548"
                         android:inputType="textPassword"
                         android:minHeight="50dp"
                         android:paddingHorizontal="10dp"
