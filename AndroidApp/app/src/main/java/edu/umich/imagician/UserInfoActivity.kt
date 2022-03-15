@@ -31,32 +31,40 @@ class UserInfoActivity : AppCompatActivity() {
 
         usernameInput.setText(LoginManager.info.username)
         emailInput.setText(LoginManager.info.email)
-        phoneInput.setText(LoginManager.info.phone)
+        phoneInput.setText(LoginManager.info.phoneNumber)
 
         updateButton.setOnClickListener {
-            MainScope().launch {
-                val newInfo = UserInfo(
-                    username = LoginManager.info.username,
-                    email = emailInput.text.let { if (it.isEmpty()) null else it.toString()},
-                    phone = phoneInput.text.let { if (it.isEmpty()) null else it.toString()}
-                )
-                if (LoginManager.updateUserInfo(context, newInfo)) {
-                    toast("Your information has been updated")
-                } else {
-
-                    /** mock */
-                    LoginManager.info = newInfo
-                    /** mock */
-
-
-                    toast("Some error occurs please try again")
-                }
-
-
-
-
-
+            val newInfo = UserInfo(
+                username = LoginManager.info.username,
+                email = emailInput.text.let { if (it.isEmpty()) null else it.toString()},
+                phoneNumber = phoneInput.text.let { if (it.isEmpty()) null else it.toString()}
+            )
+            ItemStore.httpCall(newInfo.copy()) { code ->
+                if (code == 200) LoginManager.info = newInfo
             }
+//            MainScope().launch {
+//                val newInfo = UserInfo(
+//                    username = LoginManager.info.username,
+//                    email = emailInput.text.let { if (it.isEmpty()) null else it.toString()},
+//                    phoneNumber = phoneInput.text.let { if (it.isEmpty()) null else it.toString()}
+//                )
+//                if (LoginManager.updateUserInfo(context, newInfo)) {
+//                    toast("Your information has been updated")
+//                } else {
+//
+//                    /** mock */
+//                    LoginManager.info = newInfo
+//                    /** mock */
+//
+//
+//                    toast("Some error occurs please try again")
+//                }
+//
+
+
+
+
+//            }
         }
 
         logoutButton.setOnClickListener {
