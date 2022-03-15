@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/jpg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -48,7 +48,7 @@
             android:contentDescription="@string/image_to_encode_or_decode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView8"
+            app:layout_constraintTop_toBottomOf="@id/jpg"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:text="Warning: image modification detected!"
             android:textColor="#ED3A3A"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +67,6 @@
             android:id="@+id/embed_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="8dp"
             android:text="@string/embed_info"
             android:textColor="#FFFFFF"
@@ -388,6 +387,7 @@
                         android:id="@+id/chip_dl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:onClick="onClickDownload"
                         app:layout_constraintBottom_toBottomOf="@+id/zip"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/zip"
@@ -469,6 +469,7 @@
                         android:layout_marginTop="3dp"
                         android:layout_marginBottom="16dp"
                         android:minHeight="100dp"
+                        android:onClick="onClickEnter"
                         android:textAlignment="center"
                         android:textSize="16sp"
                         android:visibility="visible"

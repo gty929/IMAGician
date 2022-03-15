@@ -1,5 +1,6 @@
 package edu.umich.imagician
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -21,6 +22,9 @@ class ExamineActivity: AppCompatActivity() {
     private var hasDecoded = AtomicBoolean()
     private var hasRetrieved = AtomicBoolean()
     private var hasChecked = AtomicBoolean()
+
+    private var isModified = false
+    private var isAuthorized = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_examine)
@@ -29,6 +33,7 @@ class ExamineActivity: AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         mockProgressBar()
         extractWatermark()
+
     }
 
     private fun mockProgressBar() {
@@ -64,7 +69,7 @@ class ExamineActivity: AppCompatActivity() {
             }
             handler.post(Runnable {
                 progressBar.progress = 100
-
+                onExamineFinish()
             })
         }).start()
     }
@@ -102,6 +107,14 @@ class ExamineActivity: AppCompatActivity() {
                 toast("checksum = $checksum", false)
             }
         }).start()
+    }
+
+    private fun onExamineFinish() {
+        val intent = Intent(this, DisplayInfoActivity::class.java)
+        intent.putExtra("isModified", isModified)
+        intent.putExtra("isAuthorized", isAuthorized)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
     }
 
 }

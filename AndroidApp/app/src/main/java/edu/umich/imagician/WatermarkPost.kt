@@ -23,6 +23,7 @@ class WatermarkPost (var id: Int? = null,
                      var phoneNumber: String? = null,
                      var uri: String? = null,
                      var message: String? = null,
+                     var folder: String? = null,
                      var timestampFlag: Boolean = false,
                      var usernameFlag: Boolean = false, /** set as false for anonymous posting*/
                      var realNameFlag: Boolean = false,

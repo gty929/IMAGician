@@ -32,18 +32,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(view.root)
         if (LoginManager.isLoggedIn.value != true) { // not logged in
             LoginManager.open(this)
-            /*{ success ->
-                if (success) {
-                    invalidateOptionsMenu()
-                    refreshPos()
-                    refreshReq()
-//                findViewById<ActionMenuItemView>(R.id.loginMenuItem).setText(LoginManager.info.username)
-                } else {
-                    findViewById<ImageButton>(R.id.newWatermarkButton).alpha =
-                        0.2F // cannot create new watermark
-                }
-            } */
-
         }
 
         val loginObserver = Observer<Boolean> { isLoggedIn ->

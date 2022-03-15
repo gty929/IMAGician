@@ -2,8 +2,8 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/confirmMenu"
-        android:icon="@drawable/ic_next"
-        android:title="@string/confirm"
+        android:id="@+id/contactMenu"
+        android:icon="@drawable/ic_send"
+        android:title="@string/send"
         app:showAsAction="always|withText" />
 </menu>
