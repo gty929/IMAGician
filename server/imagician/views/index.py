@@ -331,12 +331,12 @@ def get_tag(tag):
     result = get_img_by_tag_helper(tag)
     
     # Check authorization
-    result['authorized'] = False
+    result['authorized'] = 0
     if 'username' in flask.session:
         username = flask.session['username']
         # Connect to database
         if username == result['owner']:
-            result['authorized'] = True
+            result['authorized'] = 1
         else:
             connection = imagician.model.get_db()
             
@@ -350,7 +350,7 @@ def get_tag(tag):
             authorizations = cur.fetchall()
             for authorization in authorizations:
                 if authorization['status'] == 'GRANTED':
-                    result['authorized'] = True
+                    result['authorized'] = 1
                     break
     return flask.jsonify(**result)
 
