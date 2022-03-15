@@ -2,23 +2,20 @@ package edu.umich.imagician
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import edu.umich.imagician.RetrofitManager.networkAPIs
 import edu.umich.imagician.RetrofitManager.retrofitExCatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
 import java.io.File
 import java.lang.Exception
 import java.time.Instant
-import java.io.IOException
 
 
 /**
@@ -26,7 +23,10 @@ import java.io.IOException
  */
 @ExperimentalCoroutinesApi
 object LoginManager {
-    var isLoggedIn = false
+//    var isLoggedIn = false
+    val isLoggedIn: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
     var info = UserInfo()
     var expiration = Instant.EPOCH
     var cookie: String? = null
@@ -41,9 +41,13 @@ object LoginManager {
     private const val INSTANT_LENGTH = 24
     private const val IV_LENGTH = 12
 
+    init {
+        isLoggedIn.value = false
+    }
+
     @ExperimentalCoroutinesApi
     suspend fun loginOrSignup(context: Context, isSignUp: Boolean, username: String, password: String): Boolean {
-        if (isLoggedIn) {
+        if (isLoggedIn.value == true) {
             Log.e("LoginManager:", "already logged in")
             return false
         }
@@ -66,7 +70,7 @@ object LoginManager {
                     cookie = it
                     info.username = username
                     expiration = Instant.now().plusSeconds(21*86400)
-                    isLoggedIn = true
+                    isLoggedIn.value = true
                     save(context)
                     onGetCookie(context)
                 }
@@ -78,12 +82,12 @@ object LoginManager {
             }
 
         }
-        return isLoggedIn
+        return isLoggedIn.value == true
     }
 
     @ExperimentalCoroutinesApi
     suspend fun updateUserInfo(context: Context, newInfo: UserInfo): Boolean {
-        if (!isLoggedIn) {
+        if (isLoggedIn.value != true) {
             Log.e("LoginManager:", "not logged in")
             return false
         }
@@ -98,7 +102,7 @@ object LoginManager {
 //        val requestBody = cookieWrapper(newInfo)
         val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("email", info.email?:"")
-            .addFormDataPart("phone", info.phone?:"").build()
+            .addFormDataPart("phone", info.phoneNumber?:"").build()
         return withContext(retrofitExCatcher) {
             // Use Retrofit's suspending POST request and wait for the response
             var response: Response<ResponseBody>? = null
@@ -131,7 +135,7 @@ object LoginManager {
             }
             if (response != null && response.isSuccessful) {
                 info = Gson().fromJson(response.body()?.string() ?: "", UserInfo::class.java)
-                isLoggedIn = true
+                isLoggedIn.value = true
                 return@withContext true
             } else {
                 Log.e("update user info", response?.errorBody()?.string() ?: "Retrofit error")
@@ -143,7 +147,7 @@ object LoginManager {
 
     fun logout(context: Context): Boolean {
         info = UserInfo()
-        isLoggedIn = false
+        isLoggedIn.value = false
         delete(context)
         return true
     }
@@ -151,7 +155,7 @@ object LoginManager {
     /*
     * search for cookie on the device
     * */
-    fun open(context: Context, callback: (success:Boolean)->Unit) {
+    fun open(context: Context, callback: ((success:Boolean)->Unit)? = null) {
         if (expiration != Instant.EPOCH) { // this is not first launch
             return
         }
@@ -170,12 +174,14 @@ object LoginManager {
 
     private fun onGetCookie(context: Context, callback: ((success:Boolean)->Unit)? = null) {
         RetrofitManager.update(cookie)
-        MainScope().launch {
-            getUserInfo(context)
-            if (callback != null) {
-                callback(isLoggedIn)
-            }
-        }
+        val newInfo = UserInfo()
+        ItemStore.httpCall(newInfo) { code -> if (code == 200) {info = newInfo; isLoggedIn.value = true} }
+//        MainScope().launch {
+//            getUserInfo(context)
+//            if (callback != null) {
+//                callback(isLoggedIn)
+//            }
+//        }
     }
 
     fun save(context: Context) {

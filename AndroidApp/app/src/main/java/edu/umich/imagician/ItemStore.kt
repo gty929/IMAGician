@@ -145,9 +145,10 @@ object ItemStore {
     }
 
 
+    @Deprecated("use http call instead")
     @ExperimentalCoroutinesApi
     suspend fun postDataAfterLogin(context: Context, data: Any): Boolean {
-        if (!LoginManager.isLoggedIn) {
+        if (LoginManager.isLoggedIn.value == false) {
             Log.e("LoginManager:", "not logged in")
             return false
         }
@@ -182,15 +183,25 @@ object ItemStore {
         }
     }
 
-    // http wrapper for both post and get
-    suspend fun httpCall(data: Sendable, callback: (returnCode:Int) -> Unit) {
+    /** http wrapper for both post and get during login state, cookie must be provided
+     * should add a callback to handle the return code
+     * the fields within data can be modified
+     * */
+    fun httpCall(data: Sendable, callback: (returnCode:Int) -> Unit) {
+        if (LoginManager.cookie == null) {
+            Log.e("LoginManager:", "cookie not found")
+            callback(0)
+            return
+        }
         MainScope().launch {
             withContext(RetrofitManager.retrofitExCatcher) {
                 // Use Retrofit's suspending POST request and wait for the response
                 var returnCode = 0
                 var response: Response<ResponseBody>? = null
                 try {
-                    response = data.send(data.getRequestBodyBuilder().build())
+                    val request = data.getRequestBodyBuilder().build()
+                    response = data.send(request)
+//                    Log.d("Receives response", response?.body()?.string() ?: "")
                 } catch (e: Exception) {
                     Log.e("send", "send failed", e)
                 }
@@ -198,9 +209,9 @@ object ItemStore {
                     returnCode = response.code()
                     try {
                         if (response.isSuccessful) {
-                            data.parse(response.body().toString())
+                            data.parse(response.body()?.string()?:"")
                         } else {
-                            Log.e("http failure response", response.errorBody().toString())
+                            Log.e("http failure response", response.errorBody()?.string()?:"")
                         }
 
                     } catch (e: Exception) {

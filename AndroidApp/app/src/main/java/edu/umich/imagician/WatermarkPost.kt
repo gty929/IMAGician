@@ -49,6 +49,4 @@ class WatermarkPost (var id: Int? = null,
             .addFormDataPart("realname", this.realName?:"")
     }
 
-    override fun parse(jsonObjectStr: String) {  }
-
 }

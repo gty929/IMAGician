@@ -3,10 +3,7 @@ package edu.umich.imagician;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import retrofit2.http.Body;
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST;
+import retrofit2.http.*
 
 /**
  * Created by Tianyao Gu on 2022/3/12.
@@ -20,8 +17,8 @@ interface NetworkAPIs {
     suspend fun getUserInfo(): Response<ResponseBody>
     @POST("accounts/edit/")
     suspend fun updateUserInfo(@Body requestBody:RequestBody): Response<ResponseBody>
-    @POST("postWatermark/")
+    @POST("images/post_tag/")
     suspend fun postWatermark(@Body requestBody:RequestBody): Response<ResponseBody>
-    @GET("requestWatermark/")
-    suspend fun requestWatermark(): Response<ResponseBody>
+    @GET("images/get_tag/{tag}")
+    suspend fun requestWatermark(@Path("tag") tag: String): Response<ResponseBody>
 }

@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.ImageButton
 import android.view.View
 import androidx.appcompat.view.menu.ActionMenuItemView
+import androidx.lifecycle.Observer
 import edu.umich.imagician.ItemStore.fakeItems
 import edu.umich.imagician.ItemStore.posts
 import edu.umich.imagician.ItemStore.requests
@@ -29,9 +30,9 @@ class MainActivity : AppCompatActivity() {
 
         view = ActivityMainBinding.inflate(layoutInflater)
         setContentView(view.root)
-        if (!LoginManager.isLoggedIn) {
-            LoginManager.open(this
-            ) { success ->
+        if (LoginManager.isLoggedIn.value != true) { // not logged in
+            LoginManager.open(this)
+            /*{ success ->
                 if (success) {
                     invalidateOptionsMenu()
                     refreshPos()
@@ -41,9 +42,24 @@ class MainActivity : AppCompatActivity() {
                     findViewById<ImageButton>(R.id.newWatermarkButton).alpha =
                         0.2F // cannot create new watermark
                 }
-            }
+            } */
 
         }
+
+        val loginObserver = Observer<Boolean> { isLoggedIn ->
+            // Update the UI, in this case, a TextView.
+//            invalidateOptionsMenu()
+            if (isLoggedIn) {
+                refreshPos()
+                refreshReq()
+                findViewById<ImageButton>(R.id.newWatermarkButton).alpha =
+                    1F // can create new watermark
+            } else {
+                findViewById<ImageButton>(R.id.newWatermarkButton).alpha =
+                    0.2F // cannot create new watermark
+            }
+        }
+        LoginManager.isLoggedIn.observe(this, loginObserver)
 
         requestListAdapter = RequestListAdapter(this, requests)
         postListAdapter = PostListAdapter(this, posts)
@@ -78,7 +94,7 @@ class MainActivity : AppCompatActivity() {
      * @param view
      */
     fun startImportImageForCreation(view: View?) {
-        if (LoginManager.isLoggedIn) {
+        if (LoginManager.isLoggedIn.value == true) {
             val intent = Intent(this, ImportImageActivity::class.java)
             intent.putExtra("isCreate", true)
             startActivity(intent)
@@ -111,13 +127,18 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.login_menu, menu)
-        if (LoginManager.isLoggedIn) {
-            menu.findItem(R.id.loginMenuItem).title = LoginManager.info.username
+        val loginObserver = Observer<Boolean> { isLoggedIn ->
+            // Update the UI, in this case, a TextView.
+            if (isLoggedIn) {
+                menu.findItem(R.id.loginMenuItem).title = LoginManager.info.username
+            } else {
+                menu.findItem(R.id.loginMenuItem).title = "LOGIN"
+            }
         }
-
+        LoginManager.isLoggedIn.observe(this, loginObserver)
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -125,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.loginMenuItem -> {
 
-                val intent = if (LoginManager.isLoggedIn)
+                val intent = if (LoginManager.isLoggedIn.value == true)
                     Intent(this, UserInfoActivity::class.java)
                 else Intent(this, LoginActivity::class.java)
 

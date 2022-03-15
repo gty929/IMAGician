@@ -24,44 +24,44 @@ object ItemManager {
 
 
 
-    @ExperimentalCoroutinesApi
-    suspend fun postDataAfterLogin(context: Context, data: Any): Boolean {
-        if (!LoginManager.isLoggedIn) {
-            Log.e("LoginManager:", "not logged in")
-            return false
-        }
-        if (LoginManager.cookie == null) {
-            Log.e("LoginManager:", "cookie not found")
-            return false
-        }
-//        val requestBody = LoginManager.cookieWrapper(data)
-        val requestBody = when(data) {
-            is WatermarkPost -> data.toFormData()
-            else -> MultipartBody.Builder().setType(MultipartBody.FORM).build()
-        }
-        return withContext(RetrofitManager.retrofitExCatcher) {
-            // Use Retrofit's suspending POST request and wait for the response
-            Log.d("Post send","Sending ${Gson().toJson(data)}")
-
-            var response: Response<ResponseBody>? = null
-            try {
-                response = RetrofitManager.networkAPIs.updateUserInfo(requestBody)
-            } catch (e: Exception) {
-                Log.e("data post", "post failed", e)
-            }
-            if (response != null && response.isSuccessful) {
-                return@withContext true
-            } else {
-                Log.e("data post", response?.errorBody()?.string() ?: "Retrofit error")
-
-                /**mock*/
-                return@withContext true
-
-
-
-                return@withContext false
-            }
-
-        }
-    }
+//    @ExperimentalCoroutinesApi
+//    suspend fun postDataAfterLogin(context: Context, data: Any): Boolean {
+//        if (!LoginManager.isLoggedIn) {
+//            Log.e("LoginManager:", "not logged in")
+//            return false
+//        }
+//        if (LoginManager.cookie == null) {
+//            Log.e("LoginManager:", "cookie not found")
+//            return false
+//        }
+////        val requestBody = LoginManager.cookieWrapper(data)
+//        val requestBody = when(data) {
+//            is WatermarkPost -> data.toFormData()
+//            else -> MultipartBody.Builder().setType(MultipartBody.FORM).build()
+//        }
+//        return withContext(RetrofitManager.retrofitExCatcher) {
+//            // Use Retrofit's suspending POST request and wait for the response
+//            Log.d("Post send","Sending ${Gson().toJson(data)}")
+//
+//            var response: Response<ResponseBody>? = null
+//            try {
+//                response = RetrofitManager.networkAPIs.updateUserInfo(requestBody)
+//            } catch (e: Exception) {
+//                Log.e("data post", "post failed", e)
+//            }
+//            if (response != null && response.isSuccessful) {
+//                return@withContext true
+//            } else {
+//                Log.e("data post", response?.errorBody()?.string() ?: "Retrofit error")
+//
+//                /**mock*/
+//                return@withContext true
+//
+//
+//
+//                return@withContext false
+//            }
+//
+//        }
+//    }
 }

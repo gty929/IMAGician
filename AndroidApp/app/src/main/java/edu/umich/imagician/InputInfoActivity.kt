@@ -36,7 +36,7 @@ class InputInfoActivity: AppCompatActivity()  {
         LoginManager.info.email?.let { findViewById<CheckBox>(R.id.emailCheckBox).text = it } ?:
         findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.emailRow))
 
-        LoginManager.info.phone?.let { findViewById<CheckBox>(R.id.phoneCheckBox).text = it } ?:
+        LoginManager.info.phoneNumber?.let { findViewById<CheckBox>(R.id.phoneCheckBox).text = it } ?:
         findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.phoneRow))
 
         startTimestampThread()

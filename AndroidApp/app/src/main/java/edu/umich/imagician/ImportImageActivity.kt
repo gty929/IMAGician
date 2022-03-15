@@ -191,7 +191,7 @@ class ImportImageActivity: AppCompatActivity()  {
     }
 
     fun onClickCreate(view: View?) {
-        if (LoginManager.isLoggedIn) {
+        if (LoginManager.isLoggedIn.value == true) {
             isCreate = true
             updateExamineAndCreateButtonColor()
         }
