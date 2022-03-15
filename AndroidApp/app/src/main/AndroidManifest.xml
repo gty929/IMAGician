@@ -28,24 +28,23 @@
         android:theme="@style/Theme.IMAGician">
         <activity
             android:name=".SendRequestActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:label="Contact Author"
+            android:parentActivityName=".DisplayInfoActivity"/>
         <activity
             android:name=".DisplayInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ReqDetailActivity"
             android:exported="true"
-            android:label="@string/username"
-            android:parentActivityName=".UploadHistoryActivity" />
+            android:label="Image Info"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".UploadHistoryActivity"
             android:exported="true"
-            android:label="@string/username"
+            android:label="Creation"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".RequestStatusActivity"
             android:exported="true"
-            android:label="@string/username"
+            android:label="Request"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"

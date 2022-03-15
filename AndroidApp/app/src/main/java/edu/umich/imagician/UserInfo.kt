@@ -41,4 +41,4 @@ data class UserInfo(var username: String? = null,
             .addFormDataPart(EMAIL.field, email?:"")
             .addFormDataPart(PHONE_NUMBER.field, phoneNumber?:"")
     }
-                    }
+}

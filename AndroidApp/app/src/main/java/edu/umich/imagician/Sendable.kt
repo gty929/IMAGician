@@ -10,6 +10,15 @@ import retrofit2.Response
  * For classes that directly interact with network api
  */
 interface Sendable {
+
+    enum class Mode {
+        // BODY BUILD MODE
+        IDLE, EMPTY, FULL, LAZY
+        // IDLE do nothing
+        // EMPTY waiting to be filled
+        // FULL upload content
+        // LAZY ...
+    }
     /* generate a MultipartBody Builder for post requests
      can be omitted for get requests */
     fun getRequestBodyBuilder(): MultipartBody.Builder = MultipartBody.Builder().setType(MultipartBody.FORM)

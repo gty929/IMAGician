@@ -2,6 +2,7 @@ package edu.umich.imagician
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
@@ -13,13 +14,14 @@ class DisplayInfoActivity : AppCompatActivity() {
     private lateinit var view: ActivityDisplayInfoBinding
     private lateinit var watermarkPost: WatermarkPost
     private var isModified = false
-    private var isAuthorized = false
+    private var imageUri: Uri?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         view = ActivityDisplayInfoBinding.inflate(layoutInflater)
         setContentView(view.root)
         isModified = intent.getBooleanExtra("isModified", false)
-        isAuthorized = intent.getBooleanExtra("isAuthorized", false)
+        imageUri = intent.getParcelableExtra("IMAGE_URI")
+        view.imageShow.setImageURI(imageUri)
         showEmbeddedInfo()
     }
 
@@ -30,8 +32,9 @@ class DisplayInfoActivity : AppCompatActivity() {
         }
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // send request to author
+        // edit request to author
         return when (item.itemId) {
             R.id.contactMenu -> {
                 val intent = Intent(this, SendRequestActivity::class.java)
@@ -74,7 +77,12 @@ class DisplayInfoActivity : AppCompatActivity() {
 
         // BOOL check
         view.warning.isVisible = isModified
-        view.uright.text = isAuthorized.toString()
+        if (LoginManager.isLoggedIn.value == true) {
+            view.uright.text = watermarkPost.authorized.toString()
+        } else {
+            view.imageInfo.removeView(view.urRow)
+        }
+
 
         // optionals
         watermarkPost.username?.let { view.cname.text = it } ?:

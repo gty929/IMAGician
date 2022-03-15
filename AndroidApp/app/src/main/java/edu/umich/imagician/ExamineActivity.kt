@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +25,6 @@ class ExamineActivity: AppCompatActivity() {
     private var hasChecked = AtomicBoolean()
 
     private var isModified = false
-    private var isAuthorized = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_examine)
@@ -90,18 +90,25 @@ class ExamineActivity: AppCompatActivity() {
             runOnUiThread {
                 toast("retrieving data with tag = $tag", false)
             }
-            try {
-                Thread.sleep(2000) // mock network delay
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
+//            try {
+//                Thread.sleep(2000) // mock network delay
+//            } catch (e: InterruptedException) {
+//                e.printStackTrace()
+//            }
+            val watermarkPost = WatermarkPost.post
+            watermarkPost.tag = tag
+            watermarkPost.mode = Sendable.Mode.EMPTY // query by tag
+            ItemStore.httpCall(watermarkPost) { code ->
+                if (code != 200) if (code != 200) toast("Upload fails $code")
+                hasRetrieved.set(true)
             }
-            hasRetrieved.set(true)
-
             runOnUiThread {
                 toast("checking integrity")
             }
             val checksum = StegnoAlgo.getChecksum(img)
             // check the checksum
+            // checksum of the post is the correct one (unmodified)
+            isModified = (checksum != watermarkPost.checksum)
             hasChecked.set(true)
             runOnUiThread {
                 toast("checksum = $checksum", false)
@@ -112,7 +119,7 @@ class ExamineActivity: AppCompatActivity() {
     private fun onExamineFinish() {
         val intent = Intent(this, DisplayInfoActivity::class.java)
         intent.putExtra("isModified", isModified)
-        intent.putExtra("isAuthorized", isAuthorized)
+        intent.putExtra("IMAGE_URI", imageUri)
         startActivity(intent)
         overridePendingTransition(0, 0)
     }

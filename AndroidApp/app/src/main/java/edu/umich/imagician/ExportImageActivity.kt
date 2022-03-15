@@ -148,10 +148,18 @@ class ExportImageActivity: AppCompatActivity() {
             runOnUiThread {
                 toast("sending watermark with checksum $checksum", false)
             }
-            val context = this
+//            val context = this
+            Log.i("Export","main scope")
             MainScope().launch {
-                ItemStore.postDataAfterLogin(context, WatermarkPost.post)
-                hasUploaded.set(true)
+                val watermarkPost = WatermarkPost.post
+                watermarkPost.tag = tag
+                watermarkPost.mode = Sendable.Mode.FULL // query by tag
+                Log.i("Export","start httpCall")
+                ItemStore.httpCall(watermarkPost) { code ->
+                    if (code != 200) toast("Upload fails $code")
+                    hasUploaded.set(true)
+                }
+//                hasUploaded.set(true)
             }
 //            try {
 //                Thread.sleep(2000) // mock network delay

@@ -163,7 +163,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="5dp"
-                        android:text="@string/send_to"
+                        android:text="@string/send_from"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toEndOf="@id/user_icon"
                         app:layout_constraintTop_toTopOf="parent" />

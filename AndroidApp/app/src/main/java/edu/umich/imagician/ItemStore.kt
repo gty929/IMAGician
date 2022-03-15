@@ -6,11 +6,11 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley.newRequestQueue
 import com.google.gson.Gson
-import edu.umich.imagician.utils.toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONException
@@ -19,6 +19,7 @@ import java.lang.Exception
 import kotlin.reflect.full.declaredMemberProperties
 
 object ItemStore {
+
     val requests = arrayListOf<WatermarkRequest?>()
     val posts = arrayListOf<WatermarkPost?>()
 
@@ -110,7 +111,7 @@ object ItemStore {
                     val postEntry = postsReceived[i] as JSONArray
                     if (postEntry.length() == nReqFields) {
                         posts.add(WatermarkPost(
-                            id = postEntry[10] as Int?,
+                            tag = postEntry[10].toString(),
                             filename = postEntry[0].toString(),
                             numPending = postEntry[1] as Int?,
                             timestamp = postEntry[2].toString()))
@@ -187,7 +188,7 @@ object ItemStore {
      * should add a callback to handle the return code
      * the fields within data can be modified
      * */
-    fun httpCall(data: Sendable, callback: (returnCode:Int) -> Unit) {
+    fun httpCall(data: Sendable, callback: (returncode : Int) -> Unit) {
         if (LoginManager.cookie == null) {
             Log.e("LoginManager:", "cookie not found")
             callback(0)

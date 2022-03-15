@@ -10,6 +10,8 @@
         android:id="@+id/image_preview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +41,7 @@
             app:layout_constraintTop_toBottomOf="@+id/filename" />
 
         <ImageView
-            android:id="@+id/imagePreview"
+            android:id="@+id/image_show"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginStart="16dp"
@@ -55,13 +57,12 @@
             android:id="@+id/warning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="Warning: image modification detected!"
             android:textColor="#ED3A3A"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imagePreview" />
+            app:layout_constraintTop_toBottomOf="@+id/image_show" />
 
         <TextView
             android:id="@+id/embed_title"
