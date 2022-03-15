@@ -69,6 +69,10 @@
     <string name="dl">Download</string>
     <string name="authorized">Authorized</string>
 
+    <string name="leave_msg">Leave your message:</string>
+    <string name="send_from">Send From:</string>
+    <string name="send_to">Send To:</string>
+
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="save_to_album">Save to Album</string>

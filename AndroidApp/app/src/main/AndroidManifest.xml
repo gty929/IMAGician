@@ -27,6 +27,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IMAGician">
         <activity
+            android:name=".SendRequestActivity"
+            android:exported="false" />
+        <activity
             android:name=".DisplayInfoActivity"
             android:exported="false" />
         <activity
