@@ -11,11 +11,10 @@ import edu.umich.imagician.utils.initPython
 object StegnoAlgo {
     private val py: Python = Python.getInstance()
     private val pyo: PyObject = py.getModule("lsb")
-    private val chunkSize = 5 /*TO BE DETERMINED*/
 
     fun encode(bitmap: Bitmap, message: String): Bitmap {
         val img: String = BM2Str(bitmap)
-        val obj: PyObject = pyo.callAttr("LSB_encode", img, message,chunkSize)
+        val obj: PyObject = pyo.callAttr("LSB_encode", img, message)
         val str: String  = obj.toString()
         val res = Base64.decode(str, Base64.DEFAULT)
         val bmp: Bitmap = BitmapFactory.decodeByteArray(res,0,res.size)
@@ -32,7 +31,7 @@ object StegnoAlgo {
 
     fun decode(bitmap:Bitmap):String {
         val img: String = BM2Str(bitmap)
-        val obj: PyObject = pyo.callAttr("LSB_decode", img, chunkSize)
+        val obj: PyObject = pyo.callAttr("LSB_decode", img)
         return obj.toString()
 
     }
