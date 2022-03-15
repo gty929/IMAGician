@@ -62,6 +62,12 @@
     <string name="title_activity_req_detail">ReqDetailActivity</string>
 
     <string name="embed_info">Embedded Info:</string>
+    <string name="lock">lock</string>
+    <string name="last_edit">Last Edited Time</string>
+    <string name="filezip">File</string>
+    <string name="zip_content">(file.zip 25MB)</string>
+    <string name="dl">Download</string>
+    <string name="authorized">Authorized</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
