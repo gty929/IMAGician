@@ -1,5 +1,6 @@
 package edu.umich.imagician
 
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -14,9 +15,12 @@ class SendRequestActivity : AppCompatActivity() {
     private lateinit var view: ActivitySendRequestBinding
     private lateinit var watermarkPost: WatermarkPost
     private lateinit var watermarkRequest: WatermarkRequest
+    private var imageUri: Uri?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         view = ActivitySendRequestBinding.inflate(layoutInflater)
+        imageUri = intent.getParcelableExtra("IMAGE_URI")
+        view.imageShow.setImageURI(imageUri)
         setContentView(view.root)
         showMessageBox()
     }

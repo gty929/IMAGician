@@ -29,8 +29,8 @@ class DisplayInfoActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if (LoginManager.isLoggedIn.value == true) {
-            val inflater: MenuInflater = menuInflater
-            inflater.inflate(R.menu.contact_menu, menu)
+//            val inflater: MenuInflater = menuInflater
+//            inflater.inflate(R.menu.contact_menu, menu)
         }
         return true
     }
@@ -40,6 +40,7 @@ class DisplayInfoActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.contactMenu -> {
                 val intent = Intent(this, SendRequestActivity::class.java)
+                intent.putExtra("IMAGE_URI", imageUri)
                 startActivity(intent)
                 true
             }
@@ -60,6 +61,8 @@ class DisplayInfoActivity : AppCompatActivity() {
                 view.editTextTextPassword.isVisible = false
                 view.msg.text = "Never gonna give you up"
                 view.msg.isVisible = true
+                view.locked.isVisible = false
+                view.unlocked.isVisible = true
                 return@OnKeyListener true
             }
             false
@@ -83,6 +86,11 @@ class DisplayInfoActivity : AppCompatActivity() {
             view.uright.text = watermarkPost.authorized.toString()
         } else {
             view.imageInfo.removeView(view.urRow)
+        }
+        if (!watermarkPost.msg_encrypted) {
+            view.chipEnter.isVisible = false
+            view.locked.isVisible = false
+            view.msg.isVisible = true
         }
 
 

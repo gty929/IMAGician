@@ -10,6 +10,8 @@
         android:id="@+id/image_preview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +24,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/file_name"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toStartOf="@+id/imagePreview"
+            app:layout_constraintStart_toStartOf="@id/image_show"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -34,12 +36,12 @@
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/imagePreview"
-            app:layout_constraintStart_toStartOf="@+id/imagePreview"
+            app:layout_constraintBottom_toTopOf="@id/image_show"
+            app:layout_constraintStart_toStartOf="@id/image_show"
             app:layout_constraintTop_toBottomOf="@+id/filename" />
 
         <ImageView
-            android:id="@+id/imagePreview"
+            android:id="@+id/image_show"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginStart="16dp"
@@ -62,8 +64,8 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/imagePreview"
-            app:layout_constraintTop_toBottomOf="@+id/imagePreview" />
+            app:layout_constraintStart_toStartOf="@id/image_show"
+            app:layout_constraintTop_toBottomOf="@id/image_show" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -211,8 +213,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:background="@drawable/rounded_corner_view"
-                        android:ems="10"
                         android:hint="Enter your message here"
                         android:inputType="textMultiLine"
                         android:minHeight="250dp"

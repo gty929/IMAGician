@@ -10,8 +10,8 @@
         android:id="@+id/image_preview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/file_name"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toStartOf="@+id/imagePreview"
+            app:layout_constraintStart_toStartOf="@id/image_show"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -36,8 +36,8 @@
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/imagePreview"
-            app:layout_constraintStart_toStartOf="@+id/imagePreview"
+            app:layout_constraintBottom_toTopOf="@id/image_show"
+            app:layout_constraintStart_toStartOf="@id/image_show"
             app:layout_constraintTop_toBottomOf="@+id/filename" />
 
         <ImageView
@@ -74,7 +74,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/imagePreview"
+            app:layout_constraintStart_toStartOf="@id/image_show"
             app:layout_constraintTop_toBottomOf="@+id/warning" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
