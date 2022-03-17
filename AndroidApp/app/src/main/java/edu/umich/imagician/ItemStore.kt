@@ -20,6 +20,7 @@ import kotlin.reflect.full.declaredMemberProperties
 
 object ItemStore {
 
+    val watermarkCreations= WatermarkCreations()
     val requests = arrayListOf<WatermarkRequest?>()
     val posts = arrayListOf<WatermarkPost?>()
 
@@ -222,6 +223,23 @@ object ItemStore {
                 }
                 callback(returnCode)
 
+            }
+        }
+    }
+
+    fun clear() {
+        watermarkCreations.clear()
+    }
+
+    fun refresh(successCallback: (() -> Unit), failureCallback: (() -> Unit)? = null) {
+        httpCall(watermarkCreations) { returncode ->
+            if (returncode != 200) {
+                if (failureCallback != null) {
+                    failureCallback()
+                }
+                Log.e("watermark Creations", "get watermarkCreations failed")
+            } else {
+                successCallback()
             }
         }
     }

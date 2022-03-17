@@ -4,14 +4,17 @@ package edu.umich.imagician
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageButton
 import android.view.View
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.lifecycle.Observer
 import edu.umich.imagician.ItemStore.fakeItems
+import edu.umich.imagician.ItemStore.httpCall
 import edu.umich.imagician.ItemStore.posts
 import edu.umich.imagician.ItemStore.requests
+import edu.umich.imagician.ItemStore.watermarkCreations
 
 import edu.umich.imagician.databinding.ActivityMainBinding
 import edu.umich.imagician.utils.initPython
@@ -30,9 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         view = ActivityMainBinding.inflate(layoutInflater)
         setContentView(view.root)
-        if (LoginManager.isLoggedIn.value != true) { // not logged in
-            LoginManager.open(this)
-        }
+
 
         val loginObserver = Observer<Boolean> { isLoggedIn ->
             // Update the UI, in this case, a TextView.
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         LoginManager.isLoggedIn.observe(this, loginObserver)
 
         requestListAdapter = RequestListAdapter(this, requests)
-        postListAdapter = PostListAdapter(this, posts)
+        postListAdapter = PostListAdapter(this, watermarkCreations.posts)
         view.requests.adapter = requestListAdapter
         view.creations.adapter = postListAdapter
 
@@ -64,8 +65,12 @@ class MainActivity : AppCompatActivity() {
 
         // start python plugin
         initPython(this)
-        refreshPos()
-        refreshReq()
+//        refreshPos()
+//        refreshReq()
+
+        if (LoginManager.isLoggedIn.value != true) { // not logged in
+            LoginManager.open(this)
+        }
 
         view.requests.setOnItemClickListener { parent, view, position, id ->
             onClickRequest(view, position)
@@ -77,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Jump to the ImportImageActivity
+     * Jump to the ImportImageActivityR
      *
      * @param view
      */
@@ -159,6 +164,11 @@ class MainActivity : AppCompatActivity() {
 //            }, 4000)
 //        }
         fakeItems()
+//        httpCall(watermarkCreations) { returncode ->
+//            if (returncode != 200) {
+//                Log.e("watermark Creations", "get watermarkCreations failed")
+//            }
+//        }
         view.refreshRequests.isRefreshing = false
     }
 
@@ -174,8 +184,14 @@ class MainActivity : AppCompatActivity() {
 //                view.swipe.isRefreshing = false
 //            }, 4000)
 //        }
-        fakeItems()
-        view.refreshPosts.isRefreshing = false
+        ItemStore.clear()
+        view.refreshPosts.post { view.refreshPosts.isRefreshing = true }
+        ItemStore.refresh({
+            Log.d("refresh", "refresh post done with ${ItemStore.watermarkCreations.posts.size} posts")
+            view.refreshPosts.isRefreshing = false
+        })
+//        fakeItems()
+
     }
 
 

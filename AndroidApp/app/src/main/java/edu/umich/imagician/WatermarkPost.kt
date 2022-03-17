@@ -1,6 +1,7 @@
 package edu.umich.imagician
 
 import android.util.Log
+import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -11,27 +12,27 @@ import edu.umich.imagician.ApiStrings.*
 
 // Class of post
 
-class WatermarkPost (var tag: String? = null,
-                     var username: String? = null,
-                     var realName: String? = null,
-                     var filename: String? = null,
-                     var email: String? = null,
-                     var phoneNumber: String? = null,
-                     var uri: String? = null,
-                     var message: String? = null,
-                     var msg_encrypted: Boolean = false,
-                     var folder: String? = null,
-                     var folder_pos: String? = null,
-                     var timestampFlag: Boolean = false,
-                     var usernameFlag: Boolean = false, /** set as false for anonymous posting*/
+open class WatermarkPost (var tag: String? = null,
+                          var username: String? = null,
+                          var realName: String? = null,
+                          var filename: String? = null,
+                          var email: String? = null,
+                          var phoneNumber: String? = null,
+                          var uri: String? = null,
+                          var message: String? = null,
+                          var msg_encrypted: Boolean = false,
+                          var folder: String? = null,
+                          var folder_pos: String? = null,
+                          var timestampFlag: Boolean = false,
+                          var usernameFlag: Boolean = false,/** set as false for anonymous posting*/
                      var realNameFlag: Boolean = false,
-                     var emailFlag: Boolean = false,
-                     var phoneFlag: Boolean = false,
-                     var timestamp: String? = null,
-                     var numPending: Int? = null,
-                     var checksum: String? = null,
-                     var authorized: Boolean = false,
-                     var mode: Mode = Mode.IDLE) : Sendable {
+                          var emailFlag: Boolean = false,
+                          var phoneFlag: Boolean = false,
+                          var timestamp: String? = null,
+                          var numPending: Int? = null,
+                          var checksum: String? = null,
+                          var authorized: Boolean = false,
+                          var mode: Mode = Mode.IDLE) : Sendable {
 
     val pendingRequestList = arrayListOf<WatermarkRequest?>()
     lateinit var body: MultipartBody.Builder
@@ -69,12 +70,13 @@ class WatermarkPost (var tag: String? = null,
 
     }
 
-    override fun parse(jsonObjectStr: String) {
-        Log.d("PostParser", "Parsing post ${mode}")
+    override fun parse(responseData: String) {
+        Log.d("PostParser", "Parsing post ${responseData} with ${mode} mode")
         when (mode) {
-            Mode.EMPTY -> parseAll(jsonObjectStr)
+            Mode.EMPTY -> parseAll(responseData)
             else -> {}
         }
+        Log.d("PostParser", "Parsed post to ${Gson().toJson(this)}")
     }
 
     private fun parseAll(jsonObjectStr: String) {
@@ -83,8 +85,9 @@ class WatermarkPost (var tag: String? = null,
             val f = { api:ApiStrings -> try {obj.getString(api.field).let { if (it.isEmpty()) null else it }} catch (e: Exception) {null} }
 //            if (tag != f(TAG)) { throw error("Incorrect tag!") }
 
-            authorized = (obj.getInt("authorized") == 1)
-            msg_encrypted = (obj.getInt("message_encrypted") == 1)
+            authorized = try { obj.getInt("authorized") == 1 } catch (e: Exception) {false}
+            msg_encrypted = try { (obj.getInt("message_encrypted") == 1)} catch (e: Exception) {false}
+            numPending = try { (obj.getInt("num_pending"))} catch (e: Exception) {0}
             filename = f(FILE_NAME)
             username = f(CREATOR)
             realName = f(REAL_NAME)

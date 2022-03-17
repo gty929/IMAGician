@@ -21,11 +21,11 @@ interface Sendable {
     }
     /* generate a MultipartBody Builder for post requests
      can be omitted for get requests */
-    fun getRequestBodyBuilder(): MultipartBody.Builder = MultipartBody.Builder().setType(MultipartBody.FORM)
+    fun getRequestBodyBuilder(): MultipartBody.Builder = MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("dummy", "data")
 
     /* parse the responseBody
       can be omitted for post requests */
-    fun parse(jsonObjectStr: String) {}
+    fun parse(responseData: String) {}
 
     /* call the api in RetrofitManager*/
     suspend fun send(request: RequestBody): Response<ResponseBody>?

@@ -21,16 +21,16 @@ data class UserInfo(var username: String? = null,
         else RetrofitManager.networkAPIs.updateUserInfo(request)
     }
 
-    override fun parse(jsonObjectStr: String) {
+    override fun parse(responseData: String) {
         try {
-            val obj = JSONObject(jsonObjectStr)
+            val obj = JSONObject(responseData)
             val f = { api:ApiStrings -> try {obj.getString(api.field)} catch (e: Exception) {null} }
             username = f(USERNAME)
             phoneNumber = f(PHONE_NUMBER)
             email = f(EMAIL)
             fullname = f(FULL_NAME)
         } catch (e: Exception) {
-            Log.e("UserInfo", "cannot parse JSON string $jsonObjectStr", e)
+            Log.e("UserInfo", "cannot parse JSON string $responseData", e)
         }
 
     }

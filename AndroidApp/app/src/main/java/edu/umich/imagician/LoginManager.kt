@@ -148,6 +148,7 @@ object LoginManager {
     fun logout(context: Context): Boolean {
         info = UserInfo()
         isLoggedIn.value = false
+        ItemStore.clear()
         delete(context)
         return true
     }
