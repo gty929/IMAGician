@@ -190,11 +190,11 @@ object ItemStore {
      * the fields within data can be modified
      * */
     fun httpCall(data: Sendable, callback: (returncode : Int) -> Unit) {
-        if (LoginManager.cookie == null) {
-            Log.e("LoginManager:", "cookie not found")
-            callback(0)
-            return
-        }
+//        if (LoginManager.cookie == null) {
+//            Log.e("LoginManager:", "cookie not found")
+//            callback(0)
+//            return
+//        }
         MainScope().launch {
             withContext(RetrofitManager.retrofitExCatcher) {
                 // Use Retrofit's suspending POST request and wait for the response

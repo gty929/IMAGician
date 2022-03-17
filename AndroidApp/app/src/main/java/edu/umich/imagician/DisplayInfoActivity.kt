@@ -5,8 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
+import com.google.gson.Gson
 import edu.umich.imagician.databinding.ActivityDisplayInfoBinding
 import edu.umich.imagician.utils.toast
 
@@ -76,7 +78,7 @@ class DisplayInfoActivity : AppCompatActivity() {
 
     private fun showEmbeddedInfo() {
         watermarkPost = WatermarkPost.post
-
+        Log.d("DisplayInfo", "watermarkPost = ${Gson().toJson(watermarkPost).toString()}")
         // required
         view.jpg.text = watermarkPost.filename
 
