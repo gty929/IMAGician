@@ -89,11 +89,11 @@ open class WatermarkPost (var tag: String? = null,
             msg_encrypted = try { (obj.getInt("message_encrypted") == 1)} catch (e: Exception) {false}
             numPending = try { (obj.getInt("num_pending"))} catch (e: Exception) {0}
             filename = f(FILE_NAME)
-            username = f(CREATOR)
+            username = f(CREATOR) ?: "anonymous"
             realName = f(REAL_NAME)
             phoneNumber = f(PHONE)
             email = f(EMAIL)
-            timestamp = f(TIME)
+            timestamp = f(TIME) ?: "an unknown date"
             checksum = f(CHECKSUM)
             folder = f(FOLDER_NAME)
             folder_pos = f(FOLDER_POS)

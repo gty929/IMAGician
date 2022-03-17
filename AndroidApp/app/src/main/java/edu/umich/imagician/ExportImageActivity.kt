@@ -120,7 +120,7 @@ class ExportImageActivity: AppCompatActivity() {
             val bytes = ByteArrayOutputStream()
             newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
 
-            newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$filename$tag.png")
+            newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$filename.png")
             newImageUri?.let { it ->
                 contentResolver.openOutputStream(it)?.let {
                     it.write(bytes.toByteArray())

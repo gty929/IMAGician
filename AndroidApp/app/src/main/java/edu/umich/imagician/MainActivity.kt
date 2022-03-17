@@ -163,7 +163,11 @@ class MainActivity : AppCompatActivity() {
 //                view.swipe.isRefreshing = false
 //            }, 4000)
 //        }
-        fakeItems()
+        ItemStore.requests.clear()
+        if (LoginManager.isLoggedIn.value == true) {
+            fakeItems()
+        }
+
 //        httpCall(watermarkCreations) { returncode ->
 //            if (returncode != 200) {
 //                Log.e("watermark Creations", "get watermarkCreations failed")
