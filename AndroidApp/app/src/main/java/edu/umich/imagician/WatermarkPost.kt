@@ -9,6 +9,8 @@ import retrofit2.Response
 import edu.umich.imagician.Sendable.Mode
 import org.json.JSONObject
 import edu.umich.imagician.ApiStrings.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 // Class of post
 
@@ -93,7 +95,8 @@ open class WatermarkPost (var tag: String? = null,
             realName = f(REAL_NAME)
             phoneNumber = f(PHONE)
             email = f(EMAIL)
-            timestamp = f(TIME) ?: "an unknown date"
+            timestamp = f(TIME)
+            TimeExchange()
             checksum = f(CHECKSUM)
             folder = f(FOLDER_NAME)
             folder_pos = f(FOLDER_POS)
@@ -101,6 +104,19 @@ open class WatermarkPost (var tag: String? = null,
 
         } catch (e: Exception) {
             Log.e("UserInfo", "cannot parse JSON string $jsonObjectStr", e)
+        }
+    }
+
+    private fun TimeExchange() {
+        when (timestamp) {
+            null -> timestamp = "Unknown Time"
+            else -> {
+                val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                formatter.timeZone = TimeZone.getTimeZone("GMT")
+                val dt = formatter.parse(timestamp)
+                val formatter2 = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                timestamp = formatter2.format(dt)
+            }
         }
     }
 
