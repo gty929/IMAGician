@@ -18,6 +18,7 @@ CREATE TABLE images(
   owner VARCHAR(20) NOT NULL,
   checksum VARCHAR(256) NOT NULL,
   created DATETIME DEFAULT CURRENT_TIMESTAMP,
+  username_public BIT NOT NULL,
   fullname_public BIT NOT NULL,
   email_public BIT NOT NULL,
   phone_public BIT NOT NULL,

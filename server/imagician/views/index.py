@@ -245,6 +245,7 @@ def post_tag():
             'tag': tag of the image, string
             'imgname': name of the image, string
             'checksum': sha256 of the image, string
+            'username_public': whether the username is public,
             'fullname_public': whether the fullname is public,
             'email_public': whether the fullname is public,
             'phone_public': whether the phone number is public,
@@ -264,6 +265,7 @@ def post_tag():
     tag = flask.request.form['tag']
     imgname = flask.request.form['imgname']
     checksum = flask.request.form['checksum']
+    username_public = flask.request.form['username_public'] if 'username_public' in flask.request.form else 0
     fullname_public = flask.request.form['fullname_public'] if 'fullname_public' in flask.request.form else 0
     email_public = flask.request.form['email_public'] if 'email_public' in flask.request.form else 0
     phone_public = flask.request.form['phone_public'] if 'phone_public' in flask.request.form else 0
@@ -293,11 +295,11 @@ def post_tag():
         folder_name = ""
 
     connection.execute(
-        "INSERT INTO images(tag, imgname, owner, checksum, fullname_public, "
+        "INSERT INTO images(tag, imgname, owner, checksum, username_public, fullname_public, "
         "email_public, phone_public, time_public, message, message_encrypted, "
         "file_path, is_deleted) "
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)",
-        (tag, imgname, username, checksum, fullname_public, email_public, 
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)",
+        (tag, imgname, username, checksum, username_public, fullname_public, email_public, 
         phone_public, time_public, message, message_encrypted, folder_name, )
     )
     context = {}
@@ -393,8 +395,12 @@ def get_img_by_tag_helper(tag):
     )
     user_info = cur.fetchall()[0]
     result['imgname'] = img_info['imgname']
-    result['owner'] = img_info['owner']
     result['checksum'] = img_info['checksum']
+    
+    if img_info['username_public']:
+        result['owner'] = img_info['owner']
+    else:
+        result['owner'] = ''
     if img_info['fullname_public']:
         result['fullname'] = user_info['fullname']
     else:

@@ -58,13 +58,14 @@ This URL receives and stores all the information of a tagged image. The user mus
     1. `tag`, string: the tag embedded in the image, must be unique across all images.
     2. `imgname`, string: the name of the image.
     3. `checksum`, string: the SHA256 hash of the image.
-    4. `fullname_public`, bool (optional): whether the user's fullname will be shown when others examine this image. Default false.
-    5. `email_public`, bool (optional): whether the user's email will be shown when others examine this image. Default false.
-    6. `phone_public`, bool (optional): whether the user's phone will be shown when others examine this image. Default false.
-    7. `time_public`, bool (optional): whether the upload time of this image will be shown when others examine this image. Default false.
-    8. `message`, string: the enclosed message.
-    9. `message_encrypted`, bool: true if the message is cyphertext, else false.
-    10. `file`, file (optional): the enclosed file. If there is no enclosed file, there shouldn't be this field. Max size 16 MB, allowed extensions are 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'zip'.
+    4. `username_public`, bool (optional): whether the username of the creator will be shown when others examine this image. Default false.
+    5. `fullname_public`, bool (optional): whether the user's fullname will be shown when others examine this image. Default false.
+    6. `email_public`, bool (optional): whether the user's email will be shown when others examine this image. Default false.
+    7. `phone_public`, bool (optional): whether the user's phone will be shown when others examine this image. Default false.
+    8. `time_public`, bool (optional): whether the upload time of this image will be shown when others examine this image. Default false.
+    9. `message`, string: the enclosed message.
+    10. `message_encrypted`, bool: true if the message is cyphertext, else false.
+    11. `file`, file (optional): the enclosed file. If there is no enclosed file, there shouldn't be this field. Max size 16 MB, allowed extensions are 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'zip'.
 * If the user hasn't logged in, then abort `403`.
 * If another image is already using this tag, then abort `409`.
 * If the field `file` exists in the request form, then store the file in a correct folder.
