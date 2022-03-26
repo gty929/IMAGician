@@ -10,7 +10,7 @@ This URL creates a new account for a user. The user's password will be salted an
     2. `password`, string: the password of the new user
     3. `email`, string (optional): the email address of the new user
     4. `phone_number`, string (optional): the phone number of the new user
-    5. `full_name`, string (optional): the fullname of the new user
+    5. `fullname`, string (optional): the fullname of the new user
 * If the username already exists, then abort `409`
 * Else, create the account, login the user by setting a session cookie, and return `200`
 
@@ -25,7 +25,7 @@ This URL edits the information an existing account. The user must be logged in t
     1. `password`, string(optional): the new password of the user
     2. `email`, string(optional): the new email address of the user
     3. `phone_number`, string(optional): the new phone number of the user
-    4. `full_name`, string (optional): the fullname of the user
+    4. `fullname`, string (optional): the fullname of the user
 * If the user hasn't logged in, then abort `403`
 * Else, update the account info and return `200`
 

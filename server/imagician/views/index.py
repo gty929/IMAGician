@@ -87,7 +87,7 @@ def create_account():
         abort(400)
     username = flask.request.form['username']
     password = flask.request.form['password']
-    fullname = flask.request.form['full_name'] if 'full_name' in flask.request.form else ''
+    fullname = flask.request.form['fullname'] if 'fullname' in flask.request.form else ''
     email = flask.request.form['email'] if 'email' in flask.request.form else ''
     phone = flask.request.form['phone_number'] if 'phone_number' in flask.request.form else ''
     
@@ -168,10 +168,10 @@ def edit_account():
         abort(403)
         
     user_info = user_info[0]
-    if "full_name" not in flask.request.form:
+    if "fullname" not in flask.request.form:
         fullname = user_info['fullname']
     else:
-        fullname = flask.request.form['full_name']
+        fullname = flask.request.form['fullname']
     
     if "email" not in flask.request.form:
         email = user_info['email']

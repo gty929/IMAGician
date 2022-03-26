@@ -21,7 +21,7 @@ case $1 in
     fi
     mkdir -p var/uploads
     sqlite3 var/imagician.sqlite3 < sql/schema.sql
-    sqlite3 var/imagician.sqlite3 < sql/data.sql
+    # sqlite3 var/imagician.sqlite3 < sql/data.sql
     cp -r sql/uploads/* var/uploads/
     ;;
   "destroy")
@@ -31,7 +31,7 @@ case $1 in
     rm -rf var/imagician.sqlite3 var/uploads
     mkdir -p var/uploads
     sqlite3 var/imagician.sqlite3 < sql/schema.sql
-    sqlite3 var/imagician.sqlite3 < sql/data.sql
+    # sqlite3 var/imagician.sqlite3 < sql/data.sql
     cp -r sql/uploads/* var/uploads/
     ;;
   "dump")
