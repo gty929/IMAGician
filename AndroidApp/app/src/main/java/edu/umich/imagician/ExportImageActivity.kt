@@ -14,7 +14,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import com.google.gson.Gson
 import edu.umich.imagician.utils.mediaStoreAlloc
 import edu.umich.imagician.utils.toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,7 +31,7 @@ class ExportImageActivity: AppCompatActivity() {
 //    private var watermarkPostJsonStr: String? = null
     private var imageUri: Uri? = null
     private var newImageUri: Uri? = null
-    private var filename: String? = null
+    private var title: String? = null
     private lateinit var progressBar: ProgressBar
     private var hasEncoded = AtomicBoolean()
     private var hasHashed = AtomicBoolean()
@@ -51,9 +50,8 @@ class ExportImageActivity: AppCompatActivity() {
 
         // set top bar
         findViewById<ImageView>(R.id.imagePreview).setImageURI(imageUri)
-//        filename = intent.extras?.getString("FILENAME_STR")
-        filename = WatermarkPost.post.filename
-        findViewById<TextView>(R.id.imageFilename).text = filename
+        title = WatermarkPost.post.title
+        findViewById<TextView>(R.id.imageTitle).text = title
         mockProgressBar()
 
         embedWatermark(tag)
@@ -120,7 +118,7 @@ class ExportImageActivity: AppCompatActivity() {
             val bytes = ByteArrayOutputStream()
             newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
 
-            newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$filename.png")
+            newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$title.png")
             newImageUri?.let { it ->
                 contentResolver.openOutputStream(it)?.let {
                     it.write(bytes.toByteArray())

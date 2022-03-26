@@ -55,7 +55,6 @@ object LoginManager {
         val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("username", username)
             .addFormDataPart("password", password).build()
-//        val requestBody = JSONObject(jsonObj).toString().toRequestBody("application/json".toMediaType())
 
         withContext(retrofitExCatcher) {
             // Use Retrofit's suspending POST request and wait for the response

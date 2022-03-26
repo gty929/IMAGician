@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import edu.umich.imagician.ItemStore.getRequestDetail
-import edu.umich.imagician.ItemStore.requests
+import edu.umich.imagician.ItemStore.watermarkRequests
 import edu.umich.imagician.databinding.ActivityRequestStatusBinding
 import edu.umich.imagician.utils.toast
 
@@ -25,13 +25,13 @@ class RequestStatusActivity : AppCompatActivity() {
 
     private fun showRequest(index: Int) {
         getRequestDetail(index)
-        watermarkRequest = requests[index]!!
+        watermarkRequest = watermarkRequests.requests[index]!!
         watermarkPost = watermarkRequest.watermarkPost!!
 
         // Image Info Fields
 
         // required
-        view.jpg.text = watermarkPost.filename
+        view.jpg.text = watermarkPost.title
 
         // optionals
         watermarkPost.username?.let { view.cname.text = it } ?:

@@ -67,11 +67,11 @@ class UploadHistoryActivity : AppCompatActivity() {
 
     private fun showPost(index: Int) {
         ItemStore.getPostDetail(index)
-        watermarkPost = ItemStore.watermarkCreations.posts[index]!!
+        watermarkPost = ItemStore.watermarkPosts.posts[index]!!
         historyListAdapter = HistoryListAdapter(this, watermarkPost.pendingRequestList, this::seeMore)
 
         // required
-        view.jpg.text = watermarkPost.filename
+        view.jpg.text = watermarkPost.title
 
         // optionals
         watermarkPost.username?.let { view.cname.text = it } ?:

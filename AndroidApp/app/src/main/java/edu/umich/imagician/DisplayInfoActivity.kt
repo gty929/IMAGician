@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import edu.umich.imagician.databinding.ActivityDisplayInfoBinding
 import edu.umich.imagician.utils.toast
 
+// TODO 3/26: create and link this to a ContactActivity for contacting the author
 class DisplayInfoActivity : AppCompatActivity() {
     private lateinit var view: ActivityDisplayInfoBinding
     private lateinit var watermarkPost: WatermarkPost
@@ -79,7 +80,7 @@ class DisplayInfoActivity : AppCompatActivity() {
         watermarkPost = WatermarkPost.post
         Log.d("DisplayInfo", "watermarkPost = ${Gson().toJson(watermarkPost).toString()}")
         // required
-        view.jpg.text = watermarkPost.filename
+        view.jpg.text = watermarkPost.title
 
         // BOOL check
         view.warning.isVisible = isModified

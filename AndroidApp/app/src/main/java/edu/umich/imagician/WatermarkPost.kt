@@ -17,7 +17,7 @@ import java.util.*
 open class WatermarkPost (var tag: String? = null,
                           var username: String? = null,
                           var fullname: String? = null,
-                          var filename: String? = null,
+                          var title: String? = null,
                           var email: String? = null,
                           var phoneNumber: String? = null,
                           var uri: String? = null,
@@ -58,8 +58,9 @@ open class WatermarkPost (var tag: String? = null,
         return when (mode) {
             Mode.FULL -> body
                 .addFormDataPart(TAG.field, this.tag?:"")
-                .addFormDataPart(FILE_NAME.field, this.filename?:"")
+                .addFormDataPart(FILE_NAME.field, this.title?:"")
                 .addFormDataPart(CHECKSUM.field, this.checksum?:"")
+                .addFormDataPart("username_public", this.usernameFlag.compareTo(false).toString())
                 .addFormDataPart("fullname_public", this.fullnameFlag.compareTo(false).toString())
                 .addFormDataPart("email_public", this.emailFlag.compareTo(false).toString())
                 .addFormDataPart("phone_public", this.phoneFlag.compareTo(false).toString())
@@ -90,7 +91,7 @@ open class WatermarkPost (var tag: String? = null,
             authorized = try { obj.getInt("authorized") == 1 } catch (e: Exception) {false}
             msg_encrypted = try { (obj.getInt("message_encrypted") == 1)} catch (e: Exception) {false}
             numPending = try { (obj.getInt("num_pending"))} catch (e: Exception) {0}
-            filename = f(FILE_NAME)
+            title = f(FILE_NAME)
             username = f(CREATOR) ?: "anonymous"
             fullname = f(FULLNAME)
             phoneNumber = f(PHONE)

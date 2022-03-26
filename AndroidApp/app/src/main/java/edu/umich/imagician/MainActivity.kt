@@ -9,9 +9,8 @@ import android.view.*
 import android.widget.ImageButton
 import android.view.View
 import androidx.lifecycle.Observer
-import edu.umich.imagician.ItemStore.fakeItems
-import edu.umich.imagician.ItemStore.requests
-import edu.umich.imagician.ItemStore.watermarkCreations
+import edu.umich.imagician.ItemStore.watermarkPosts
+import edu.umich.imagician.ItemStore.watermarkRequests
 
 import edu.umich.imagician.databinding.ActivityMainBinding
 import edu.umich.imagician.utils.initPython
@@ -34,7 +33,6 @@ class MainActivity : AppCompatActivity() {
 
         val loginObserver = Observer<Boolean> { isLoggedIn ->
             // Update the UI, in this case, a TextView.
-//            invalidateOptionsMenu()
             if (isLoggedIn) {
                 refreshPos()
                 refreshReq()
@@ -47,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         }
         LoginManager.isLoggedIn.observe(this, loginObserver)
 
-        requestListAdapter = RequestListAdapter(this, requests)
-        postListAdapter = PostListAdapter(this, watermarkCreations.posts)
+        requestListAdapter = RequestListAdapter(this, watermarkRequests.requests)
+        postListAdapter = PostListAdapter(this, watermarkPosts.posts)
         view.requests.adapter = requestListAdapter
         view.creations.adapter = postListAdapter
 
@@ -149,49 +147,28 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun refreshReq() {
-//        getRequests(applicationContext) {
-//            runOnUiThread {
-//                // inform the list adapter that data set has changed
-//                // so that it can redraw the screen.
-//                requestListAdapter.notifyDataSetChanged()
-//            }
-//            // stop the refreshing animation upon completion:
-//            Handler().postDelayed(Runnable {
-//                view.swipe.isRefreshing = false
-//            }, 4000)
-//        }
-        ItemStore.requests.clear()
-        if (LoginManager.isLoggedIn.value == true) {
-            fakeItems()
+        if (LoginManager.isLoggedIn.value != true) {
+            toast("You need to first login")
         }
+        watermarkRequests.clear()
+        view.refreshRequests.post { view.refreshRequests.isRefreshing = true }
+        ItemStore.refreshWatermarkRequests({
+            Log.d("refresh", "refresh request done with ${watermarkRequests.requests.size} requests")
+            view.refreshRequests.isRefreshing = false
+        })
 
-//        httpCall(watermarkCreations) { returncode ->
-//            if (returncode != 200) {
-//                Log.e("watermark Creations", "get watermarkCreations failed")
-//            }
-//        }
-        view.refreshRequests.isRefreshing = false
     }
 
     private fun refreshPos() {
-//        getPosts(applicationContext) {
-//            runOnUiThread {
-//                // inform the list adapter that data set has changed
-//                // so that it can redraw the screen.
-//                postListAdapter.notifyDataSetChanged()
-//            }
-//            // stop the refreshing animation upon completion:
-//            Handler().postDelayed(Runnable {
-//                view.swipe.isRefreshing = false
-//            }, 4000)
-//        }
-        ItemStore.clear()
+        if (LoginManager.isLoggedIn.value != true) {
+            toast("You need to first login")
+        }
+        watermarkPosts.clear()
         view.refreshPosts.post { view.refreshPosts.isRefreshing = true }
-        ItemStore.refresh({
-            Log.d("refresh", "refresh post done with ${ItemStore.watermarkCreations.posts.size} posts")
+        ItemStore.refreshWatermarkPosts({
+            Log.d("refresh", "refresh post done with ${watermarkPosts.posts.size} posts")
             view.refreshPosts.isRefreshing = false
         })
-//        fakeItems()
 
     }
 

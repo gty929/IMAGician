@@ -18,6 +18,8 @@ import java.util.*
 
 /**
  * Created by Tianyao Gu on 2022/3/6.
+ * TODO 3/26: File upload
+ *            Encrypt message feature (put Cypto Sdk to Extensions.kt)
  */
 @ExperimentalCoroutinesApi
 class InputInfoActivity: AppCompatActivity()  {
@@ -72,7 +74,7 @@ class InputInfoActivity: AppCompatActivity()  {
         WatermarkPost.post = WatermarkPost(
             username = LoginManager.info.username,
             fullname = LoginManager.info.fullname,
-            filename = editToStr(findViewById<EditText>(R.id.editFileName).text),
+            title = editToStr(findViewById<EditText>(R.id.editTitle).text),
             message = editToStr(findViewById<EditText>(R.id.editMessage).text),
             timestampFlag = timestampCheckBox.isChecked,
             usernameFlag = findViewById<CheckBox>(R.id.usernameCheckBox).isChecked,
@@ -96,6 +98,7 @@ class InputInfoActivity: AppCompatActivity()  {
     }
     val handler: Handler = @SuppressLint("HandlerLeak")
     object :Handler() {
+        @SuppressLint("SimpleDateFormat")
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             when (msg.what) {

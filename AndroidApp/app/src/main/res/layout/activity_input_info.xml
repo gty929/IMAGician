@@ -96,7 +96,7 @@
                         android:text="@string/title_" />
 
                     <EditText
-                        android:id="@+id/editFileName"
+                        android:id="@+id/editTitle"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:ems="14"

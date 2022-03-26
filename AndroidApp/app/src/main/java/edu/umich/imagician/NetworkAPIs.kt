@@ -30,11 +30,11 @@ interface NetworkAPIs {
     // authorization
     // creator side
     @GET("images/my_creation")
-    suspend fun getCreations(): Response<ResponseBody>
+    suspend fun getPosts(): Response<ResponseBody>
     @GET("images/my_creation/{tag}")
-    suspend fun getCreationDetail(@Path("tag") tag: String): Response<ResponseBody>
+    suspend fun getPostDetail(@Path("tag") tag: String): Response<ResponseBody>
     @GET("requests/received_request/{reqid}")
-    suspend fun getRcvRequestDetail(@Path("reqid") tag: String): Response<ResponseBody>
+    suspend fun getRequestDetail(@Path("reqid") tag: String): Response<ResponseBody>
     @POST("requests/received_request")
     suspend fun handleRequest(): Response<ResponseBody>
     // viewer side

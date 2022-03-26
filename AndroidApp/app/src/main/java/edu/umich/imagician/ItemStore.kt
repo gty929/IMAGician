@@ -1,72 +1,64 @@
 package edu.umich.imagician
 
-import android.content.Context
 import android.util.Log
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley.newRequestQueue
-import com.google.gson.Gson
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MultipartBody
 import okhttp3.ResponseBody
-import org.json.JSONArray
-import org.json.JSONException
 import retrofit2.Response
 import java.lang.Exception
-import kotlin.reflect.full.declaredMemberProperties
 
 object ItemStore {
 
-    val watermarkCreations= WatermarkCreations()
-    val requests = arrayListOf<WatermarkRequest?>()
-    val posts = arrayListOf<WatermarkPost?>()
+    val watermarkPosts= WatermarkPosts()
+    val watermarkRequests= WatermarkRequests()
+//    val requests = arrayListOf<WatermarkRequest?>()
+//    val posts = arrayListOf<WatermarkPost?>()
 
-    private val nReqFields = WatermarkRequest::class.declaredMemberProperties.size
-    private val nPosFields = WatermarkPost::class.declaredMemberProperties.size
-
-    private lateinit var reqQueue: RequestQueue
-    private lateinit var posQueue: RequestQueue
+//    private val nReqFields = WatermarkRequest::class.declaredMemberProperties.size
+//    private val nPosFields = WatermarkPost::class.declaredMemberProperties.size
+//
+//    private lateinit var reqQueue: RequestQueue
+//    private lateinit var posQueue: RequestQueue
     private const val serverUrl = "https://35.192.222.203/"
 
+    /*
     fun fakeItems() {
         requests.clear()
         posts.clear()
         for (i in 0 until 3) {
             requests.add(
                 WatermarkRequest(
-                watermarkPost = WatermarkPost(filename = "fake.bmp"),
+                watermarkPost = WatermarkPost(title = "fake.bmp"),
                 timestamp = "yyyy/dd/mm, time",
                 status = "GRANTED"
             ))
             posts.add(WatermarkPost(
-                filename = "image.bmp",
+                title = "image.bmp",
                 timestamp = "yyyy/dd/mm, time",
                 numPending = 0
             ))
         }
         for (i in 0 until 3) {
             requests.add(WatermarkRequest(
-                watermarkPost = WatermarkPost(filename = "fake.bmp"),
+                watermarkPost = WatermarkPost(title = "fake.bmp"),
                 timestamp = "yyyy/dd/mm, time",
                 status = "REJECTED"
             ))
             posts.add(WatermarkPost(
-                    filename = "image.bmp",
+                    title = "image.bmp",
                     timestamp = "yyyy/dd/mm, time",
                     numPending = 2
             ))
         }
         for (i in 0 until 3) {
             requests.add(WatermarkRequest(
-                watermarkPost = WatermarkPost(filename = "fake.bmp"),
+                watermarkPost = WatermarkPost(title = "fake.bmp"),
                 timestamp = "yyyy/dd/mm, time",
                 status = "PENDING"
             ))
             posts.add(WatermarkPost(
-                    filename = "image.bmp",
+                    title = "image.bmp",
                     timestamp = "yyyy/dd/mm, time",
                     numPending = 3
             ))
@@ -83,7 +75,7 @@ object ItemStore {
                     if (requestEntry.length() == nReqFields) {
                         requests.add(WatermarkRequest(
                             id = requestEntry[10] as Int?,
-                            watermarkPost = WatermarkPost(filename = requestEntry[0].toString()),
+                            watermarkPost = WatermarkPost(title = requestEntry[0].toString()),
                             status = requestEntry[1].toString(),
                             timestamp = requestEntry[2].toString(),
                             message = requestEntry[3].toString(),
@@ -113,7 +105,7 @@ object ItemStore {
                     if (postEntry.length() == nReqFields) {
                         posts.add(WatermarkPost(
                             tag = postEntry[10].toString(),
-                            filename = postEntry[0].toString(),
+                            title = postEntry[0].toString(),
                             numPending = postEntry[1] as Int?,
                             timestamp = postEntry[2].toString()))
                     } else {
@@ -129,9 +121,10 @@ object ItemStore {
         }
         posQueue.add(getPost)
     }
-
+*/
+    // TODO 3/26
     fun getPostDetail(index: Int) {
-        var watermarkPost = watermarkCreations.posts[index]
+        val watermarkPost = watermarkPosts.posts[index]
         watermarkPost?.pendingRequestList?.add(WatermarkRequest(
             sender = "Ron",
             message = "dsdsds"
@@ -142,8 +135,9 @@ object ItemStore {
         ))
     }
 
+    // TODO 3/26
     fun getRequestDetail(index: Int) {
-
+        val watermarkRequest = watermarkRequests.requests[index]
     }
 
     /** http wrapper for both post and get during login state, cookie must be provided
@@ -184,16 +178,30 @@ object ItemStore {
     }
 
     fun clear() {
-        watermarkCreations.clear()
+        watermarkPosts.clear()
+        watermarkRequests.clear()
     }
 
-    fun refresh(successCallback: (() -> Unit), failureCallback: (() -> Unit)? = null) {
-        httpCall(watermarkCreations) { returncode ->
+    fun refreshWatermarkPosts(successCallback: (() -> Unit), failureCallback: (() -> Unit)? = null) {
+        httpCall(watermarkPosts) { returncode ->
             if (returncode != 200) {
                 if (failureCallback != null) {
                     failureCallback()
                 }
-                Log.e("watermark Creations", "get watermarkCreations failed")
+                Log.e("watermark posts", "get watermarkPosts failed")
+            } else {
+                successCallback()
+            }
+        }
+    }
+
+    fun refreshWatermarkRequests(successCallback: (() -> Unit), failureCallback: (() -> Unit)? = null) {
+        httpCall(watermarkRequests) { returncode ->
+            if (returncode != 200) {
+                if (failureCallback != null) {
+                    failureCallback()
+                }
+                Log.e("watermark requests", "get watermarkRequests failed")
             } else {
                 successCallback()
             }

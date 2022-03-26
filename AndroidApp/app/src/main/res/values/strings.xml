@@ -94,5 +94,7 @@
     <string name="phone_">Phone:</string>
     <string name="_123456789">123456789</string>
     <string name="from_camera">From Camera</string>
+    <string name="warning_image_modification_detected">Warning: image modification detected!</string>
+    <string name="enter_your_password_here">Enter your password here</string>
 
 </resources>

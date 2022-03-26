@@ -9,7 +9,7 @@ import retrofit2.Response
 import edu.umich.imagician.Sendable.Mode
 
 // Class of request
-
+// TODO 3/26: complete the fields (you may refer to WatermarkPost)
 class WatermarkRequest (var id: Int? = null,
                         var watermarkPost: WatermarkPost? = null,
                         var sender: String? = null,

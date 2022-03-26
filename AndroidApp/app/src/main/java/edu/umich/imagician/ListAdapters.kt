@@ -1,7 +1,6 @@
 package edu.umich.imagician
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,6 @@ import androidx.core.content.ContextCompat
 import edu.umich.imagician.databinding.ListitemHistoryBinding
 import edu.umich.imagician.databinding.ListitemRequestBinding
 import edu.umich.imagician.databinding.ListitemUploadBinding
-import edu.umich.imagician.utils.toast
-import kotlin.math.log
 
 class RequestListAdapter(context: Context, watermarkRequests: ArrayList<WatermarkRequest?>) :
     ArrayAdapter<WatermarkRequest?>(context, 0, watermarkRequests) {
@@ -30,7 +27,7 @@ class RequestListAdapter(context: Context, watermarkRequests: ArrayList<Watermar
                 "PENDING" -> R.color.pending
                 else -> R.color.rejected
             }
-            listItemView.textView.text = watermarkPost?.filename
+            listItemView.textView.text = watermarkPost?.title
             listItemView.textView2.text = status
             listItemView.textView2.setTextColor(ContextCompat.getColor(context, color))
             listItemView.timestamp.text = "Usage right requested at ".plus(timestamp)
@@ -57,7 +54,7 @@ class PostListAdapter(context: Context, watermarkPosts: ArrayList<WatermarkPost?
                 0 -> R.color.pending
                 else -> R.color.rejected
             }
-            listItemView.textView.text = filename
+            listItemView.textView.text = title
             listItemView.textView2.text = numPending.toString().plus(" pending(s)")
             listItemView.textView2.setTextColor(ContextCompat.getColor(context, color))
             listItemView.timestamp.text = "Watermark embedded at ".plus(timestamp)

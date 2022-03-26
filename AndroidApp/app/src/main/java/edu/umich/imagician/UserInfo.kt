@@ -24,7 +24,9 @@ data class UserInfo(var username: String? = null,
     override fun parse(responseData: String) {
         try {
             val obj = JSONObject(responseData)
-            val f = { api:ApiStrings -> try {obj.getString(api.field)} catch (e: Exception) {null} }
+            val f = { api:ApiStrings ->
+                try {obj.getString(api.field).let { if (it.isEmpty()) null else it }}
+                catch (e: Exception) {null} }
             username = f(USERNAME)
             phoneNumber = f(PHONE_NUMBER)
             email = f(EMAIL)
