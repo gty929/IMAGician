@@ -227,11 +227,8 @@ class ImportImageActivity: AppCompatActivity()  {
             listofCroppers[0].activityInfo.packageName,
             listofCroppers[0].activityInfo.name)
 
-        // create a square crop box:
-        intent.putExtra("outputX", 500)
-            .putExtra("outputY", 500)
-            .putExtra("aspectX", 1)
-            .putExtra("aspectY", 1)
+        // create a crop box:
+        intent
             // enable zoom and crop
             .putExtra("scale", true)
             .putExtra("crop", true)
