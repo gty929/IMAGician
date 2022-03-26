@@ -16,6 +16,7 @@ import com.chaquo.python.android.AndroidPlatform
 import java.io.File
 import android.text.Editable
 import android.widget.EditText
+import java.security.MessageDigest
 
 
 /**
@@ -86,4 +87,14 @@ fun initPython(context: Context){
 
 fun editToStr(txt: Editable): String? {
     return if (txt.isEmpty()) null else txt.toString()
+}
+
+object Hasher {
+    val md = MessageDigest.getInstance("SHA-256")
+
+    fun hash(s: String): String {
+        val bytes = s.toByteArray()
+        val digest = md.digest(bytes)
+        return digest.fold("") { str, it -> str + "%02x".format(it) }
+    }
 }

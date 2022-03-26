@@ -15,6 +15,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import edu.umich.imagician.utils.Hasher
 import edu.umich.imagician.utils.PasswordStrength
 import edu.umich.imagician.utils.toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -68,12 +69,14 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
             if (isSignup && PasswordStrength.calculateStrength(passwordInput.text.toString()) == PasswordStrength.WEAK) {
                 toast("The password is too weak")
             } else {
+                val username = usernameInput.text.toString()
+                val hashedPassword = Hasher.hash(passwordInput.text.toString()+"WaiBiBaBu"+username)
                 MainScope().launch {
                     if (LoginManager.loginOrSignup(
                             context,
                             isSignup,
-                            usernameInput.text.toString(),
-                            passwordInput.text.toString()
+                            username,
+                            hashedPassword
                         )
                     ) {
                         startActivity(Intent(context, MainActivity::class.java))
