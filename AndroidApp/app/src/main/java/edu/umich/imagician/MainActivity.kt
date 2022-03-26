@@ -8,11 +8,8 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageButton
 import android.view.View
-import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.lifecycle.Observer
 import edu.umich.imagician.ItemStore.fakeItems
-import edu.umich.imagician.ItemStore.httpCall
-import edu.umich.imagician.ItemStore.posts
 import edu.umich.imagician.ItemStore.requests
 import edu.umich.imagician.ItemStore.watermarkCreations
 

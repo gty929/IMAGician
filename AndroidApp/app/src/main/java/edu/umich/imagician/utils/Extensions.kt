@@ -1,6 +1,5 @@
 package edu.umich.imagician.utils
 
-import android.app.Notification
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
@@ -15,9 +14,8 @@ import android.widget.Toast
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import java.io.File
-import android.os.FileUtils
-
-
+import android.text.Editable
+import android.widget.EditText
 
 
 /**
@@ -86,3 +84,6 @@ fun initPython(context: Context){
     }
 }
 
+fun editToStr(txt: Editable): String? {
+    return if (txt.isEmpty()) null else txt.toString()
+}

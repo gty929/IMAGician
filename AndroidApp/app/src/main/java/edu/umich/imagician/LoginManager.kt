@@ -85,66 +85,6 @@ object LoginManager {
         return isLoggedIn.value == true
     }
 
-    @ExperimentalCoroutinesApi
-    suspend fun updateUserInfo(context: Context, newInfo: UserInfo): Boolean {
-        if (isLoggedIn.value != true) {
-            Log.e("LoginManager:", "not logged in")
-            return false
-        }
-        if (cookie == null) {
-            Log.e("LoginManager:", "cookie not found")
-            return false
-        }
-        if (newInfo.username != info.username) {
-            Log.e("LoginManager:", "username has changed, which should be impossible")
-            return false
-        }
-//        val requestBody = cookieWrapper(newInfo)
-        val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("email", info.email?:"")
-            .addFormDataPart("phone", info.phoneNumber?:"").build()
-        return withContext(retrofitExCatcher) {
-            // Use Retrofit's suspending POST request and wait for the response
-            var response: Response<ResponseBody>? = null
-            try {
-                response = networkAPIs.updateUserInfo(requestBody)
-            } catch (e: Exception) {
-                Log.e("login", "update failed", e)
-            }
-            if (response != null && response.isSuccessful) {
-                info = newInfo
-                return@withContext true
-            } else {
-                Log.e("update user info", response?.errorBody()?.string() ?: "Retrofit error")
-                return@withContext false
-            }
-
-        }
-    }
-
-    @ExperimentalCoroutinesApi
-    suspend fun getUserInfo(context: Context): Boolean {
-
-        return withContext(retrofitExCatcher) {
-            // Use Retrofit's suspending POST request and wait for the response
-            var response: Response<ResponseBody>? = null
-            try {
-                response = networkAPIs.getUserInfo()
-            } catch (e: Exception) {
-                Log.e("login", "get user info failed", e)
-            }
-            if (response != null && response.isSuccessful) {
-                info = Gson().fromJson(response.body()?.string() ?: "", UserInfo::class.java)
-                isLoggedIn.value = true
-                return@withContext true
-            } else {
-                Log.e("update user info", response?.errorBody()?.string() ?: "Retrofit error")
-                return@withContext false
-            }
-
-        }
-    }
-
     fun logout(context: Context): Boolean {
         info = UserInfo()
         isLoggedIn.value = false
@@ -177,12 +117,6 @@ object LoginManager {
         RetrofitManager.update(cookie)
         val newInfo = UserInfo()
         ItemStore.httpCall(newInfo) { code -> if (code == 200) {info = newInfo; isLoggedIn.value = true} }
-//        MainScope().launch {
-//            getUserInfo(context)
-//            if (callback != null) {
-//                callback(isLoggedIn)
-//            }
-//        }
     }
 
     fun save(context: Context) {
@@ -203,14 +137,6 @@ object LoginManager {
                 .edit().clear().apply() // clear each preference file from memory
             File(folder, it).delete()   // delete the file
         }
-    }
-
-    fun cookieWrapper(data: Any?): RequestBody {
-        return JSONObject(mapOf(
-            "username" to info.username,
-            "cookie" to cookie,
-            "data" to if (data is String) data else Gson().toJson(data).toString()
-        )).toString().toRequestBody("application/json".toMediaType())
     }
 
 }

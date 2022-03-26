@@ -16,7 +16,7 @@ import java.util.*
 
 open class WatermarkPost (var tag: String? = null,
                           var username: String? = null,
-                          var realName: String? = null,
+                          var fullname: String? = null,
                           var filename: String? = null,
                           var email: String? = null,
                           var phoneNumber: String? = null,
@@ -27,7 +27,7 @@ open class WatermarkPost (var tag: String? = null,
                           var folder_pos: String? = null,
                           var timestampFlag: Boolean = false,
                           var usernameFlag: Boolean = false,/** set as false for anonymous posting*/
-                     var realNameFlag: Boolean = false,
+                          var fullnameFlag: Boolean = false,
                           var emailFlag: Boolean = false,
                           var phoneFlag: Boolean = false,
                           var timestamp: String? = null,
@@ -60,7 +60,7 @@ open class WatermarkPost (var tag: String? = null,
                 .addFormDataPart(TAG.field, this.tag?:"")
                 .addFormDataPart(FILE_NAME.field, this.filename?:"")
                 .addFormDataPart(CHECKSUM.field, this.checksum?:"")
-                .addFormDataPart("fullname_public", this.realNameFlag.compareTo(false).toString())
+                .addFormDataPart("fullname_public", this.fullnameFlag.compareTo(false).toString())
                 .addFormDataPart("email_public", this.emailFlag.compareTo(false).toString())
                 .addFormDataPart("phone_public", this.phoneFlag.compareTo(false).toString())
                 .addFormDataPart("time_public",this.timestampFlag.compareTo(false).toString())
@@ -92,7 +92,7 @@ open class WatermarkPost (var tag: String? = null,
             numPending = try { (obj.getInt("num_pending"))} catch (e: Exception) {0}
             filename = f(FILE_NAME)
             username = f(CREATOR) ?: "anonymous"
-            realName = f(REAL_NAME)
+            fullname = f(FULLNAME)
             phoneNumber = f(PHONE)
             email = f(EMAIL)
             timestamp = f(TIME)

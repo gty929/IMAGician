@@ -11,7 +11,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
+import edu.umich.imagician.utils.editToStr
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,11 +33,17 @@ class InputInfoActivity: AppCompatActivity()  {
 
         findViewById<CheckBox>(R.id.usernameCheckBox).text = LoginManager.info.username
 
+        val infoTable = findViewById<TableLayout>(R.id.infoTable)
+
+        // remove the row if the user has not set it in personal info page
+        LoginManager.info.fullname?.let { findViewById<CheckBox>(R.id.fullnameCheckBox).text = it } ?:
+        infoTable.removeView(findViewById<TableRow>(R.id.fullnameRow))
+
         LoginManager.info.email?.let { findViewById<CheckBox>(R.id.emailCheckBox).text = it } ?:
-        findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.emailRow))
+        infoTable.removeView(findViewById<TableRow>(R.id.emailRow))
 
         LoginManager.info.phoneNumber?.let { findViewById<CheckBox>(R.id.phoneCheckBox).text = it } ?:
-        findViewById<TableLayout>(R.id.infoTable).removeView(findViewById<TableRow>(R.id.phoneRow))
+        infoTable.removeView(findViewById<TableRow>(R.id.phoneRow))
 
         startTimestampThread()
 
@@ -55,8 +61,6 @@ class InputInfoActivity: AppCompatActivity()  {
             R.id.confirmMenu -> {
                 val intent = Intent(this, ExportImageActivity::class.java)
                 intent.putExtra("IMAGE_URI", imageUri)
-//                intent.putExtra("FILENAME_STR", WatermarkPost.post.filename)
-//                intent.putExtra("WATERMARK_POST_JSON_STR", Gson().toJson(watermarkPost).toString())
                 startActivity(intent)
                 true
             }
@@ -67,10 +71,12 @@ class InputInfoActivity: AppCompatActivity()  {
     private fun setWatermarkPost() {
         WatermarkPost.post = WatermarkPost(
             username = LoginManager.info.username,
-            filename = findViewById<EditText>(R.id.editFileName).text.toString(),
-            message = findViewById<EditText>(R.id.editMessage).text.toString(),
+            fullname = LoginManager.info.fullname,
+            filename = editToStr(findViewById<EditText>(R.id.editFileName).text),
+            message = editToStr(findViewById<EditText>(R.id.editMessage).text),
             timestampFlag = timestampCheckBox.isChecked,
             usernameFlag = findViewById<CheckBox>(R.id.usernameCheckBox).isChecked,
+            fullnameFlag = findViewById<CheckBox>(R.id.fullnameCheckBox)?.isChecked ?: false, // it's possible that the row has been removed
             emailFlag = findViewById<CheckBox>(R.id.emailCheckBox)?.isChecked ?: false,
             phoneFlag = findViewById<CheckBox>(R.id.phoneCheckBox)?.isChecked ?: false
         )

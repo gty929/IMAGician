@@ -28,7 +28,7 @@ data class UserInfo(var username: String? = null,
             username = f(USERNAME)
             phoneNumber = f(PHONE_NUMBER)
             email = f(EMAIL)
-            fullname = f(FULL_NAME)
+            fullname = f(FULLNAME)
         } catch (e: Exception) {
             Log.e("UserInfo", "cannot parse JSON string $responseData", e)
         }
@@ -37,7 +37,7 @@ data class UserInfo(var username: String? = null,
 
     override fun getRequestBodyBuilder(): MultipartBody.Builder {
         return MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart(FULL_NAME.field, fullname?:"")
+            .addFormDataPart(FULLNAME.field, fullname?:"")
             .addFormDataPart(EMAIL.field, email?:"")
             .addFormDataPart(PHONE_NUMBER.field, phoneNumber?:"")
     }

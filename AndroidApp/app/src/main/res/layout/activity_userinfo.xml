@@ -80,6 +80,18 @@
 
 
                         <EditText
+                            android:id="@+id/fullname_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawableStart="@drawable/ic_brand"
+                            android:drawablePadding="16dp"
+                            android:hint="Click to add your name/brand"
+                            android:inputType="textPersonName|text"
+                            android:maxLines="1"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp" />
+
+                        <EditText
                             android:id="@+id/email_input"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"

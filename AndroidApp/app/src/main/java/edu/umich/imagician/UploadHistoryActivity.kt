@@ -2,7 +2,6 @@ package edu.umich.imagician
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import edu.umich.imagician.databinding.ActivityUploadHistoryBinding
@@ -77,7 +76,7 @@ class UploadHistoryActivity : AppCompatActivity() {
         // optionals
         watermarkPost.username?.let { view.cname.text = it } ?:
         view.imageInfo.removeView(view.cnameRow)
-        watermarkPost.realName?.let { view.rname.text = it } ?:
+        watermarkPost.fullname?.let { view.rname.text = it } ?:
         view.imageInfo.removeView(view.rnameRow)
         watermarkPost.email?.let { view.eaddr.text = it } ?:
         view.imageInfo.removeView(view.eaddrRow)

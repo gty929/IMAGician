@@ -9,7 +9,7 @@ enum class ApiStrings (val field: String) {
     PASSWORD("password"),
     EMAIL("email"),
     PHONE_NUMBER("phone_number"),
-    FULL_NAME("fullname"),
+    FULLNAME("fullname"),
 
     // watermark post
     TAG("tag"),
@@ -19,7 +19,6 @@ enum class ApiStrings (val field: String) {
     FOLDER_POS("folder"),
     MESSAGE("message"),
     CREATOR("owner"),
-    REAL_NAME("fullname"),
     PHONE("phone"),
     TIME("time"),
     PENDING("num_pending"),

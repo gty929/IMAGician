@@ -1,6 +1,5 @@
 package edu.umich.imagician
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -99,7 +98,7 @@ class DisplayInfoActivity : AppCompatActivity() {
         // optionals
         watermarkPost.username?.let { view.cname.text = it } ?:
         view.imageInfo.removeView(view.cnameRow)
-        watermarkPost.realName?.let { view.rname.text = it } ?:
+        watermarkPost.fullname?.let { view.rname.text = it } ?:
         view.imageInfo.removeView(view.rnameRow)
         watermarkPost.email?.let { view.eaddr.text = it } ?:
         view.imageInfo.removeView(view.eaddrRow)

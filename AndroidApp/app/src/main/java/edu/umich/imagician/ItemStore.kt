@@ -146,55 +146,11 @@ object ItemStore {
 
     }
 
-
-    @Deprecated("use http call instead")
-    @ExperimentalCoroutinesApi
-    suspend fun postDataAfterLogin(context: Context, data: Any): Boolean {
-        if (LoginManager.isLoggedIn.value == false) {
-            Log.e("LoginManager:", "not logged in")
-            return false
-        }
-        if (LoginManager.cookie == null) {
-            Log.e("LoginManager:", "cookie not found")
-            return false
-        }
-        val requestBody = LoginManager.cookieWrapper(data)
-        return withContext(RetrofitManager.retrofitExCatcher) {
-            // Use Retrofit's suspending POST request and wait for the response
-            Log.d("Post send","Sending ${Gson().toJson(data)}")
-
-            var response: Response<ResponseBody>? = null
-            try {
-                response = RetrofitManager.networkAPIs.updateUserInfo(requestBody)
-            } catch (e: Exception) {
-                Log.e("data post", "post failed", e)
-            }
-            if (response != null && response.isSuccessful) {
-                return@withContext true
-            } else {
-                Log.e("data post", response?.errorBody()?.string() ?: "Retrofit error")
-
-                /**mock*/
-                return@withContext true
-
-
-
-                return@withContext false
-            }
-
-        }
-    }
-
     /** http wrapper for both post and get during login state, cookie must be provided
      * should add a callback to handle the return code
      * the fields within data can be modified
      * */
     fun httpCall(data: Sendable, callback: (returncode : Int) -> Unit) {
-//        if (LoginManager.cookie == null) {
-//            Log.e("LoginManager:", "cookie not found")
-//            callback(0)
-//            return
-//        }
         MainScope().launch {
             withContext(RetrofitManager.retrofitExCatcher) {
                 // Use Retrofit's suspending POST request and wait for the response

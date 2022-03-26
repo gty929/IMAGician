@@ -1,6 +1,5 @@
 package edu.umich.imagician
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
@@ -37,7 +36,7 @@ class RequestStatusActivity : AppCompatActivity() {
         // optionals
         watermarkPost.username?.let { view.cname.text = it } ?:
         view.imageInfo.removeView(view.cnameRow)
-        watermarkPost.realName?.let { view.rname.text = it } ?:
+        watermarkPost.fullname?.let { view.rname.text = it } ?:
         view.imageInfo.removeView(view.rnameRow)
         watermarkPost.email?.let { view.eaddr.text = it } ?:
         view.imageInfo.removeView(view.eaddrRow)
