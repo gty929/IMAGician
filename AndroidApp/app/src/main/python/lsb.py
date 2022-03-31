@@ -40,12 +40,8 @@ def LSB_decode(data, debug=False):
     else:
         img = get_data(data)
     message_byte = ""
-    H,W,C = img.shape
-
-    for h in range(H):
-        for w in range(W):
-            for c in range(C):
-                message_byte += msgToBinary(img[h,w,c])[-1]
+    flat_img = img.reshape(-1)%2
+    message_byte = "".join(map(str, list(flat_img)))
 
     message_byte = message_byte.split(msgToBinary(DELIMITER))
     result = {}
