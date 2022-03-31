@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="3dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="0dp"
         app:cardMaxElevation="0dp"
         app:cardPreventCornerOverlap="false"
@@ -32,7 +32,7 @@
             android:layout_centerInParent="true"
             android:layout_margin="2dp"
             app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="3dp"
+            app:cardCornerRadius="15dp"
             app:cardElevation="0dp"
             app:cardMaxElevation="0dp"
             app:cardPreventCornerOverlap="false">
@@ -63,22 +63,24 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/popup_window_title" />
 
+
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/popup_window_title"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMaxTextSize="24dp"
+                    android:layout_marginTop="8dp"
                     android:background="@color/white"
-                    android:text="Title"
                     android:gravity="center"
+                    android:text="Title"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="20sp"
+                    app:autoSizeMaxTextSize="24dp"
+                    app:autoSizeTextType="uniform"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
 
                 <Button
                     android:id="@+id/popup_window_button"
