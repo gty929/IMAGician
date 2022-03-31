@@ -66,6 +66,15 @@
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/menu/confirm_menu.xml" value="0.335" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/menu/login_menu.xml" value="0.25677083333333334" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/xml/network_security_config.xml" value="0.18854166666666666" />
+        <entry key="app/src/main/res/drawable/ic_email_light_blue_24dp.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_outline_message_24.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_display_info.xml" value="0.10472615904965965" />
+        <entry key="app/src/main/res/layout/activity_examine.xml" value="0.2600465146378052" />
+        <entry key="app/src/main/res/layout/activity_input_info.xml" value="0.41890639481000924" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.3239215034990069" />
+        <entry key="app/src/main/res/layout/activity_pop_up_window.xml" value="0.4815250174575597" />
+        <entry key="app/src/main/res/layout/activity_userinfo.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/listitem_upload.xml" value="0.1" />
       </map>
     </option>
   </component>

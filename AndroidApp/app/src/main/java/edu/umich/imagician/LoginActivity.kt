@@ -81,7 +81,13 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
                     ) {
                         startActivity(Intent(context, MainActivity::class.java))
                     } else {
-                        toast("Wrong password or username") //TODO add network failure case
+                        toast("Wrong password or username") 
+                        val intent = Intent(context, PopUpWindow::class.java)
+                        intent.putExtra("popuptitle", "Login Failed")
+                        intent.putExtra("popuptext", "Wrong password or username!")
+                        intent.putExtra("popupbtn", "OK")
+                        intent.putExtra("darkstatusbar", true)
+                        startActivity(intent)
                     }
 
                 }

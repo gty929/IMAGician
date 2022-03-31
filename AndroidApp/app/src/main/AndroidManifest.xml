@@ -27,15 +27,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IMAGician">
         <activity
+            android:name=".PopUpWindow"
+            android:exported="false" />
+        <activity
             android:name=".SendRequestActivity"
             android:exported="true"
             android:label="Contact Author"
-            android:parentActivityName=".DisplayInfoActivity"/>
+            android:parentActivityName=".DisplayInfoActivity" />
         <activity
             android:name=".DisplayInfoActivity"
             android:exported="true"
             android:label="Image Info"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".UploadHistoryActivity"
             android:exported="true"
