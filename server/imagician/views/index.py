@@ -330,7 +330,7 @@ def get_tag(tag):
                 'authorized': if the user is logged in, and the user has been authorized
                 'tag': the tag of the image
     """
-    result = get_img_by_tag_helper(tag)
+    result = get_img_by_tag_helper(tag, 1)
     
     # Check authorization
     result['authorized'] = 0
@@ -354,9 +354,12 @@ def get_tag(tag):
                 if authorization['status'] == 'GRANTED':
                     result['authorized'] = 1
                     break
+    if not result['username_public']:
+        result['owner'] = ''
+    result.pop('username_public')
     return flask.jsonify(**result)
 
-def get_img_by_tag_helper(tag):
+def get_img_by_tag_helper(tag, keep_owner = 0):
     """Helper for getting all the information of an image with id
                 'imgname': the name of the image, string
                 'owner': the username of the creator of the image, string
@@ -397,10 +400,14 @@ def get_img_by_tag_helper(tag):
     result['imgname'] = img_info['imgname']
     result['checksum'] = img_info['checksum']
     
-    if img_info['username_public']:
+    if keep_owner:
         result['owner'] = img_info['owner']
+        result['username_public'] = img_info['username_public']
     else:
-        result['owner'] = ''
+        if img_info['username_public']:
+            result['owner'] = img_info['owner']
+        else:
+            result['owner'] = ''
     if img_info['fullname_public']:
         result['fullname'] = user_info['fullname']
     else:
