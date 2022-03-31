@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">ec2-3-84-195-179.compute-1.amazonaws.com</domain>
+    <!--Set application-wide security config using base-config tag.-->
+<!--    <base-config cleartextTrafficPermitted="true"/>-->
+    <domain-config>
+        <domain includeSubdomains="true">3.84.195.179</domain>
+        <trust-anchors>
+            <certificates src="user"/>
+        </trust-anchors>
     </domain-config>
 </network-security-config>

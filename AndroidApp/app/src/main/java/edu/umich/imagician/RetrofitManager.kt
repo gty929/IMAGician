@@ -37,7 +37,7 @@ object RetrofitManager {
                 )
             }
         }
-        retrofit = Retrofit.Builder().baseUrl("http://ec2-3-84-195-179.compute-1.amazonaws.com/").client(httpClient.build()).build()
+        retrofit = Retrofit.Builder().baseUrl("https://3.84.195.179/").client(httpClient.build()).build()
         networkAPIs = retrofit.create(NetworkAPIs::class.java)
         Log.d("Okhttp client updated", cookie?:"")
     }
