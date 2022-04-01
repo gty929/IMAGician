@@ -225,6 +225,8 @@ def get_account_info():
 @imagician.app.route("/uploads/<string:uuid>/")
 def download_file(uuid):
     """Download file."""
+    if uuid.find('/') != -1 or uuid.find('\\') != -1:
+        abort(404)
     upload_dir = pathlib.Path(imagician.app.config['UPLOAD_FOLDER'], uuid)
     if not os.path.isdir(upload_dir):
         abort(404)
@@ -285,6 +287,8 @@ def post_tag():
     
     if 'file' in flask.request.files:
         filename = flask.request.files['file'].filename
+        if filename.find('/') != -1 or filename.find('\\') != -1:
+            abort(400)
         folder_name = uuid.uuid4().hex
         folder = imagician.app.config["UPLOAD_FOLDER"]/pathlib.Path(folder_name)
         folder.mkdir(parents=False, exist_ok=False)
