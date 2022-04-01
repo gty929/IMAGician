@@ -96,5 +96,6 @@
     <string name="from_camera">From Camera</string>
     <string name="warning_image_modification_detected">Warning: image modification detected!</string>
     <string name="enter_your_password_here">Enter your password here</string>
+    <string name="_16mb"><![CDATA[<16MB]]></string>
 
 </resources>

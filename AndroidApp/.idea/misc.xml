@@ -35,6 +35,7 @@
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_camera.xml" value="0.4630208333333333" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_email_light_blue_24dp.xml" value="0.25885416666666666" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_file.xml" value="0.4630208333333333" />
+        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_file_zip.xml" value="0.3005" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_home.xml" value="0.2475" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.275" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/ic_lock_light_blue_24dp.xml" value="0.27291666666666664" />
@@ -52,7 +53,7 @@
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_examine.xml" value="0.25625" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_export_image.xml" value="0.43681917211328974" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_import_image.xml" value="0.45" />
-        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_input_info.xml" value="0.375" />
+        <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_input_info.xml" value="0.1" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_new_watermark.xml" value="0.446875" />
@@ -66,15 +67,6 @@
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/menu/confirm_menu.xml" value="0.335" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/menu/login_menu.xml" value="0.25677083333333334" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/xml/network_security_config.xml" value="0.18854166666666666" />
-        <entry key="app/src/main/res/drawable/ic_email_light_blue_24dp.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/ic_outline_message_24.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_display_info.xml" value="0.10472615904965965" />
-        <entry key="app/src/main/res/layout/activity_examine.xml" value="0.2600465146378052" />
-        <entry key="app/src/main/res/layout/activity_input_info.xml" value="0.41890639481000924" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.3239215034990069" />
-        <entry key="app/src/main/res/layout/activity_pop_up_window.xml" value="0.35475953408046135" />
-        <entry key="app/src/main/res/layout/activity_userinfo.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/listitem_upload.xml" value="0.1" />
       </map>
     </option>
   </component>

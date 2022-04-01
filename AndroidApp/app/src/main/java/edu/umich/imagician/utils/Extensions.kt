@@ -1,5 +1,6 @@
 package edu.umich.imagician.utils
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
@@ -7,6 +8,8 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.OpenableColumns
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -14,8 +17,6 @@ import android.widget.Toast
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import java.io.File
-import android.text.Editable
-import android.widget.EditText
 import java.security.MessageDigest
 
 
@@ -33,13 +34,13 @@ fun ImageView.display(uri: Uri) {
 }
 
 fun Uri.toFile(context: Context): File? {
-
-    if (!(authority == "media" || authority == "com.google.android.apps.photos.contentprovider")) {
-        // for on-device media files only
-        context.toast("Media file not on device")
-        Log.d("Uri.toFile", authority.toString())
-        return null
-    }
+    Log.d("File", "Converting $this to file")
+//    if (!(authority == "media" || authority == "com.google.android.apps.photos.contentprovider")) {
+//        // for on-device media files only
+//        context.toast("Media file not on device")
+//        Log.d("Uri.toFile", authority.toString())
+//        return null
+//    }
 
     if (scheme.equals("content")) {
         var cursor: Cursor? = null

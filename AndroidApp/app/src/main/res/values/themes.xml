@@ -38,6 +38,15 @@
 
     </style>
 
+    <style name="Button.Gray" parent="ThemeOverlay.AppCompat">
+        <item name="colorPrimary">#FF7F7F7F</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+
+    </style>
+
+
     <style name="Theme.IMAGician.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

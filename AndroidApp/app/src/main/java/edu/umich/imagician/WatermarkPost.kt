@@ -1,5 +1,6 @@
 package edu.umich.imagician
 
+import android.net.Uri
 import android.util.Log
 import com.google.gson.Gson
 import okhttp3.MultipartBody
@@ -9,6 +10,8 @@ import retrofit2.Response
 import edu.umich.imagician.Sendable.Mode
 import org.json.JSONObject
 import edu.umich.imagician.ApiStrings.*
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,7 +23,8 @@ open class WatermarkPost (var tag: String? = null,
                           var title: String? = null,
                           var email: String? = null,
                           var phoneNumber: String? = null,
-                          var uri: String? = null,
+                          var file: File? = null,
+                          var filename: String? = null,
                           var message: String? = null,
                           var msg_encrypted: Boolean = false,
                           var folder: String? = null,
@@ -67,6 +71,9 @@ open class WatermarkPost (var tag: String? = null,
                 .addFormDataPart("time_public",this.timestampFlag.compareTo(false).toString())
                 .addFormDataPart(MESSAGE.field, this.message?:"")
                 .addFormDataPart("message_encrypted", this.msg_encrypted.compareTo(false).toString())
+                .also { if (this.file != null)
+                    it.addFormDataPart("file", "${this.filename}",
+                    this.file!!.asRequestBody())}
 
             else -> body.addFormDataPart(TAG.field, this.tag?:"")
         }

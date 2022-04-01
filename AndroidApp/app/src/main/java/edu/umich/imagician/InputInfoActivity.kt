@@ -11,19 +11,21 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import edu.umich.imagician.utils.editToStr
+import edu.umich.imagician.utils.*
+import edu.umich.imagician.utils.FileUtilNoCopy.getFileName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * Created by Tianyao Gu on 2022/3/6.
- * TODO 3/26: File upload
- *            Encrypt message feature (put Cypto Sdk to Extensions.kt)
+ * TODO 4/1: Encrypt message feature (put Cypto Sdk to Extensions.kt)
  */
 @ExperimentalCoroutinesApi
 class InputInfoActivity: AppCompatActivity()  {
     var imageUri: Uri? = null
+    var fileUri: Uri? = null
+    var filename: String? = null
     lateinit var timestampCheckBox: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,16 @@ class InputInfoActivity: AppCompatActivity()  {
         timestampCheckBox = findViewById(R.id.timestampCheckBox)
 
         findViewById<CheckBox>(R.id.usernameCheckBox).text = LoginManager.info.username
+
+        // from https://stackoverflow.com/questions/49697630/open-file-choose-in-android-app-using-kotlin
+        findViewById<Button>(R.id.selectFileButton).setOnClickListener {
+            val intent = Intent()
+                .setType("*/*")
+                .setAction(Intent.ACTION_GET_CONTENT)
+
+            startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
+
+        }
 
         val infoTable = findViewById<TableLayout>(R.id.infoTable)
 
@@ -70,6 +82,19 @@ class InputInfoActivity: AppCompatActivity()  {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 111 && resultCode == RESULT_OK) {
+            fileUri = data?.data?.also {
+                filename = getFileName(this, it)
+                findViewById<TextView>(R.id.fileDescriptor).text = filename
+            } //The uri with the location of the file
+
+
+        }
+    }
+
     private fun setWatermarkPost() {
         WatermarkPost.post = WatermarkPost(
             username = LoginManager.info.username,
@@ -80,7 +105,11 @@ class InputInfoActivity: AppCompatActivity()  {
             usernameFlag = findViewById<CheckBox>(R.id.usernameCheckBox).isChecked,
             fullnameFlag = findViewById<CheckBox>(R.id.fullnameCheckBox)?.isChecked ?: false, // it's possible that the row has been removed
             emailFlag = findViewById<CheckBox>(R.id.emailCheckBox)?.isChecked ?: false,
-            phoneFlag = findViewById<CheckBox>(R.id.phoneCheckBox)?.isChecked ?: false
+            phoneFlag = findViewById<CheckBox>(R.id.phoneCheckBox)?.isChecked ?: false,
+//            file = FileUtils.getPath(this, fileUri)?.let {File(it)},
+//            file = fileUri?.toFile(this),
+            file = fileUri?.let {FileUtil.from(this, it)},
+            filename = filename
         )
     }
 

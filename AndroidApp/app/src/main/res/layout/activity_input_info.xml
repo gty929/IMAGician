@@ -266,7 +266,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
-                        android:text="@string/timestamp_" />
+                        android:text="Time:" />
 
                     <CheckBox
                         android:id="@+id/timestampCheckBox"
@@ -276,9 +276,52 @@
 
 
                 </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/filezipIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/icon"
+                        app:srcCompat="@drawable/ic_file_zip" />
+
+                    <TextView
+                        android:id="@+id/filezipField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="File:" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/selectFileButton"
+                            style="@android:style/Widget.Holo.Light.Button"
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="0dp"
+                            android:text="Select File"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/fileDescriptor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="4dp"
+                            android:text="@string/_16mb" />
+                    </LinearLayout>
+
+
+                </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -286,8 +329,11 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent" >
+
+                </TableRow>
             </TableLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
