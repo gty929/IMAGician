@@ -12,3 +12,6 @@ source env/bin/activate
 export FLASK_ENV=development
 export FLASK_APP=imagician
 flask run --host 0.0.0.0 --port 8000
+
+pkill -f gunicorn
+gunicorn -b localhost:8000 -w 2 -D imagician:app

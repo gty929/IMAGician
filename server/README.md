@@ -3,6 +3,26 @@ install: scripts/IMAGician_install
 initiate database: scripts/IMAGician_install start
 restart database: scripts/IMAGician_install reset
 start: scripts/IMAGician_run
+
+## Server Back End Third-Party Dependencies
+- [SQLite](https://www.sqlite.org/index.html): database that stores all backend persistent data.
+- [Flask web framework](https://flask.palletsprojects.com/en/2.0.x/): web framework for the back end application.
+- [Gunicorn](https://gunicorn.org): serves as a WSGI application server that bridges the web server and the application.
+- [Nginx](https://www.nginx.com): accepts requests, takes care of general domain logic, and takes care of handling HTTP connections.
+- [hashlib](https://docs.python.org/3/library/hashlib.html): used for storing user passwords.
+- [uuid](https://docs.python.org/3/library/uuid.html): used for generating salt for password hashes and unique folders.
+
+## Server deployment
+1. Install and configure Nginx according to [this tutorial](https://eecs485staff.github.io/p2-insta485-serverside/setup_aws.html#install-nginx).
+2. Clone the github repo to the machine that you wish to run the server on.
+3. Open up a new bash terminal with backend as the current directory. (`cd IMAGician/backend`)
+4. Run `./scripts/IMAGician_install` to install all the dependencies and activate the environment.
+5. Run `./scripts/IMAGician_run` to run the server.
+6. Update to HTTPS traffic according to [this tutorial](https://eecs441.eecs.umich.edu/asns/lab0-chatter-backend#server-side-https)
+
+Currently, the server is hosted at https://3.84.195.179/ . The self-signed certificate can be found [here](https://github.com/gty929/IMAGician/blob/main/server/selfsigned.crt)
+
+## Server API
 * ### Back-end Endpoint: POST /accounts/create/
 This URL creates a new account for a user. The user's password will be salted and hashed before being stored in the database. After an account has been successfully created, the user will be automatically logged in.
 * Receives a json form data of:
