@@ -18,6 +18,7 @@ import java.io.OutputStream;
 public class FileUtil {
     private static final int EOF = -1;
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
+    private static final int MAX_FILE_SIZE = 1024 * 1024 * 16;
 
     private FileUtil() {
 
@@ -106,6 +107,9 @@ public class FileUtil {
         while (EOF != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
+            if (count > MAX_FILE_SIZE) {
+                throw new IOException("File to large");
+            }
         }
         return count;
     }

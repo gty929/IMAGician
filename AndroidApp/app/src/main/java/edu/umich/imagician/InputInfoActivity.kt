@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import edu.umich.imagician.utils.*
 import edu.umich.imagician.utils.FileUtilNoCopy.getFileName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -69,7 +70,15 @@ class InputInfoActivity: AppCompatActivity()  {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // finish selection
-        setWatermarkPost()
+        try {
+            setWatermarkPost()
+        } catch (e: IOException) {
+            toast(e.message ?: "File IO Error")
+            return false
+        } catch (e: Exception) {
+            toast(e.message ?: "Unknown Error")
+            return false
+        }
         // Handle item selection
         return when (item.itemId) {
             R.id.confirmMenu -> {
@@ -108,7 +117,7 @@ class InputInfoActivity: AppCompatActivity()  {
             phoneFlag = findViewById<CheckBox>(R.id.phoneCheckBox)?.isChecked ?: false,
 //            file = FileUtils.getPath(this, fileUri)?.let {File(it)},
 //            file = fileUri?.toFile(this),
-            file = fileUri?.let {FileUtil.from(this, it)},
+            file = fileUri?.let { FileUtil.from(this, it)},
             filename = filename
         )
     }
