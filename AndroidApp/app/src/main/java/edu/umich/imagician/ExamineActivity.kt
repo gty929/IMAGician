@@ -23,6 +23,7 @@ class ExamineActivity: AppCompatActivity() {
     private var hasDecoded = AtomicBoolean()
     private var hasRetrieved = AtomicBoolean()
     private var hasChecked = AtomicBoolean()
+    private var tagFound = AtomicBoolean()
 
     private var isModified = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,30 +98,52 @@ class ExamineActivity: AppCompatActivity() {
 //            }
             WatermarkPost.post = WatermarkPost(tag=tag, mode = Sendable.Mode.EMPTY)
             ItemStore.httpCall(WatermarkPost.post) { code ->
-                if (code != 200) if (code != 200) toast("Retrieve fails $code")
+                if (code != 200){
+                    toast("Retrieve fails $code")
+                    tagFound.set(false)
+                }
+                else{
+                    tagFound.set(true)
+                }
                 hasRetrieved.set(true)
 
-                runOnUiThread {
-                    toast("checking integrity")
+
+                if(tagFound.get()){
+                    runOnUiThread {
+                        toast("checking integrity")
+                    }
+                    val checksum = StegnoAlgo.getChecksum(img)
+                    // check the checksum
+                    // checksum of the post is the correct one (unmodified)
+                    isModified = (checksum != WatermarkPost.post.checksum)
+                    runOnUiThread {
+                        toast("checksum = $checksum", false)
+                    }
                 }
-                val checksum = StegnoAlgo.getChecksum(img)
-                // check the checksum
-                // checksum of the post is the correct one (unmodified)
-                isModified = (checksum != WatermarkPost.post.checksum)
+
                 hasChecked.set(true)
-                runOnUiThread {
-                    toast("checksum = $checksum", false)
-                }
+
             }
         }).start()
     }
 
     private fun onExamineFinish() {
-        val intent = Intent(this, DisplayInfoActivity::class.java)
-        intent.putExtra("isModified", isModified)
-        intent.putExtra("IMAGE_URI", imageUri)
-        startActivity(intent)
-        overridePendingTransition(0, 0)
+        if(!tagFound.get()){
+            val intent = Intent(this, PopUpWindow::class.java)
+            intent.putExtra("popuptitle", "Extraction Failed")
+            intent.putExtra("popuptext", "Watermark not found in this image!")
+            intent.putExtra("popupbtn", "OK")
+            intent.putExtra("darkstatusbar", true)
+            startActivity(intent)
+
+        }
+        else{
+            val intent = Intent(this, DisplayInfoActivity::class.java)
+            intent.putExtra("isModified", isModified)
+            intent.putExtra("IMAGE_URI", imageUri)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+        }
     }
 
 }

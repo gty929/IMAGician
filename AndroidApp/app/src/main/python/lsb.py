@@ -53,7 +53,8 @@ def LSB_decode(data, debug=False):
             result[segment] = 0
         result[segment] += 1
     message = max(result, key=result.get)  
-
+    if len(message) > 20:
+        message = ""
     return message
 
 
