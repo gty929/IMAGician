@@ -36,6 +36,7 @@ class ExportImageActivity: AppCompatActivity() {
     private var hasEncoded = AtomicBoolean()
     private var hasHashed = AtomicBoolean()
     private var hasUploaded = AtomicBoolean()
+    private var uploadFailed = AtomicBoolean()
     private val tag = SecureRandom().generateSeed(7).toString()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,6 +100,15 @@ class ExportImageActivity: AppCompatActivity() {
             }
             handler.post(Runnable {
                 progressBar.progress = 100
+                if(uploadFailed.get()){
+                    val intent = Intent(this, PopUpWindow::class.java)
+                    intent.putExtra("popuptitle", "Embedding Failed")
+                    intent.putExtra("popuptext", "An issue occurred during embedding. Please try again. ")
+                    intent.putExtra("popupbtn", "OK")
+                    intent.putExtra("darkstatusbar", true)
+                    intent.putExtra("gohome", true)
+                    startActivity(intent)
+                }
                 setViewVisibilityByState(false)
             })
         }).start()
@@ -154,7 +164,13 @@ class ExportImageActivity: AppCompatActivity() {
                 watermarkPost.mode = Sendable.Mode.FULL // query by tag
                 Log.i("Export","start httpCall")
                 ItemStore.httpCall(watermarkPost) { code ->
-                    if (code != 200) toast("Upload fails $code")
+                    if (code != 200) {
+                        toast("Upload fails $code")
+                        uploadFailed.set(true)
+                    }
+                    else{
+                        uploadFailed.set(false)
+                    }
                     hasUploaded.set(true)
                 }
 //                hasUploaded.set(true)
