@@ -134,6 +134,7 @@ class ExamineActivity: AppCompatActivity() {
             intent.putExtra("popuptext", "Watermark not found in this image!")
             intent.putExtra("popupbtn", "OK")
             intent.putExtra("darkstatusbar", true)
+            intent.putExtra("gohome", true)
             startActivity(intent)
 
         }
