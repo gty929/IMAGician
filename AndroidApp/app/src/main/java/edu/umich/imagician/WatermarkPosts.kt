@@ -24,8 +24,7 @@ class WatermarkPosts: Sendable {
         try {
             val objs = JSONObject(responseData).getJSONArray("result")
             for (i in 0 until objs.length()) {
-                val watermarkPost = WatermarkPost()
-                watermarkPost.mode = Sendable.Mode.EMPTY
+                val watermarkPost = WatermarkPost(mode = Sendable.Mode.EMPTY)
                 watermarkPost.parse(objs.getJSONObject(i).getJSONObject("image").toString())
                 posts.add(watermarkPost)
             }

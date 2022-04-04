@@ -17,7 +17,7 @@ interface Sendable {
         // IDLE do nothing
         // EMPTY waiting to be filled
         // FULL upload content
-        // LAZY ...
+        // LAZY handle requests list
     }
     /* generate a MultipartBody Builder for post requests
      can be omitted for get requests */

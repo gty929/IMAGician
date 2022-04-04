@@ -1,8 +1,10 @@
 package edu.umich.imagician
 
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -36,9 +38,7 @@ class SendRequestActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.contactMenu -> {
                 watermarkRequest.message = view.editTextTextMultiLine.text.toString()
-                val pattern = "yyyy-MM-dd hh:mm";
-                watermarkRequest.timestamp = DateTimeFormatter.ofPattern(pattern).format(Instant.now())
-
+                Log.i("Send req", "message ${watermarkRequest.message}")
                 submitRequest()
                 true
             }
@@ -54,14 +54,18 @@ class SendRequestActivity : AppCompatActivity() {
             watermarkPost = this.watermarkPost,
             sender = LoginManager.info.username,
         )
+        Log.d("imgtag", watermarkRequest.watermarkPost?.tag ?: "") // why cannot add the line?
     }
 
     private fun submitRequest() {
+        watermarkRequest.mode = Sendable.Mode.FULL
         ItemStore.httpCall(watermarkRequest) { code ->
             if (code == 200) {
                 toast("Successfully submit request!")
                 // return to parent activity
-                finishActivity(0)
+                val intent = Intent(this, DisplayInfoActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
             }
         }
     }

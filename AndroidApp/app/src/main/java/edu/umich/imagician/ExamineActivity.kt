@@ -136,7 +136,6 @@ class ExamineActivity: AppCompatActivity() {
             intent.putExtra("darkstatusbar", true)
             intent.putExtra("gohome", true)
             startActivity(intent)
-
         }
         else{
             val intent = Intent(this, DisplayInfoActivity::class.java)

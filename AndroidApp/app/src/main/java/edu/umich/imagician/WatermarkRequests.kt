@@ -24,8 +24,8 @@ class WatermarkRequests: Sendable {
         try {
             val objs = JSONObject(responseData).getJSONArray("result")
             for (i in 0 until objs.length()) {
-                val watermarkRequest = WatermarkRequest()
-                watermarkRequest.parse(objs.getJSONObject(i).getJSONObject("request").toString())
+                val watermarkRequest = WatermarkRequest(mode = Sendable.Mode.EMPTY)
+                watermarkRequest.parse(objs.getJSONObject(i).toString())
                 requests.add(watermarkRequest)
             }
 

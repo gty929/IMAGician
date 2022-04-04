@@ -21,8 +21,9 @@ class DisplayInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         view = ActivityDisplayInfoBinding.inflate(layoutInflater)
         setContentView(view.root)
-        isModified = intent.getBooleanExtra("isModified", false)
-        imageUri = intent.getParcelableExtra("IMAGE_URI")
+        watermarkPost = WatermarkPost.post
+        isModified = watermarkPost.isModified ?: intent.getBooleanExtra("isModified", false)
+        imageUri = watermarkPost.img_uri ?: intent.getParcelableExtra("IMAGE_URI")
         view.imageShow.setImageURI(imageUri)
         view.chipEnter.text = "Encrypted, click to enter the password"
         view.chipDl.text = "Download"
@@ -31,8 +32,8 @@ class DisplayInfoActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if (LoginManager.isLoggedIn.value == true) {
-//            val inflater: MenuInflater = menuInflater
-//            inflater.inflate(R.menu.contact_menu, menu)
+            val inflater: MenuInflater = menuInflater
+            inflater.inflate(R.menu.contact_menu, menu)
         }
         return true
     }
@@ -41,6 +42,13 @@ class DisplayInfoActivity : AppCompatActivity() {
         // edit request to author
         return when (item.itemId) {
             R.id.contactMenu -> {
+                Log.i("Display info", "image uri: $imageUri")
+                val intent = Intent(this, SendRequestActivity::class.java)
+                intent.putExtra("IMAGE_URI", imageUri)
+                startActivity(intent)
+                true
+            }
+            R.id.contactMenuText -> {
                 val intent = Intent(this, SendRequestActivity::class.java)
                 intent.putExtra("IMAGE_URI", imageUri)
                 startActivity(intent)
@@ -77,8 +85,9 @@ class DisplayInfoActivity : AppCompatActivity() {
     }
 
     private fun showEmbeddedInfo() {
-        watermarkPost = WatermarkPost.post
         Log.d("DisplayInfo", "watermarkPost = ${Gson().toJson(watermarkPost).toString()}")
+        watermarkPost.isModified = isModified
+        watermarkPost.img_uri = imageUri
         // required
         view.jpg.text = watermarkPost.title
 
