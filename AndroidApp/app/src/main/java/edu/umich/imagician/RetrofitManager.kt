@@ -3,10 +3,8 @@ package edu.umich.imagician
 import android.util.Log
 import kotlinx.coroutines.CoroutineExceptionHandler
 import retrofit2.Retrofit
-import okhttp3.Interceptor
 
 import okhttp3.OkHttpClient
-import java.io.IOException
 
 
 /**
