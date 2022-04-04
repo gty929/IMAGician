@@ -57,7 +57,6 @@ def LSB_decode(data, check=False, debug=False):
 
     message_byte = message_byte.split(msgToBinary(DELIMITER))
     if check:
-        print(len(message_byte))
         return len(message_byte) > 256
     result = {}
     for byte in message_byte:
