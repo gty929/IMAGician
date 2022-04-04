@@ -1,3 +1,4 @@
+from xmlrpc.client import TRANSPORT_ERROR
 import cv2
 from PIL import Image
 import base64
@@ -14,28 +15,39 @@ def LSB_encode(data,message,debug=False):
     message += DELIMITER
     binary_message = msgToBinary(message)
     data_len = len(binary_message)
-    data_index = 0
+    
     if debug:
         img = data
     else:
         img = get_data(data)
+
+    if LSB_decode(data, check=True):
+        return None
 
     H,W,C = img.shape
     max_bytes = H * W * C / 8
     if len(message) > max_bytes:
         raise RuntimeError(f"message({len(message)}) too large! ({max_bytes})")
 
-    for h in range(H):
-        for w in range(W):
-            for c in range(C):
-                img[h,w,c] = int(msgToBinary(img[h,w,c])[:-1]+binary_message[data_index],2)
-                data_index = (data_index+1)%data_len
+    # '''For Method'''
+    # data_index = 0
+    # for h in range(H):
+    #     for w in range(W):
+    #         for c in range(C):
+    #             img[h,w,c] = int(msgToBinary(img[h,w,c])[:-1]+binary_message[data_index],2)
+    #             data_index = (data_index+1)%data_len
+
+    '''Vectorization Method'''
+    img = (img >> 1)*2
+    bin_msg_vec = np.array([int(b) for b in binary_message], dtype='uint8')
+    bin_msg_vec = np.tile(bin_msg_vec,(H*W*C//data_len)+1)[:H*W*C].reshape(H,W,C)
+    img += bin_msg_vec
 
     return wrap_data(img) if not debug else img
 
 
-def LSB_decode(data, debug=False):
-    if debug:
+def LSB_decode(data, check=False, debug=False):
+    if debug or check:
         img = data
     else:
         img = get_data(data)
@@ -44,6 +56,9 @@ def LSB_decode(data, debug=False):
     message_byte = "".join(map(str, list(flat_img)))
 
     message_byte = message_byte.split(msgToBinary(DELIMITER))
+    if check:
+        print(len(message_byte))
+        return len(message_byte) > 256
     result = {}
     for byte in message_byte:
         segment = ""
@@ -157,4 +172,35 @@ def old_LSB_decode(data, chunk_size):
     message = max(result, key=result.get)
 #     print(message)
     return message
+
+
+
+"""
+Debug
+"""
+# import time
+# from PIL import Image
+# from numpy import asarray
+
+
+# img = Image.open('org.png')
+
+# img = asarray(img)
+# img = np.random.randint(90,255,(100,100,3))
+
+# time_start = time.time()
+# embed_img = LSB_encode(img, "abcdefng", debug=True)
+# time_end = time.time()
+# print(f"embed time: {time_end-time_start}")
+
+
+# time_start = time.time()
+# msg = LSB_decode(embed_img,check=False,debug=True)
+# time_end = time.time()
+# print(f"decode time: {time_end-time_start}")
+# print(f"message: {msg}")
+
+
+# embed_img = LSB_encode(embed_img, "abcdefng", debug=True)
+# assert embed_img is None
 
