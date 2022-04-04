@@ -24,9 +24,11 @@ enum class ApiStrings (val field: String) {
     PENDING("num_pending"),
 
     // watermark request
+    IMG_TAG("imgtag"),
     REQ_TIME("created"),
     REQ_ID("reqid"),
     REQ_MSG("message"),
     STATUS("status"),
+    ACTION("action"),
     REQUESTER("username"),
 }

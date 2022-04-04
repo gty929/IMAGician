@@ -48,9 +48,11 @@ open class WatermarkPost (var tag: String? = null,
     }
 
     override suspend fun send(request: RequestBody): Response<ResponseBody>? {
+        Log.d("PostSender", "Send post $mode")
         return when (mode) {
             Mode.EMPTY -> RetrofitManager.networkAPIs.getWatermark(tag!!)
             Mode.FULL -> RetrofitManager.networkAPIs.postWatermark(request)
+            Mode.LAZY -> RetrofitManager.networkAPIs.getPostDetail(tag!!)
             else -> null
         }
 
@@ -84,17 +86,19 @@ open class WatermarkPost (var tag: String? = null,
         Log.d("PostParser", "Parsing post ${responseData} with ${mode} mode")
         when (mode) {
             Mode.EMPTY -> parseAll(responseData)
+            Mode.LAZY -> parseReqs(responseData)
             else -> {}
         }
         Log.d("PostParser", "Parsed post to ${Gson().toJson(this)}")
     }
 
     private fun parseAll(jsonObjectStr: String) {
+        // parse all except pendingReqList
         try {
             val obj = JSONObject(jsonObjectStr)
             val f = { api:ApiStrings -> try {obj.getString(api.field).let { if (it.isEmpty()) null else it }} catch (e: Exception) {null} }
 //            if (tag != f(TAG)) { throw error("Incorrect tag!") }
-
+            tag = f(TAG)
             authorized = try { obj.getInt("authorized") == 1 } catch (e: Exception) {false}
             msg_encrypted = try { (obj.getInt("message_encrypted") == 1)} catch (e: Exception) {false}
             numPending = try { (obj.getInt("num_pending"))} catch (e: Exception) {0}
@@ -104,7 +108,7 @@ open class WatermarkPost (var tag: String? = null,
             phoneNumber = f(PHONE)
             email = f(EMAIL)
             timestamp = f(TIME)
-            TimeExchange()
+            timeExchange()
             checksum = f(CHECKSUM)
             folder = f(FOLDER_NAME)
             folder_pos = f(FOLDER_POS)
@@ -115,7 +119,7 @@ open class WatermarkPost (var tag: String? = null,
         }
     }
 
-    private fun TimeExchange() {
+    private fun timeExchange() {
         when (timestamp) {
             null -> timestamp = "Unknown Time"
             else -> {
@@ -125,6 +129,21 @@ open class WatermarkPost (var tag: String? = null,
                 val formatter2 = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
                 timestamp = formatter2.format(dt)
             }
+        }
+    }
+
+    private fun parseReqs(responseData: String) {
+        // pendingRequestList.clear() // do this before
+        try {
+            val objs = JSONObject(responseData).getJSONArray("requests")
+            for (i in 0 until objs.length()) {
+                val watermarkRequest = WatermarkRequest()
+                watermarkRequest.parse(objs.getJSONObject(i).toString())
+                pendingRequestList.add(watermarkRequest)
+            }
+
+        } catch (e: Exception) {
+            Log.e("Watermark Post", "cannot parse JSON string $responseData", e)
         }
     }
 

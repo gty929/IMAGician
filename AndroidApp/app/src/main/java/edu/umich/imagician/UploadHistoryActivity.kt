@@ -2,6 +2,7 @@ package edu.umich.imagician
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import edu.umich.imagician.databinding.ActivityUploadHistoryBinding
@@ -41,11 +42,14 @@ class UploadHistoryActivity : AppCompatActivity() {
             showStatus(reqIndex)
         }
 
+        watermarkPost = ItemStore.watermarkPosts.posts[index]!!
+        showPost()
+
         view.refreshReqs.setOnRefreshListener {
-            showPost(index)
+            showHistory(index)
         }
 
-        showPost(index)
+        showHistory(index)
     }
 
     fun seeMore(idx: Int) {
@@ -65,11 +69,7 @@ class UploadHistoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun showPost(index: Int) {
-        ItemStore.getPostDetail(index)
-        watermarkPost = ItemStore.watermarkPosts.posts[index]!!
-        historyListAdapter = HistoryListAdapter(this, watermarkPost.pendingRequestList, this::seeMore)
-
+    private fun showPost() {
         // required
         view.jpg.text = watermarkPost.title
 
@@ -88,9 +88,20 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.imageInfo.removeView(view.msgRow)
 
         // history requests
+        historyListAdapter = HistoryListAdapter(this, watermarkPost.pendingRequestList, this::seeMore)
         view.reqList.adapter = historyListAdapter
+    }
 
-        view.refreshReqs.isRefreshing = false
+    private fun showHistory(index: Int) {
+//        if (LoginManager.isLoggedIn.value != true) {
+//            toast("You need to first login")
+//        }
+        watermarkPost.pendingRequestList.clear()
+
+        ItemStore.getPostDetail(index, {
+            Log.d("refresh", "refresh request done with ${ItemStore.watermarkRequests.requests.size} requests")
+            view.refreshReqs.isRefreshing = false
+        })
     }
 
     private fun showOpts() {
