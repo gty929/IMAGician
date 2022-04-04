@@ -19,7 +19,7 @@ class UploadHistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         view = ActivityUploadHistoryBinding.inflate(layoutInflater)
         setContentView(view.root)
-        var index = intent.getIntExtra("index", -1)
+        val index = intent.getIntExtra("index", -1)
         if (index == -1) {
             toast("Error: incorrect post index!")
         }
@@ -99,8 +99,9 @@ class UploadHistoryActivity : AppCompatActivity() {
         watermarkPost.pendingRequestList.clear()
 
         ItemStore.getPostDetail(index, {
-            Log.d("refresh", "refresh request done with ${ItemStore.watermarkRequests.requests.size} requests")
+            Log.d("refresh", "refresh request done with ${watermarkPost.pendingRequestList.size} requests")
             view.refreshReqs.isRefreshing = false
+            historyListAdapter.notifyDataSetChanged()
         })
     }
 

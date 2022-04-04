@@ -26,7 +26,9 @@ object ItemStore {
                 }
                 Log.e("watermark post", "get watermarkRequests failed")
             } else {
+
                 successCallback()
+
             }
         }
     }

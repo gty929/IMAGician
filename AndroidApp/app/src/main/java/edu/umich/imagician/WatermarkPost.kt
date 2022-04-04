@@ -12,6 +12,7 @@ import org.json.JSONObject
 import edu.umich.imagician.ApiStrings.*
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,6 +39,8 @@ open class WatermarkPost (var tag: String? = null,
                           var numPending: Int? = null,
                           var checksum: String? = null,
                           var authorized: Boolean = false,
+                          var img_uri: Uri? = null,
+                          var isModified: Boolean? = false,
                           var mode: Mode = Mode.IDLE) : Sendable {
 
     val pendingRequestList = arrayListOf<WatermarkRequest?>()

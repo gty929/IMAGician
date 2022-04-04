@@ -1,6 +1,7 @@
 package edu.umich.imagician
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,9 +65,7 @@ class PostListAdapter(context: Context, watermarkPosts: ArrayList<WatermarkPost?
     }
 }
 
-class HistoryListAdapter(
-    context: Context,
-    watermarkRequests: ArrayList<WatermarkRequest?>,
+class HistoryListAdapter(context: Context, watermarkRequests: ArrayList<WatermarkRequest?>,
     val seeMore: (index: Int) -> Unit
 ) :
     ArrayAdapter<WatermarkRequest?>(context, 0, watermarkRequests) {
@@ -84,6 +83,7 @@ class HistoryListAdapter(
         }
 
         getItem(position)?.run {
+            Log.d("History adapter", "asasa")
             listItemView.requester.text = sender
             listItemView.msg.text = message
         }
