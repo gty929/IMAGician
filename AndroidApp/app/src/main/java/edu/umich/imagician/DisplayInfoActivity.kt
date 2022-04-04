@@ -46,6 +46,12 @@ class DisplayInfoActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
+            R.id.contactMenuText -> {
+                val intent = Intent(this, SendRequestActivity::class.java)
+                intent.putExtra("IMAGE_URI", imageUri)
+                startActivity(intent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
