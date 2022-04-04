@@ -34,12 +34,12 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.buttonGrant.setOnClickListener {
             watermarkRequest.status = "GRANTED"
             postUpdateStatus()
-            showStatus(reqIndex)
+//            showStatus(reqIndex)
         }
         view.buttonReject.setOnClickListener {
             watermarkRequest.status = "REJECTED"
             postUpdateStatus()
-            showStatus(reqIndex)
+//            showStatus(reqIndex)
         }
 
         watermarkPost = ItemStore.watermarkPosts.posts[index]!!
@@ -63,7 +63,7 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.refreshReqs.isVisible = false
         view.reqInfoPad.isVisible = true
         if (watermarkRequest.status != "PENDING") {
-            showStatus(idx)
+            showStatus()
         } else {
             showOpts()
         }
@@ -111,7 +111,7 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.buttonBack.isVisible = false
     }
 
-    private fun showStatus(idx: Int) {
+    private fun showStatus() {
         view.ops.isVisible = false
         view.status.text = watermarkRequest.status
         val color = when (watermarkRequest.status) {
@@ -125,6 +125,14 @@ class UploadHistoryActivity : AppCompatActivity() {
 
     private fun postUpdateStatus() {
         // post change to server
-        toast("Update status to be ${watermarkRequest.status}")
+        toast("Update status of req_id: ${watermarkRequest.id}")
+        WatermarkRequest.request = watermarkRequest
+        ItemStore.handleRequest({
+            Log.d("update status", "send action ${watermarkRequest.status}")
+            showStatus()
+        }, {
+            Log.e("update status", "send action fails")
+            watermarkRequest.status = "PENDING"
+        })
     }
 }

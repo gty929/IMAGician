@@ -3,7 +3,6 @@ package edu.umich.imagician
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import edu.umich.imagician.ItemStore.getRequestDetail
 import edu.umich.imagician.ItemStore.watermarkRequests
 import edu.umich.imagician.databinding.ActivityRequestStatusBinding
 import edu.umich.imagician.utils.toast
@@ -24,7 +23,7 @@ class RequestStatusActivity : AppCompatActivity() {
     }
 
     private fun showRequest(index: Int) {
-        getRequestDetail(index)
+//        getRequestDetail(index)
         watermarkRequest = watermarkRequests.requests[index]!!
         watermarkPost = watermarkRequest.watermarkPost!!
 

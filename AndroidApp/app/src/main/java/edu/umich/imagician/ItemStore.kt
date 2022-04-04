@@ -34,9 +34,26 @@ object ItemStore {
     }
 
     // TODO 3/26
-    fun getRequestDetail(index: Int) {
-        val watermarkRequest = watermarkRequests.requests[index]
+    fun handleRequest(successCallback: (() -> Unit), failureCallback: (() -> Unit)? = null) {
+        val watermarkRequest = WatermarkRequest.request
+        Log.d("handle request", "req id ${watermarkRequest.id}")
+        watermarkRequest.mode = Sendable.Mode.LAZY // send action
+        httpCall(watermarkRequest) { returncode ->
+            if (returncode != 200) {
+                if (failureCallback != null) {
+                    failureCallback()
+                }
+                Log.e("watermark post", "get watermarkRequests failed")
+            } else {
+
+                successCallback()
+
+            }
+        }
     }
+//    fun getRequestDetail(index: Int) { // basically useless
+//        val watermarkRequest = watermarkRequests.requests[index]
+//    }
 
     /** http wrapper for both post and get during login state, cookie must be provided
      * should add a callback to handle the return code
