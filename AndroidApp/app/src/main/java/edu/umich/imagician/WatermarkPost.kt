@@ -40,7 +40,7 @@ open class WatermarkPost (var tag: String? = null,
                           var checksum: String? = null,
                           var authorized: Boolean = false,
                           var img_uri: Uri? = null,
-                          var isModified: Boolean? = false,
+                          var isModified: Boolean? = null,
                           var mode: Mode = Mode.IDLE) : Sendable {
 
     val pendingRequestList = arrayListOf<WatermarkRequest?>()
