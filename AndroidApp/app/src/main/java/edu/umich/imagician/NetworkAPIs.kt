@@ -36,12 +36,12 @@ interface NetworkAPIs {
     @GET("requests/received_request/{reqid}")
     suspend fun getRequestDetail(@Path("reqid") tag: String): Response<ResponseBody>
     @POST("requests/received_request")
-    suspend fun handleRequest(): Response<ResponseBody>
+    suspend fun handleRequest(@Body requestBody:RequestBody): Response<ResponseBody>
     // viewer side
     @GET("requests/sent_request")
     suspend fun getRequests(): Response<ResponseBody>
     @GET("requests/sent_request/{reqid}")
     suspend fun getSentRequestDetail(@Path("reqid") tag: String): Response<ResponseBody>
     @POST("requests/post_request")
-    suspend fun postRequest(): Response<ResponseBody>
+    suspend fun postRequest(@Body requestBody:RequestBody): Response<ResponseBody>
 }

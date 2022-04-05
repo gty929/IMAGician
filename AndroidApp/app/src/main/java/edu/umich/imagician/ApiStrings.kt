@@ -26,6 +26,7 @@ enum class ApiStrings (val field: String) {
     // watermark request
     IMG_TAG("imgtag"),
     REQ_TIME("created"),
+    ID("id"),
     REQ_ID("reqid"),
     REQ_MSG("message"),
     STATUS("status"),

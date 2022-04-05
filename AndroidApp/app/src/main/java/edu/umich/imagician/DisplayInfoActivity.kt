@@ -4,12 +4,17 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
 import com.google.gson.Gson
 import edu.umich.imagician.databinding.ActivityDisplayInfoBinding
 import edu.umich.imagician.utils.toast
+import java.lang.Exception
+import java.net.URL
+import java.nio.file.Files
+import java.nio.file.Paths
 
 // TODO 3/26: create and link this to a ContactActivity for contacting the author
 class DisplayInfoActivity : AppCompatActivity() {
@@ -21,8 +26,9 @@ class DisplayInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         view = ActivityDisplayInfoBinding.inflate(layoutInflater)
         setContentView(view.root)
-        isModified = intent.getBooleanExtra("isModified", false)
-        imageUri = intent.getParcelableExtra("IMAGE_URI")
+        watermarkPost = WatermarkPost.post
+        isModified = watermarkPost.isModified ?: intent.getBooleanExtra("isModified", false)
+        imageUri = watermarkPost.img_uri ?: intent.getParcelableExtra("IMAGE_URI")
         view.imageShow.setImageURI(imageUri)
         view.chipEnter.text = "Encrypted, click to enter the password"
         view.chipDl.text = "Download"
@@ -41,6 +47,7 @@ class DisplayInfoActivity : AppCompatActivity() {
         // edit request to author
         return when (item.itemId) {
             R.id.contactMenu -> {
+                Log.i("Display info", "image uri: $imageUri")
                 val intent = Intent(this, SendRequestActivity::class.java)
                 intent.putExtra("IMAGE_URI", imageUri)
                 startActivity(intent)
@@ -79,12 +86,31 @@ class DisplayInfoActivity : AppCompatActivity() {
 
     fun onClickDownload(chip: View?) {
         // http.GET
-        toast("The attachment has been saved...")
+        Thread {
+            downloadFile(
+                URL("https://3.84.195.179/uploads/${watermarkPost.folder_pos}/"),
+                "${getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)}/${watermarkPost.folder}"
+            )
+            runOnUiThread {
+                toast("The attachment has been saved...")
+            }
+        }.start()
+    }
+
+    private fun downloadFile(url: URL, fileName: String) {
+        Log.d("Download file", "url: $url, filename: $fileName")
+        try {
+            url.openStream().use { Files.copy(it, Paths.get(fileName)) }
+        } catch (e: Exception) {
+            Log.e("download exception", e.toString())
+        }
+
     }
 
     private fun showEmbeddedInfo() {
-        watermarkPost = WatermarkPost.post
         Log.d("DisplayInfo", "watermarkPost = ${Gson().toJson(watermarkPost).toString()}")
+        watermarkPost.isModified = isModified
+        watermarkPost.img_uri = imageUri
         // required
         view.jpg.text = watermarkPost.title
 

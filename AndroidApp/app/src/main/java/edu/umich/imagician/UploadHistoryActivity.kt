@@ -19,7 +19,7 @@ class UploadHistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         view = ActivityUploadHistoryBinding.inflate(layoutInflater)
         setContentView(view.root)
-        var index = intent.getIntExtra("index", -1)
+        val index = intent.getIntExtra("index", -1)
         if (index == -1) {
             toast("Error: incorrect post index!")
         }
@@ -34,12 +34,12 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.buttonGrant.setOnClickListener {
             watermarkRequest.status = "GRANTED"
             postUpdateStatus()
-            showStatus(reqIndex)
+//            showStatus(reqIndex)
         }
         view.buttonReject.setOnClickListener {
             watermarkRequest.status = "REJECTED"
             postUpdateStatus()
-            showStatus(reqIndex)
+//            showStatus(reqIndex)
         }
 
         watermarkPost = ItemStore.watermarkPosts.posts[index]!!
@@ -63,7 +63,7 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.refreshReqs.isVisible = false
         view.reqInfoPad.isVisible = true
         if (watermarkRequest.status != "PENDING") {
-            showStatus(idx)
+            showStatus()
         } else {
             showOpts()
         }
@@ -99,8 +99,9 @@ class UploadHistoryActivity : AppCompatActivity() {
         watermarkPost.pendingRequestList.clear()
 
         ItemStore.getPostDetail(index, {
-            Log.d("refresh", "refresh request done with ${ItemStore.watermarkRequests.requests.size} requests")
+            Log.d("refresh", "refresh request done with ${watermarkPost.pendingRequestList.size} requests")
             view.refreshReqs.isRefreshing = false
+            historyListAdapter.notifyDataSetChanged()
         })
     }
 
@@ -110,7 +111,7 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.buttonBack.isVisible = false
     }
 
-    private fun showStatus(idx: Int) {
+    private fun showStatus() {
         view.ops.isVisible = false
         view.status.text = watermarkRequest.status
         val color = when (watermarkRequest.status) {
@@ -124,6 +125,14 @@ class UploadHistoryActivity : AppCompatActivity() {
 
     private fun postUpdateStatus() {
         // post change to server
-        toast("Update status to be ${watermarkRequest.status}")
+        toast("Update status of req_id: ${watermarkRequest.id}")
+        WatermarkRequest.request = watermarkRequest
+        ItemStore.handleRequest({
+            Log.d("update status", "send action ${watermarkRequest.status}")
+            showStatus()
+        }, {
+            Log.e("update status", "send action fails")
+            watermarkRequest.status = "PENDING"
+        })
     }
 }

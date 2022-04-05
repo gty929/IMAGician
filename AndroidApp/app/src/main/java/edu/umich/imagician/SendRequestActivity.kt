@@ -1,5 +1,6 @@
 package edu.umich.imagician
 
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -53,6 +54,7 @@ class SendRequestActivity : AppCompatActivity() {
             watermarkPost = this.watermarkPost,
             sender = LoginManager.info.username,
         )
+        Log.d("imgtag", watermarkRequest.watermarkPost?.tag ?: "") // why cannot add the line?
     }
 
     private fun submitRequest() {
@@ -61,7 +63,9 @@ class SendRequestActivity : AppCompatActivity() {
             if (code == 200) {
                 toast("Successfully submit request!")
                 // return to parent activity
-                finishActivity(0)
+                val intent = Intent(this, DisplayInfoActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
             }
         }
     }

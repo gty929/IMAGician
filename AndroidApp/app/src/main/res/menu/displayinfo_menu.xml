@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/contactMenu"
-        android:icon="@drawable/ic_action_name"
+        android:icon="@drawable/ic_send"
         android:title="@string/send"
         app:showAsAction="always" />
 </menu>
