@@ -1,6 +1,5 @@
 package edu.umich.imagician.utils
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
@@ -8,7 +7,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.text.Editable
 import android.util.Log
 import android.view.View
@@ -18,6 +16,9 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import java.io.File
 import java.security.MessageDigest
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 
 /**
@@ -97,5 +98,35 @@ object Hasher {
         val bytes = s.toByteArray()
         val digest = md.digest(bytes)
         return digest.fold("") { str, it -> str + "%02x".format(it) }
+    }
+}
+
+fun encryptMSG(msg: String, pwd: String): String {
+    val salted_msg = "IMAGician$msg"
+    val keyBytes = pwd.toByteArray()
+    val secretKey = SecretKeySpec(keyBytes, "AES")
+    val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+    val encryptMSG = cipher.doFinal(salted_msg.toByteArray())
+    val iv = cipher.iv
+    Log.d("Encrypted message: ", "$encryptMSG@$iv")
+    return "$encryptMSG@$iv"
+}
+
+fun decryptMSG(encryptMSG: String, pwd: String): String? {
+    val data = encryptMSG.split("@")
+    val encryptedText = data[0]
+    val iv = data[1]
+    val keyBytes = pwd.toByteArray()
+    val secretKey = SecretKeySpec(keyBytes, "AES")
+    val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+    val ivSpec = IvParameterSpec(iv.toByteArray())
+    cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec)
+    val plainMSG = cipher.doFinal(encryptMSG.toByteArray()).toString()
+    if (plainMSG.substring(0, 9) === "IMAGician") {
+        Log.d("Decrypted message: ", plainMSG.substring(9))
+        return plainMSG.substring(9)
+    } else {
+        return null
     }
 }
