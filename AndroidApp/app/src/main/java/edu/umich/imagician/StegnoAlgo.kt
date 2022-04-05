@@ -1,4 +1,5 @@
 package edu.umich.imagician
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.chaquo.python.PyObject
@@ -6,16 +7,20 @@ import com.chaquo.python.Python
 import java.io.ByteArrayOutputStream
 import android.util.Base64
 import edu.umich.imagician.utils.initPython
+import edu.umich.imagician.utils.toast
 
 
 object StegnoAlgo {
     private val py: Python = Python.getInstance()
     private val pyo: PyObject = py.getModule("lsb")
 
-    fun encode(bitmap: Bitmap, message: String): Bitmap {
+    fun encode(bitmap: Bitmap, message: String): Bitmap? {
         val img: String = BM2Str(bitmap)
         val obj: PyObject = pyo.callAttr("LSB_encode", img, message)
         val str: String  = obj.toString()
+        if(str == ""){
+            return null
+        }
         val res = Base64.decode(str, Base64.DEFAULT)
         val bmp: Bitmap = BitmapFactory.decodeByteArray(res,0,res.size)
 

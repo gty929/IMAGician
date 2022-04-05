@@ -124,62 +124,73 @@ class ExportImageActivity: AppCompatActivity() {
                 toast("embedding watermark with tag $tag")
             }
             val prevImg: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
-            val newImg: Bitmap = StegnoAlgo.encode(prevImg,tag)
-            val bytes = ByteArrayOutputStream()
-            newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
-
-            newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$title.png")
-            newImageUri?.let { it ->
-                contentResolver.openOutputStream(it)?.let {
-                    it.write(bytes.toByteArray())
-                    it.close()
+            val newImg: Bitmap? = StegnoAlgo.encode(prevImg,tag)
+            if(newImg == null){
+                runOnUiThread {
+                    toast("Duplicate tag detected")
                 }
+                val intent = Intent(this, PopUpWindow::class.java)
+                intent.putExtra("popuptitle", "Error")
+                intent.putExtra("popuptext", "Tag detected in the image. Embedding aborted.")
+                intent.putExtra("popupbtn", "OK")
+                intent.putExtra("darkstatusbar", true)
+                intent.putExtra("gohome", true)
+                startActivity(intent)
             }
-            Log.d("New Image Uri", newImageUri?.toString() ?: "")
+            else{
+                val bytes = ByteArrayOutputStream()
+                newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+
+                newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$title.png")
+                newImageUri?.let { it ->
+                    contentResolver.openOutputStream(it)?.let {
+                        it.write(bytes.toByteArray())
+                        it.close()
+                    }
+                }
+                Log.d("New Image Uri", newImageUri?.toString() ?: "")
 //            val path = MediaStore.Images.Media.insertImage(contentResolver, newImg, null, null)
 //            newImageUri = Uri.parse(path)
 
-            hasEncoded.set(true)
+                hasEncoded.set(true)
 
-            // yyzjason: update the new image
+                // yyzjason: update the new image
 //            handler.post(Runnable {
 //                iv.setImageBitmap(new_img) // tyg: the user wouldn't notice
 //            })
 
-            runOnUiThread {
-                toast("calculating checksum")
-            }
-            val checksum = StegnoAlgo.getChecksum(newImg)
-            WatermarkPost.post.checksum = checksum
-            hasHashed.set(true)
-            // send data here (all fields + checksum) [TO BE UPDATED]
-            runOnUiThread {
-                toast("sending watermark with checksum $checksum", false)
-            }
-//            val context = this
-            Log.i("Export","main scope")
-            MainScope().launch {
-                val watermarkPost = WatermarkPost.post
-                watermarkPost.tag = tag
-                watermarkPost.mode = Sendable.Mode.FULL // query by tag
-                Log.i("Export","start httpCall")
-                ItemStore.httpCall(watermarkPost) { code ->
-                    if (code != 200) {
-                        toast("Upload fails $code")
-                        uploadFailed.set(true)
-                    }
-                    else{
-                        uploadFailed.set(false)
-                    }
-                    hasUploaded.set(true)
+                runOnUiThread {
+                    toast("calculating checksum")
                 }
+                val checksum = StegnoAlgo.getChecksum(newImg)
+                WatermarkPost.post.checksum = checksum
+                hasHashed.set(true)
+                // send data here (all fields + checksum) [TO BE UPDATED]
+                runOnUiThread {
+                    toast("sending watermark with checksum $checksum", false)
+                }
+//            val context = this
+                Log.i("Export","main scope")
+                MainScope().launch {
+                    val watermarkPost = WatermarkPost.post
+                    watermarkPost.tag = tag
+                    watermarkPost.mode = Sendable.Mode.FULL // query by tag
+                    Log.i("Export","start httpCall")
+                    ItemStore.httpCall(watermarkPost) { code ->
+                        if (code != 200) {
+                            toast("Upload fails $code")
+                            uploadFailed.set(true)
+                        }
+                        else{
+                            uploadFailed.set(false)
+                        }
+                        hasUploaded.set(true)
+                    }
 //                hasUploaded.set(true)
+                }
             }
-//            try {
-//                Thread.sleep(2000) // mock network delay
-//            } catch (e: InterruptedException) {
-//                e.printStackTrace()
-//            }
+
+//
 
         }).start()
     }

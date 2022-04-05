@@ -22,7 +22,7 @@ def LSB_encode(data,message,debug=False):
         img = get_data(data)
 
     if LSB_decode(data, check=True):
-        return None
+        return ""
 
     H,W,C = img.shape
     max_bytes = H * W * C / 8
@@ -47,7 +47,7 @@ def LSB_encode(data,message,debug=False):
 
 
 def LSB_decode(data, check=False, debug=False):
-    if debug or check:
+    if debug:
         img = data
     else:
         img = get_data(data)
