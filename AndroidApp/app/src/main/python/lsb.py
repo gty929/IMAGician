@@ -174,31 +174,3 @@ def old_LSB_decode(data, chunk_size):
 
 
 
-"""
-Debug
-"""
-import time
-from PIL import Image
-from numpy import asarray
-
-
-# img = Image.open('org.png')
-
-# img = asarray(img)
-img = np.random.randint(90,255,(3000,4000,3))
-
-time_start = time.time()
-embed_img = LSB_encode(img, "abcdefng", debug=True)
-time_end = time.time()
-print(f"embed time: {time_end-time_start}")
-
-
-# time_start = time.time()
-# msg = LSB_decode(embed_img,check=False,debug=True)
-# time_end = time.time()
-# print(f"decode time: {time_end-time_start}")
-# print(f"message: {msg}")
-
-
-# embed_img = LSB_encode(embed_img, "abcdefng", debug=True)
-# assert embed_img is None
