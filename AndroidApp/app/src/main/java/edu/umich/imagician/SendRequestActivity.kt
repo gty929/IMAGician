@@ -50,6 +50,7 @@ class SendRequestActivity : AppCompatActivity() {
         watermarkPost = WatermarkPost.post
         view.cname.text = watermarkPost.username ?: "Anonymous"
         view.rname.text = LoginManager.info.username
+        view.textView8.text = watermarkPost.title
         watermarkRequest = WatermarkRequest(
             watermarkPost = this.watermarkPost,
             sender = LoginManager.info.username,
