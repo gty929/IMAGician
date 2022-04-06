@@ -26,6 +26,7 @@ class PopUpWindow : AppCompatActivity() {
     private var popupButton = ""
     private var darkStatusBar = false
     private var goHome = false
+    private var displayInfo = false
 
 
 
@@ -45,6 +46,7 @@ class PopUpWindow : AppCompatActivity() {
         popupButton = bundle?.getString("popupbtn", "Button") ?: ""
         darkStatusBar = bundle?.getBoolean("darkstatusbar", false) ?: false
         goHome = bundle?.getBoolean("gohome", false) ?: false
+        displayInfo = bundle?.getBoolean("displayinfo", false) ?: false
 
         // Set the data
         popup_window_title.text = popupTitle
@@ -120,6 +122,9 @@ class PopUpWindow : AppCompatActivity() {
         })
         if(goHome){
             startActivity(Intent(this, MainActivity::class.java))
+        }
+        else if(displayInfo){
+            startActivity(Intent(this, DisplayInfoActivity::class.java))
         }
         colorAnimation.start()
     }
