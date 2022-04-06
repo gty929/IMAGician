@@ -64,8 +64,8 @@ class SendRequestActivity : AppCompatActivity() {
             if (code == 200) {
                 toast("Successfully submit request!")
                 val intent = Intent(this, PopUpWindow::class.java)
-                intent.putExtra("popuptitle", "Notice")
-                intent.putExtra("popuptext", "Message sent to image creator!")
+                intent.putExtra("popuptitle", "Sent")
+                intent.putExtra("popuptext", "Message successfully sent to image creator!")
                 intent.putExtra("popupbtn", "OK")
                 intent.putExtra("darkstatusbar", true)
                 intent.putExtra("displayinfo", true)
