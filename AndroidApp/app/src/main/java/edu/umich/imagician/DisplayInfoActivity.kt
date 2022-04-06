@@ -113,6 +113,12 @@ class DisplayInfoActivity : AppCompatActivity() {
             runOnUiThread {
                 toast("The attachment has been saved...")
             }
+            val intent = Intent(this, PopUpWindow::class.java)
+            intent.putExtra("popuptitle", "Saved")
+            intent.putExtra("popuptext", "Attached file saved to Download folder.")
+            intent.putExtra("popupbtn", "OK")
+            intent.putExtra("darkstatusbar", true)
+            startActivity(intent)
         }.start()
     }
 
