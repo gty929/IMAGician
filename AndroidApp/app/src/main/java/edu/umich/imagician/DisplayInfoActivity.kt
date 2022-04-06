@@ -53,13 +53,6 @@ class DisplayInfoActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // edit request to author
         return when (item.itemId) {
-            R.id.contactMenu -> {
-                Log.i("Display info", "image uri: $imageUri")
-                val intent = Intent(this, SendRequestActivity::class.java)
-                intent.putExtra("IMAGE_URI", imageUri)
-                startActivity(intent)
-                true
-            }
             R.id.contactMenuText -> {
                 val intent = Intent(this, SendRequestActivity::class.java)
                 intent.putExtra("IMAGE_URI", imageUri)
