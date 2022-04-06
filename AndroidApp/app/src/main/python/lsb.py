@@ -39,7 +39,7 @@ def LSB_encode(data,message,debug=False):
 
     '''Vectorization Method'''
     img = (img >> 1)*2
-    bin_msg_vec = np.array([int(b) for b in binary_message], dtype='uint8')
+    bin_msg_vec = np.array(list(binary_message), dtype='uint8')
     bin_msg_vec = np.tile(bin_msg_vec,(H*W*C//data_len)+1)[:H*W*C].reshape(H,W,C)
     img += bin_msg_vec
 
