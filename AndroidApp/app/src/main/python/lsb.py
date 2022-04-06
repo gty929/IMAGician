@@ -21,7 +21,7 @@ def LSB_encode(data,message,debug=False):
     else:
         img = get_data(data)
 
-    if LSB_decode(data, check=True):
+    if LSB_decode(img, check=True):
         return ""
 
     H,W,C = img.shape
@@ -47,7 +47,7 @@ def LSB_encode(data,message,debug=False):
 
 
 def LSB_decode(data, check=False, debug=False):
-    if debug:
+    if debug or check:
         img = data
     else:
         img = get_data(data)
@@ -177,20 +177,20 @@ def old_LSB_decode(data, chunk_size):
 """
 Debug
 """
-# import time
-# from PIL import Image
-# from numpy import asarray
+import time
+from PIL import Image
+from numpy import asarray
 
 
 # img = Image.open('org.png')
 
 # img = asarray(img)
-# img = np.random.randint(90,255,(100,100,3))
+img = np.random.randint(90,255,(3000,4000,3))
 
-# time_start = time.time()
-# embed_img = LSB_encode(img, "abcdefng", debug=True)
-# time_end = time.time()
-# print(f"embed time: {time_end-time_start}")
+time_start = time.time()
+embed_img = LSB_encode(img, "abcdefng", debug=True)
+time_end = time.time()
+print(f"embed time: {time_end-time_start}")
 
 
 # time_start = time.time()
@@ -202,4 +202,3 @@ Debug
 
 # embed_img = LSB_encode(embed_img, "abcdefng", debug=True)
 # assert embed_img is None
-
