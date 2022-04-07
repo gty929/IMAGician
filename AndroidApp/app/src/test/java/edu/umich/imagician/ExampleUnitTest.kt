@@ -18,20 +18,4 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
 
-    @Test
-    fun testEncodeDecode() {
-        val W = 5
-        val H = 4
-        val img:Bitmap = Bitmap.createBitmap(5, 4, Bitmap.Config.ARGB_8888)
-        for (w in 0 until W) {
-            for (h in 0 until H) {
-                img.setPixel(w, h, (w+h) * 0x10101)
-            }
-        }
-        val encodeImg = ktencode(img, "a")
-        if (encodeImg != null) {
-            val decodeMsg = ktdecode(encodeImg)
-            print(decodeMsg)
-        }
-    }
 }

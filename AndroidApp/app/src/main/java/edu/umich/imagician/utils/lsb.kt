@@ -53,6 +53,7 @@ fun ktencode(oldImg: Bitmap, message: String): Bitmap? {
                 if (bitPos == 7) {
                     bitPos = 0
                     msg += accByte.toChar()
+                    accByte = 0
                     if (msg.length >= 3 && msg.substring(msg.length - 3) == "###") {
                         if (msgStartingPos == -1) {
                             msgStartingPos = msg.length

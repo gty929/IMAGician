@@ -242,7 +242,7 @@ class ExportImageActivity : AppCompatActivity() {
         if (ratio == 0) {
             delay(time)
         } else {
-            delay((ratio.toDouble() * time / (1080 * 1080)).toLong())
+            delay((ratio.toDouble() * time / (1080 * 1080 * 3)).toLong())
         }
 
     }
