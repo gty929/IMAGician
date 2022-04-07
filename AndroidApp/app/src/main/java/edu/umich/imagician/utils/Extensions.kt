@@ -14,7 +14,11 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
+import kotlinx.coroutines.delay
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.OutputStream
+import java.io.Serializable
 import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
@@ -99,6 +103,12 @@ object Hasher {
         val digest = md.digest(bytes)
         return digest.fold("") { str, it -> str + "%02x".format(it) }
     }
+
+    fun hash(s: ByteArrayOutputStream): String {
+        val bytes = s.toByteArray()
+        val digest = md.digest(bytes)
+        return digest.fold("") { str, it -> str + "%02x".format(it) }
+    }
 }
 
 
@@ -111,4 +121,13 @@ fun decryptMSG(encryptMSG: String?, pwd: String?): String? {
     } else {
         return null
     }
+}
+
+suspend fun myDelayBase(time: Long, ratio: Int) {
+    if (ratio == 0) {
+        delay(time)
+    } else {
+        delay((ratio.toDouble() * time / (1080 * 1080 * 3)).toLong())
+    }
+
 }

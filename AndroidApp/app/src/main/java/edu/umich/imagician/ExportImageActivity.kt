@@ -13,9 +13,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import edu.umich.imagician.utils.Hasher
 import edu.umich.imagician.utils.ktencode
 import edu.umich.imagician.utils.mediaStoreAlloc
 import edu.umich.imagician.utils.toast
+import edu.umich.imagician.utils.myDelayBase
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
@@ -86,12 +88,12 @@ class ExportImageActivity : AppCompatActivity() {
                     val embedFlag = hasEncoded.get()
                     val hashFlag = hasHashed.get()
                     val uploadFlag = hasUploaded.get()
-                    if (embedFlag && i < 50 || hashFlag && i < 70 || uploadFlag) {
+                    if (embedFlag && i < 75 || hashFlag && i < 85 || uploadFlag) {
                         delay(5) // update the progress bar faster
-                    } else if (!embedFlag && i >= 50 || !hashFlag && i >= 70) {
-                        myDelay(100) // update the progress bar slower
+                    } else if (!embedFlag && i >= 75 || !hashFlag && i >= 85) {
+                        myDelay(120) // update the progress bar slower
                     } else {
-                        myDelay(40) // update the progress bar at normal rate
+                        myDelay(60) // update the progress bar at normal rate
                     }
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
@@ -139,17 +141,16 @@ class ExportImageActivity : AppCompatActivity() {
             // yyzjason: LSB encode
 //            var iv:ImageView = findViewById<ImageView>(R.id.imagePreview)
 //            val prev_img : Bitmap = iv.drawable.toBitmap() // tyg: don't rely on the view
-            runOnUiThread {
-                toast("embedding watermark with tag $tag")
-            }
+//            runOnUiThread {
+//                toast("embedding watermark with tag $tag")
+//            }
 
             val prevImg: Bitmap =
                 MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
             speedRatio.set(prevImg.width * prevImg.height)
-            val newImg: Bitmap?
-            withContext(Dispatchers.Default) {
+            val newImg = withContext(Dispatchers.Default) {
 //                newImg = StegnoAlgo.encode(prevImg, tag)
-                newImg = ktencode(prevImg, tag)
+                ktencode(prevImg, tag)
             }
 
             if (newImg == null) {
@@ -167,14 +168,20 @@ class ExportImageActivity : AppCompatActivity() {
                 val bytes = ByteArrayOutputStream()
                 newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
 
-                newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$title.png")
-                newImageUri?.let { it ->
-                    contentResolver.openOutputStream(it)?.let {
-                        it.write(bytes.toByteArray())
-                        it.close()
-                    }
+                val checksum = withContext(Dispatchers.Default) {
+//                    StegnoAlgo.getChecksum(newImg)
+                    Hasher.hash(bytes)
                 }
-                Log.d("New Image Uri", newImageUri?.toString() ?: "")
+                withContext(Dispatchers.Default) {
+                    newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$title.png")
+                    newImageUri?.let { it ->
+                        contentResolver.openOutputStream(it)?.let {
+                            it.write(bytes.toByteArray())
+                            it.close()
+                        }
+                    }
+                    Log.d("New Image Uri", newImageUri?.toString() ?: "")
+                }
 //            val path = MediaStore.Images.Media.insertImage(contentResolver, newImg, null, null)
 //            newImageUri = Uri.parse(path)
 
@@ -187,9 +194,6 @@ class ExportImageActivity : AppCompatActivity() {
 
                 runOnUiThread {
                     toast("calculating checksum")
-                }
-                val checksum = withContext(Dispatchers.Default) {
-                    StegnoAlgo.getChecksum(newImg)
                 }
                 WatermarkPost.post.checksum = checksum
                 hasHashed.set(true)
@@ -239,11 +243,6 @@ class ExportImageActivity : AppCompatActivity() {
 
     private suspend fun myDelay(time: Long) {
         val ratio = speedRatio.get()
-        if (ratio == 0) {
-            delay(time)
-        } else {
-            delay((ratio.toDouble() * time / (1080 * 1080 * 3)).toLong())
-        }
-
+        myDelayBase(time, ratio)
     }
 }
