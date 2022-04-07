@@ -32,22 +32,22 @@
         <activity
             android:name=".SendRequestActivity"
             android:exported="true"
-            android:label="Contact Author"
+            android:label=""
             android:parentActivityName=".DisplayInfoActivity" />
         <activity
             android:name=".DisplayInfoActivity"
             android:exported="true"
-            android:label="Image Info"
+            android:label=""
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".UploadHistoryActivity"
             android:exported="true"
-            android:label="Creation"
+            android:label="My Creation"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".RequestStatusActivity"
             android:exported="true"
-            android:label="Request"
+            android:label="Sent Request"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"

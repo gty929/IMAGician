@@ -2,8 +2,9 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/contactMenu"
-        android:icon="@drawable/ic_send"
-        android:title="@string/send"
-        app:showAsAction="always" />
+        android:id="@+id/contactMenuText"
+        android:title="@string/contact_author"
+        android:titleCondensed="@string/contact_author"
+        android:tooltipText="@string/contact_author"
+        app:showAsAction="ifRoom|withText" />
 </menu>

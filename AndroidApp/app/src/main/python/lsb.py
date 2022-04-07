@@ -21,7 +21,7 @@ def LSB_encode(data,message,debug=False):
     else:
         img = get_data(data)
 
-    if LSB_decode(data, check=True):
+    if LSB_decode(img, check=True):
         return ""
 
     H,W,C = img.shape
@@ -39,7 +39,7 @@ def LSB_encode(data,message,debug=False):
 
     '''Vectorization Method'''
     img = (img >> 1)*2
-    bin_msg_vec = np.array([int(b) for b in binary_message], dtype='uint8')
+    bin_msg_vec = np.array(list(binary_message), dtype='uint8')
     bin_msg_vec = np.tile(bin_msg_vec,(H*W*C//data_len)+1)[:H*W*C].reshape(H,W,C)
     img += bin_msg_vec
 
@@ -47,7 +47,7 @@ def LSB_encode(data,message,debug=False):
 
 
 def LSB_decode(data, check=False, debug=False):
-    if debug:
+    if debug or check:
         img = data
     else:
         img = get_data(data)
@@ -173,33 +173,4 @@ def old_LSB_decode(data, chunk_size):
     return message
 
 
-
-"""
-Debug
-"""
-# import time
-# from PIL import Image
-# from numpy import asarray
-
-
-# img = Image.open('org.png')
-
-# img = asarray(img)
-# img = np.random.randint(90,255,(100,100,3))
-
-# time_start = time.time()
-# embed_img = LSB_encode(img, "abcdefng", debug=True)
-# time_end = time.time()
-# print(f"embed time: {time_end-time_start}")
-
-
-# time_start = time.time()
-# msg = LSB_decode(embed_img,check=False,debug=True)
-# time_end = time.time()
-# print(f"decode time: {time_end-time_start}")
-# print(f"message: {msg}")
-
-
-# embed_img = LSB_encode(embed_img, "abcdefng", debug=True)
-# assert embed_img is None
 

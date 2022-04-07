@@ -320,18 +320,74 @@
                             android:text="@string/_16mb" />
                     </LinearLayout>
 
-
                 </TableRow>
 
                 <TableRow
+                    android:id="@+id/EncryptOptionRow"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical" >
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    <ImageView
+                        android:id="@+id/IsEncryptIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/icon"
+                        app:srcCompat="@drawable/ic_baseline_vpn_key_24" />
+
+                    <TextView
+                        android:id="@+id/IsEncryptField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/encryption" />
+
+                    <CheckBox
+                        android:id="@+id/IsEncryptCheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="onClickEncryption"
+                        android:text="@string/protect_message_with_password" />
 
                 </TableRow>
+
+
+                <TableRow
+                    android:id="@+id/PasswordRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:visibility="invisible">
+
+                    <ImageView
+                        android:id="@+id/Password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/icon"
+                        app:srcCompat="@drawable/ic_baseline_enhanced_encryption_24" />
+
+                    <TextView
+                        android:id="@+id/PasswordField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/password" />
+
+                    <EditText
+                        android:id="@+id/editPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="14"
+                        android:gravity="start|top"
+                        android:hint="@string/enter_the_password"
+                        android:inputType="textMultiLine"
+                        android:maxLength="100"
+                        tools:ignore="SpeakableTextPresentCheck,TextFields,TouchTargetSizeCheck" />
+
+                </TableRow>
+
             </TableLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

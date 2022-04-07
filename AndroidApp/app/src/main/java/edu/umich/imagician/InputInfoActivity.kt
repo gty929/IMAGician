@@ -3,12 +3,15 @@ package edu.umich.imagician
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import edu.umich.imagician.utils.*
@@ -105,11 +108,17 @@ class InputInfoActivity: AppCompatActivity()  {
     }
 
     private fun setWatermarkPost() {
+        val IsMsgEncrypted = findViewById<CheckBox>(R.id.IsEncryptCheckBox).isChecked
+        var message = editToStr(findViewById<EditText>(R.id.editMessage).text)
+        if (IsMsgEncrypted) {
+            val password = editToStr(findViewById<EditText>(R.id.editPassword).text)
+            message = "$message@*@$password"
+        }
         WatermarkPost.post = WatermarkPost(
             username = LoginManager.info.username,
             fullname = LoginManager.info.fullname,
             title = editToStr(findViewById<EditText>(R.id.editTitle).text),
-            message = editToStr(findViewById<EditText>(R.id.editMessage).text),
+            message = message,
             timestampFlag = timestampCheckBox.isChecked,
             usernameFlag = findViewById<CheckBox>(R.id.usernameCheckBox).isChecked,
             fullnameFlag = findViewById<CheckBox>(R.id.fullnameCheckBox)?.isChecked ?: false, // it's possible that the row has been removed
@@ -118,7 +127,8 @@ class InputInfoActivity: AppCompatActivity()  {
 //            file = FileUtils.getPath(this, fileUri)?.let {File(it)},
 //            file = fileUri?.toFile(this),
             file = fileUri?.let { FileUtil.from(this, it)},
-            filename = filename
+            filename = filename,
+            msg_encrypted = IsMsgEncrypted
         )
     }
 
@@ -149,6 +159,18 @@ class InputInfoActivity: AppCompatActivity()  {
                 else -> {
                 }
             }
+        }
+    }
+
+    fun onClickEncryption(chip: View?) {
+        val isEncryption = findViewById<CheckBox>(R.id.IsEncryptCheckBox).isChecked
+        val PasswordField = findViewById<TableRow>(R.id.PasswordRow)
+        if (isEncryption) {
+            PasswordField.visibility = View.VISIBLE
+        } else {
+            PasswordField.visibility = View.INVISIBLE
+            val PasswordText = findViewById<EditText>(R.id.editPassword)
+            PasswordText.text.clear()
         }
     }
 }

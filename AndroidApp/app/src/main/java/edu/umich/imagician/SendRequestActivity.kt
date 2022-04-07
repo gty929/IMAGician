@@ -50,6 +50,7 @@ class SendRequestActivity : AppCompatActivity() {
         watermarkPost = WatermarkPost.post
         view.cname.text = watermarkPost.username ?: "Anonymous"
         view.rname.text = LoginManager.info.username
+        view.textView8.text = watermarkPost.title
         watermarkRequest = WatermarkRequest(
             watermarkPost = this.watermarkPost,
             sender = LoginManager.info.username,
@@ -62,10 +63,18 @@ class SendRequestActivity : AppCompatActivity() {
         ItemStore.httpCall(watermarkRequest) { code ->
             if (code == 200) {
                 toast("Successfully submit request!")
-                // return to parent activity
-                val intent = Intent(this, DisplayInfoActivity::class.java)
+                val intent = Intent(this, PopUpWindow::class.java)
+                intent.putExtra("popuptitle", "Sent")
+                intent.putExtra("popuptext", "Message successfully sent to image creator!")
+                intent.putExtra("popupbtn", "OK")
+                intent.putExtra("darkstatusbar", true)
+                intent.putExtra("displayinfo", true)
                 startActivity(intent)
-                overridePendingTransition(0, 0)
+                // overridePendingTransition(0, 0)
+                // return to parent activity
+                // val anotherIntent = Intent(this, DisplayInfoActivity::class.java)
+                // startActivity(anotherIntent)
+                // overridePendingTransition(0, 0)
             }
         }
     }
