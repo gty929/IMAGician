@@ -1,5 +1,6 @@
 package edu.umich.imagician
 
+import android.graphics.Bitmap
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -13,5 +14,11 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
+    }
+
+    @Test
+    fun testEncodeDecode() {
+//        val arr = [0x1111111,0x2222222]
+//        val img:Bitmap = Bitmap.createBitmap()
     }
 }

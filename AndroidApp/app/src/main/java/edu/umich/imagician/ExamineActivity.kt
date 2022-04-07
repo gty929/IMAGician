@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import edu.umich.imagician.utils.initPython
+import edu.umich.imagician.utils.ktdecode
 import edu.umich.imagician.utils.toast
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -82,8 +83,8 @@ class ExamineActivity: AppCompatActivity() {
             runOnUiThread {
                 toast("decoding watermark")
             }
-            val tag = StegnoAlgo.decode(img)
-
+//            val tag = StegnoAlgo.decode(img)
+            val tag = ktdecode(img)
             // yyzjason: checksum of the encoded image
             hasDecoded.set(true)
 
