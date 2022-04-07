@@ -80,31 +80,25 @@ class ExportImageActivity : AppCompatActivity() {
         try {
 
             for (i in 1..99) {
-                try {
-                    val embedFlag = hasEncoded.get()
-                    val hashFlag = hasHashed.get()
-                    val uploadFlag = hasUploaded.get()
-                    if (embedFlag && i < 75 || hashFlag && i < 85 || uploadFlag) {
-                        delay(5) // update the progress bar faster
-                    } else if (!embedFlag && i >= 75 || !hashFlag && i >= 85) {
-                        myDelay(100) // update the progress bar slower
-                    } else {
-                        myDelay(50) // update the progress bar at normal rate
-                    }
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
+
+                val embedFlag = hasEncoded.get()
+                val hashFlag = hasHashed.get()
+                val uploadFlag = hasUploaded.get()
+                if (embedFlag && i < 75 || hashFlag && i < 85 || uploadFlag) {
+                    delay(5) // update the progress bar faster
+                } else if (!embedFlag && i >= 75 || !hashFlag && i >= 85) {
+                    myDelay(100) // update the progress bar slower
+                } else {
+                    myDelay(50) // update the progress bar at normal rate
                 }
+
 //                    handler.post(Runnable {
                 progressBar.progress = i
 //                    })
             }
             while (!hasUploaded.get()) {
                 // taking longer than expected
-                try {
-                    delay(50) // just busy waiting
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                }
+                delay(50) // just busy waiting
             }
             progressBar.progress = 100
             if (uploadFailed.get()) {
@@ -166,9 +160,12 @@ class ExportImageActivity : AppCompatActivity() {
 
                 if (newImg == null) {
                     val intent =
-                        android.content.Intent(parent, edu.umich.imagician.PopUpWindow::class.java)
+                        android.content.Intent(this, edu.umich.imagician.PopUpWindow::class.java)
                     intent.putExtra("popuptitle", "Error")
-                    intent.putExtra("popuptext", "There is an error embedding watermark, please try again.")
+                    intent.putExtra(
+                        "popuptext",
+                        "There is an error when embedding watermark, please try again."
+                    )
                     intent.putExtra("popupbtn", "OK")
                     intent.putExtra("darkstatusbar", true)
                     intent.putExtra("gohome", true)
@@ -231,11 +228,16 @@ class ExportImageActivity : AppCompatActivity() {
 //
 
 
-        } catch (e: TimeoutException) {
-            toast("Embed timeout, please use a smaller image", false)
-            Log.e("Embed timeout", "timeout error: ", e)
         } catch (e: Exception) {
             Log.e("Embed error", "unknown error", e)
+            val intent =
+                android.content.Intent(parent, edu.umich.imagician.PopUpWindow::class.java)
+            intent.putExtra("popuptitle", "Error")
+            intent.putExtra("popuptext", "There is an error when embedding watermark, please try again.")
+            intent.putExtra("popupbtn", "OK")
+            intent.putExtra("darkstatusbar", true)
+            intent.putExtra("gohome", true)
+            startActivity(intent)
         }
     }
 

@@ -1,13 +1,12 @@
 package edu.umich.imagician
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -36,6 +35,16 @@ class InputInfoActivity: AppCompatActivity()  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input_info)
         imageUri = intent.getParcelableExtra("IMAGE_URI")
+        if (imageUri == null || contentResolver.getType(imageUri!!)?.startsWith("image") != true) {
+            val intent =
+                android.content.Intent(this, edu.umich.imagician.PopUpWindow::class.java)
+            intent.putExtra("popuptitle", "Error")
+            intent.putExtra("popuptext", "The file doesn't exist or is not an image")
+            intent.putExtra("popupbtn", "OK")
+            intent.putExtra("darkstatusbar", true)
+            intent.putExtra("gohome", true)
+            startActivity(intent)
+        }
         findViewById<ImageView>(R.id.imagePreview).setImageURI(imageUri)
         timestampCheckBox = findViewById(R.id.timestampCheckBox)
 

@@ -43,34 +43,42 @@ class ExamineActivity : AppCompatActivity() {
     }
 
     private suspend fun mockProgressBar() {
-        for (i in 1..99) {
-            try {
+        try {
+            for (i in 1..99) {
+
                 val embedFlag = hasDecoded.get()
                 val retrieveFlag = hasRetrieved.get()
                 val checkFlag = hasChecked.get()
-                if (embedFlag && i < 50 ||  checkFlag && i < 60 || retrieveFlag) {
+                if (embedFlag && i < 50 || checkFlag && i < 60 || retrieveFlag) {
                     myDelay(4) // update the progress bar faster
                 } else if (!embedFlag && i >= 50 || !checkFlag && i >= 60) {
                     myDelay(40) // update the progress bar slower
                 } else {
                     myDelay(20) // update the progress bar at normal rate
                 }
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-            progressBar.progress = i
-        }
-        while (!hasRetrieved.get()) {
-            // taking longer than expected
-            try {
-                delay(50) // just busy waiting
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
-            }
-        }
-        progressBar.progress = 100
-        onExamineFinish()
 
+                progressBar.progress = i
+            }
+            while (!hasRetrieved.get()) {
+                // taking longer than expected
+                delay(50) // just busy waiting
+            }
+            progressBar.progress = 100
+            onExamineFinish()
+        } catch (e: Exception) {
+            Log.e("Examine error", "unknown error", e)
+            val intent =
+                android.content.Intent(this, edu.umich.imagician.PopUpWindow::class.java)
+            intent.putExtra("popuptitle", "Error")
+            intent.putExtra(
+                "popuptext",
+                "There is an error when examining watermark, please try again."
+            )
+            intent.putExtra("popupbtn", "OK")
+            intent.putExtra("darkstatusbar", true)
+            intent.putExtra("gohome", true)
+            startActivity(intent)
+        }
 //        }).start()
     }
 
@@ -126,7 +134,6 @@ class ExamineActivity : AppCompatActivity() {
 //                        toast("checksum = $checksum", false)
 //                    }
                 }
-
 
 
             }
