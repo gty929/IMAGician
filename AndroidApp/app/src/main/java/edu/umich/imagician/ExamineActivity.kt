@@ -22,11 +22,11 @@ import java.util.concurrent.atomic.AtomicInteger
 class ExamineActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private lateinit var progressBar: ProgressBar
-    private var hasDecoded = AtomicBoolean()
-    private var hasRetrieved = AtomicBoolean()
-    private var hasChecked = AtomicBoolean()
-    private var tagFound = AtomicBoolean()
-    private var speedRatio = AtomicInteger()
+    private val hasDecoded = AtomicBoolean()
+    private val hasRetrieved = AtomicBoolean()
+    private val hasChecked = AtomicBoolean()
+    private val tagFound = AtomicBoolean()
+    private val speedRatio = AtomicInteger()
 
     private var isModified = false
     override fun onCreate(savedInstanceState: Bundle?) {

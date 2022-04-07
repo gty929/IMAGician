@@ -2,11 +2,12 @@ package edu.umich.imagician.utils
 
 import android.graphics.Bitmap
 import android.util.Log
+import java.lang.StringBuilder
 import kotlin.experimental.and
 
 
 fun ktencode(oldImg: Bitmap, message: String): Bitmap? {
-        val msg = "$message###".toByteArray()
+        val msg = "###$message".toByteArray()
         val msgLen = msg.size
         val H = oldImg.height
         val W = oldImg.width
@@ -44,7 +45,7 @@ fun ktencode(oldImg: Bitmap, message: String): Bitmap? {
         val W = oldImg.width
         var msgStartingPos = -1
         var bitPos = 0
-        var msg = ""
+        var msg = StringBuilder()
         var accByte = 0
         for (w in 0 until W) {
             for (h in 0 until H) {
@@ -52,7 +53,7 @@ fun ktencode(oldImg: Bitmap, message: String): Bitmap? {
                 val bit = oldImg.getPixel(w, h) and 1
                 if (bitPos == 7) {
                     bitPos = 0
-                    msg += accByte.toChar()
+                    msg.append(accByte.toChar())
                     accByte = 0
                     if (msg.length >= 3 && msg.substring(msg.length - 3) == "###") {
                         if (msgStartingPos == -1) {
@@ -65,9 +66,6 @@ fun ktencode(oldImg: Bitmap, message: String): Bitmap? {
                     accByte += (bit shl bitPos)
                     ++bitPos
                 }
-            }
-            if (w % 50 == 0){
-                Log.d("Progress: line = ", "$w")
             }
         }
         return null

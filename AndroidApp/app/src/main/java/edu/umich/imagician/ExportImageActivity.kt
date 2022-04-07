@@ -13,11 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import edu.umich.imagician.utils.Hasher
-import edu.umich.imagician.utils.ktencode
-import edu.umich.imagician.utils.mediaStoreAlloc
-import edu.umich.imagician.utils.toast
-import edu.umich.imagician.utils.myDelayBase
+import edu.umich.imagician.utils.*
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
@@ -36,11 +32,11 @@ class ExportImageActivity : AppCompatActivity() {
     private var newImageUri: Uri? = null
     private var title: String? = null
     private lateinit var progressBar: ProgressBar
-    private var hasEncoded = AtomicBoolean()
-    private var hasHashed = AtomicBoolean()
-    private var hasUploaded = AtomicBoolean()
-    private var uploadFailed = AtomicBoolean()
-    private var speedRatio = AtomicInteger()
+    private val hasEncoded = AtomicBoolean()
+    private val hasHashed = AtomicBoolean()
+    private val hasUploaded = AtomicBoolean()
+    private val uploadFailed = AtomicBoolean()
+    private val speedRatio = AtomicInteger()
 
     private val tag = SecureRandom().generateSeed(7).toString()
 
@@ -91,9 +87,9 @@ class ExportImageActivity : AppCompatActivity() {
                     if (embedFlag && i < 75 || hashFlag && i < 85 || uploadFlag) {
                         delay(5) // update the progress bar faster
                     } else if (!embedFlag && i >= 75 || !hashFlag && i >= 85) {
-                        myDelay(120) // update the progress bar slower
+                        myDelay(100) // update the progress bar slower
                     } else {
-                        myDelay(60) // update the progress bar at normal rate
+                        myDelay(50) // update the progress bar at normal rate
                     }
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
@@ -145,19 +141,17 @@ class ExportImageActivity : AppCompatActivity() {
 //                toast("embedding watermark with tag $tag")
 //            }
 
+
             val prevImg: Bitmap =
                 MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
             speedRatio.set(prevImg.width * prevImg.height)
-            val newImg = withContext(Dispatchers.Default) {
-//                newImg = StegnoAlgo.encode(prevImg, tag)
-                ktencode(prevImg, tag)
-            }
-
-            if (newImg == null) {
+            val context = this
+            if (withContext(Dispatchers.Default) { ktdecode(prevImg) } != null) { // duplicate
                 runOnUiThread {
                     toast("Duplicate tag detected")
                 }
-                val intent = Intent(this, PopUpWindow::class.java)
+                val intent =
+                    android.content.Intent(context, edu.umich.imagician.PopUpWindow::class.java)
                 intent.putExtra("popuptitle", "Error")
                 intent.putExtra("popuptext", "Tag detected in the image. Embedding aborted.")
                 intent.putExtra("popupbtn", "OK")
@@ -165,65 +159,75 @@ class ExportImageActivity : AppCompatActivity() {
                 intent.putExtra("gohome", true)
                 startActivity(intent)
             } else {
-                val bytes = ByteArrayOutputStream()
-                newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+                val newImg = withContext(Dispatchers.Default) {
+//                newImg = StegnoAlgo.encode(prevImg, tag)
+                    ktencode(prevImg, tag)
+                }
 
-                val checksum = withContext(Dispatchers.Default) {
+                if (newImg == null) {
+                    val intent =
+                        android.content.Intent(parent, edu.umich.imagician.PopUpWindow::class.java)
+                    intent.putExtra("popuptitle", "Error")
+                    intent.putExtra("popuptext", "There is an error embedding watermark, please try again.")
+                    intent.putExtra("popupbtn", "OK")
+                    intent.putExtra("darkstatusbar", true)
+                    intent.putExtra("gohome", true)
+                    startActivity(intent)
+                } else {
+                    val bytes = ByteArrayOutputStream()
+                    val checksum = withContext(Dispatchers.Default) {
+                        newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
 //                    StegnoAlgo.getChecksum(newImg)
-                    Hasher.hash(bytes)
-                }
-                withContext(Dispatchers.Default) {
-                    newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$title.png")
-                    newImageUri?.let { it ->
-                        contentResolver.openOutputStream(it)?.let {
-                            it.write(bytes.toByteArray())
-                            it.close()
+                        Hasher.hash(bytes)
+                    }
+                    withContext(Dispatchers.Default) {
+                        newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$title.png")
+                        newImageUri?.let { it ->
+                            contentResolver.openOutputStream(it)?.let {
+                                it.write(bytes.toByteArray())
+                                it.close()
+                            }
+                        }
+                        Log.d("New Image Uri", newImageUri?.toString() ?: "")
+                    }
+
+                    hasEncoded.set(true)
+
+                    // yyzjason: update the new image
+
+
+//                    runOnUiThread {
+//                        toast("calculating checksum")
+//                    }
+                    WatermarkPost.post.checksum = checksum
+                    hasHashed.set(true)
+
+//                    runOnUiThread {
+//                        toast("sending watermark with checksum $checksum", false)
+//                    }
+
+                    Log.i("Export", "main scope")
+                    val watermarkPost = WatermarkPost.post
+                    watermarkPost.tag = tag
+                    watermarkPost.mode = Sendable.Mode.FULL // query by tag
+
+
+                    Log.i("Export", "start httpCall")
+                    withContext(Dispatchers.IO) {
+                        ItemStore.httpCall(watermarkPost) { code ->
+                            if (code != 200) {
+                                toast("Upload fails $code")
+                                uploadFailed.set(true)
+                            } else {
+                                uploadFailed.set(false)
+                            }
+                            hasUploaded.set(true)
                         }
                     }
-                    Log.d("New Image Uri", newImageUri?.toString() ?: "")
-                }
-//            val path = MediaStore.Images.Media.insertImage(contentResolver, newImg, null, null)
-//            newImageUri = Uri.parse(path)
-
-                hasEncoded.set(true)
-
-                // yyzjason: update the new image
-//            handler.post(Runnable {
-//                iv.setImageBitmap(new_img) // tyg: the user wouldn't notice
-//            })
-
-                runOnUiThread {
-                    toast("calculating checksum")
-                }
-                WatermarkPost.post.checksum = checksum
-                hasHashed.set(true)
-                // send data here (all fields + checksum) [TO BE UPDATED]
-                runOnUiThread {
-                    toast("sending watermark with checksum $checksum", false)
-                }
-//            val context = this
-                Log.i("Export", "main scope")
-                val watermarkPost = WatermarkPost.post
-                watermarkPost.tag = tag
-                watermarkPost.mode = Sendable.Mode.FULL // query by tag
-
-
-                Log.i("Export", "start httpCall")
-                withContext(Dispatchers.IO) {
-                    ItemStore.httpCall(watermarkPost) { code ->
-                        if (code != 200) {
-                            toast("Upload fails $code")
-                            uploadFailed.set(true)
-                        } else {
-                            uploadFailed.set(false)
-                        }
-                        hasUploaded.set(true)
-                    }
-                }
 //                hasUploaded.set(true)
 
+                }
             }
-
 //
 
 
