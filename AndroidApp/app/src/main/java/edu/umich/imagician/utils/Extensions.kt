@@ -95,13 +95,15 @@ fun editToStr(txt: Editable): String? {
     return if (txt.isEmpty()) null else txt.toString()
 }
 
+fun ByteArray.toHex(): String = fold("") { str, it -> str + "%02x".format(it) }
+
 object Hasher {
     val md = MessageDigest.getInstance("SHA-256")
 
     fun hash(s: String): String {
         val bytes = s.toByteArray()
         val digest = md.digest(bytes)
-        return digest.fold("") { str, it -> str + "%02x".format(it) }
+        return digest.toHex()
     }
 
     fun hash(s: ByteArrayOutputStream): String {

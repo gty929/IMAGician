@@ -38,7 +38,7 @@ class ExportImageActivity : AppCompatActivity() {
     private val uploadFailed = AtomicBoolean()
     private val speedRatio = AtomicInteger()
 
-    private val tag = SecureRandom().generateSeed(7).toString()
+    private val tag = SecureRandom().generateSeed(7).toHex()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
