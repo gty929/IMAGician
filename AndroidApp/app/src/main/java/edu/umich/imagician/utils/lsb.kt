@@ -45,7 +45,7 @@ fun ktencode(oldImg: Bitmap, message: String): Bitmap? {
         val W = oldImg.width
         var msgStartingPos = -1
         var bitPos = 0
-        var msg = StringBuilder()
+        val msg = StringBuilder()
         var accByte = 0
         for (w in 0 until W) {
             for (h in 0 until H) {
@@ -56,11 +56,15 @@ fun ktencode(oldImg: Bitmap, message: String): Bitmap? {
                     msg.append(accByte.toChar())
                     accByte = 0
                     if (msg.length >= 3 && msg.substring(msg.length - 3) == "###") {
-                        if (msgStartingPos == -1) {
-                            msgStartingPos = msg.length
-                        } else {
-                            return msg.substring(msgStartingPos, msg.length - 3)
+                        if (msgStartingPos != -1) {
+                            val retStr = msg.substring(msgStartingPos, msg.length - 3)
+                            if (retStr.length % 2 == 0 && Regex("[0-9a-f]+").matches(retStr)) {
+                                return retStr
+                            }
+
                         }
+                        msgStartingPos = msg.length
+
                     }
                 } else {
                     accByte += (bit shl bitPos)

@@ -36,8 +36,8 @@ class ExampleInstrumentedTest {
             }
         }
         val imgArr = bitMap2Array(img)
-        val msg = "a"
-        val msgByteArray = ("$msg###").toByteArray()
+        val msg = "a1bf"
+        val msgByteArray = ("###$msg").toByteArray()
         var msgBitStr = ""
         for (b in msgByteArray) {
             msgBitStr += Integer.toBinaryString(b.toInt()).reversed().let { it + "0".repeat(8 - it.length)} // little endian
@@ -47,7 +47,7 @@ class ExampleInstrumentedTest {
         if (encodeImg != null) {
             val encodeImgArr = bitMap2Array(encodeImg)
             val decodeMsg = ktdecode(encodeImg)
-            print(decodeMsg)
+            assert(decodeMsg == msg)
         }
     }
 
