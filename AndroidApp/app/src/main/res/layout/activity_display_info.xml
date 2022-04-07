@@ -488,7 +488,7 @@
                         android:layout_marginTop="3dp"
                         android:layout_marginBottom="16dp"
                         android:background="@drawable/rounded_corner_view"
-                        android:hint="@string/enter_your_password_here"
+                        android:hint="  Enter your password here."
                         android:inputType="textPassword"
                         android:minHeight="50dp"
                         android:visibility="invisible"
@@ -496,15 +496,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/msg_icon" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/confirm_row"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="10dp"
-                    android:paddingTop="@dimen/info_pad">
 
                     <Button
                         android:id="@+id/confirm_button_field"
@@ -517,10 +508,21 @@
                         android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
+                        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/confirm_row"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_marginHorizontal="10dp"-->
+<!--                    android:paddingBottom="5dp">-->
+
+<!--                    -->
+
+
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
             </LinearLayout>
 

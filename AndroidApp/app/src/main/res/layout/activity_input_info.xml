@@ -384,6 +384,8 @@
                         android:hint="@string/enter_the_password"
                         android:inputType="textMultiLine"
                         android:maxLength="100"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
                         tools:ignore="SpeakableTextPresentCheck,TextFields,TouchTargetSizeCheck" />
 
                 </TableRow>
