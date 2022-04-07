@@ -14,7 +14,7 @@
     <string name="status_granted">Granted</string>
 
     <string name="imageinfo">Image Info</string>
-    <string name="file_name">File Name</string>
+    <string name="file_name">Title</string>
     <string name="fname">Michigan.jpg</string>
     <string name="creator_name">Username</string>
     <string name="cname">another_user</string>
