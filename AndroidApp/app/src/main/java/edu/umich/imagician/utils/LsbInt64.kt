@@ -2,7 +2,6 @@ package edu.umich.imagician.utils
 
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.core.graphics.createBitmap
 
 
 /**
@@ -29,25 +28,6 @@ fun ktencode64(oldImg: Bitmap, tag: Long): Bitmap? {
     val H = oldImg.height
     val W = oldImg.width
     val newImg = oldImg.copy( Bitmap.Config.ARGB_8888 , true)
-//    var msgPos = 0
-//    var bitPos = 0
-//    for (w in 0 until W) {
-//        for (h in 0 until H) {
-//            val newColor = oldImg.getPixel(w, h).let {
-//
-//            }
-//            newBitmap.setPixel(w, h, newColor)
-//            if (bitPos == 7) {
-//                bitPos = 0
-//                ++msgPos
-//                if (msgPos == msgLen) {
-//                    msgPos = 0
-//                }
-//            } else {
-//                ++bitPos
-//            }
-//        }
-//    }
     val locBufArr = IntArray(8)
     val msgBufArr = IntArray(32)
     for (w in 0 .. W-5 step 5) {
@@ -122,54 +102,11 @@ fun ktdecode64(img: Bitmap): Long? {
     }
     return null
 }
-//
-//fun ktdecode(oldImg: Bitmap): String? {
-//    val H = oldImg.height
-//    val W = oldImg.width
-//    var msgStartingPos = -1
-//    var bitPos = 0
-//    val msg = StringBuilder()
-//    val hash3Bits = 0xc4c4c4
-//    var initAccBits = 0
-//    var accByte = 0
-//    for (w in 0 until W) {
-//        for (h in 0 until H) {
-//            val bit = oldImg.getPixel(w, h) and 1
-//            if (msgStartingPos == -1) {
-//                initAccBits = ((initAccBits shl 1) + bit) and 0xFFFFFF // search for start of ###
-//                if (initAccBits == hash3Bits) {
-//                    msgStartingPos = 0
-//                }
-//                continue
-//            }
-//
-//            if (bitPos == 7) {
-//                bitPos = 0
-//                msg.append(accByte.toChar())
-//                accByte = 0
-//                if (msg.length >= 3 && msg.substring(msg.length - 3) == "###") {
-////                        if (msgStartingPos != -1) {
-//                    val retStr = msg.substring(msgStartingPos, msg.length - 3)
-//                    if (retStr.length == 14 && Regex("[0-9a-f]+").matches(retStr)) {
-//                        return retStr
-//                    }
-//
-////                        }
-//                    msgStartingPos = msg.length
-//
-//                }
-//            } else {
-//                accByte += (bit shl bitPos)
-//                ++bitPos
-//            }
-//        }
-//    }
-//    return null
-//}
 
 fun calcHash(tag: Long): Long {
+    val nuance = 0xB5  // add nuance to avoid false positive for pure black image
     val FF = 0xFF.toLong()
-    var hash = 0.toLong()
+    var hash = nuance.toLong()
     var runningBytes = tag
     for (i in 0..6) {
         hash = hash xor (runningBytes and FF)

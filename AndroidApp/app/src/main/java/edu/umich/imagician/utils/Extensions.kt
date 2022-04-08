@@ -113,6 +113,11 @@ object Hasher {
         return digest.toHex()
     }
 
+    fun hash(bytes: ByteArray): String {
+        val digest = md.digest(bytes)
+        return digest.fold("") { str, it -> str + "%02x".format(it) }
+    }
+
     fun hash(s: ByteArrayOutputStream): String {
         val bytes = s.toByteArray()
         val digest = md.digest(bytes)

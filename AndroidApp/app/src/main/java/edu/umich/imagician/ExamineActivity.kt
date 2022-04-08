@@ -33,6 +33,16 @@ class ExamineActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_examine)
         imageUri = intent.getParcelableExtra("IMAGE_URI")
+        if (imageUri == null || contentResolver.getType(imageUri!!)?.startsWith("image") != true) {
+            val intent =
+                android.content.Intent(this, edu.umich.imagician.PopUpWindow::class.java)
+            intent.putExtra("popuptitle", "Error")
+            intent.putExtra("popuptext", "The file doesn't exist or is not an image")
+            intent.putExtra("popupbtn", "OK")
+            intent.putExtra("darkstatusbar", true)
+            intent.putExtra("gohome", true)
+            startActivity(intent)
+        }
         findViewById<ImageView>(R.id.imagePreview).setImageURI(imageUri)
         progressBar = findViewById(R.id.progressBar)
         MainScope().launch {
@@ -84,9 +94,6 @@ class ExamineActivity : AppCompatActivity() {
 
     private suspend fun extractWatermark() {
         val img: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri);
-//        runOnUiThread {
-//            toast("decoding watermark")
-//        }
         speedRatio.set(img.width * img.height)
 //            val tag = StegnoAlgo.decode(img)
         val tag = withContext(Dispatchers.Default) {
@@ -94,19 +101,15 @@ class ExamineActivity : AppCompatActivity() {
         }
         // yyzjason: checksum of the encoded image
         hasDecoded.set(true)
-
+        val context = this
         val checksum = withContext(Dispatchers.Default) {
 //            StegnoAlgo.getChecksum(img)
-            val bytes = ByteArrayOutputStream()
-            img.compress(Bitmap.CompressFormat.PNG, 100, bytes)
-            Hasher.hash(bytes)
-
+//            val bytes = ByteArrayOutputStream()
+//            img.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+//            Hasher.hash(bytes)
+            context.contentResolver.openInputStream(imageUri!!)?.buffered()?.use { Hasher.hash(it.readBytes()) }
         }
         hasChecked.set(true)
-        // yyzjason: update the new image
-//        runOnUiThread {
-//            toast("retrieving data with tag = $tag", false)
-//        }
 
         WatermarkPost.post = WatermarkPost(tag = tag.toString(), mode = Sendable.Mode.EMPTY)
         withContext(Dispatchers.IO) {
@@ -130,9 +133,6 @@ class ExamineActivity : AppCompatActivity() {
                     // check the checksum
                     // checksum of the post is the correct one (unmodified)
                     isModified = (checksum != WatermarkPost.post.checksum)
-//                    runOnUiThread {
-//                        toast("checksum = $checksum", false)
-//                    }
                 }
 
 

@@ -76,7 +76,7 @@ class ExportImageActivity : AppCompatActivity() {
     }
 
     private suspend fun mockProgressBar() {
-//        val handler: Handler = Handler()
+
         try {
 
             for (i in 1..99) {
@@ -91,10 +91,7 @@ class ExportImageActivity : AppCompatActivity() {
                 } else {
                     myDelay(50) // update the progress bar at normal rate
                 }
-
-//                    handler.post(Runnable {
                 progressBar.progress = i
-//                    })
             }
             while (!hasUploaded.get()) {
                 // taking longer than expected
@@ -125,16 +122,7 @@ class ExportImageActivity : AppCompatActivity() {
     }
 
     private suspend fun embedWatermark(tag: Long) {
-//        val handler: Handler = Handler()
         try {
-
-            // yyzjason: LSB encode
-//            var iv:ImageView = findViewById<ImageView>(R.id.imagePreview)
-//            val prev_img : Bitmap = iv.drawable.toBitmap() // tyg: don't rely on the view
-//            runOnUiThread {
-//                toast("embedding watermark with tag $tag")
-//            }
-
 
             val prevImg: Bitmap =
                 MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
@@ -181,7 +169,7 @@ class ExportImageActivity : AppCompatActivity() {
                         Hasher.hash(bytes)
                     }
                     Log.d("ExportActivity", "Hash finished")
-                    withContext(Dispatchers.Default) {
+                    withContext(Dispatchers.IO) {
                         newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$title.png")
                         newImageUri?.let { it ->
                             contentResolver.openOutputStream(it)?.let {
@@ -194,18 +182,8 @@ class ExportImageActivity : AppCompatActivity() {
 
                     hasEncoded.set(true)
 
-                    // yyzjason: update the new image
-
-
-//                    runOnUiThread {
-//                        toast("calculating checksum")
-//                    }
                     WatermarkPost.post.checksum = checksum
                     hasHashed.set(true)
-
-//                    runOnUiThread {
-//                        toast("sending watermark with checksum $checksum", false)
-//                    }
 
                     Log.i("Export", "main scope")
                     val watermarkPost = WatermarkPost.post
@@ -225,12 +203,9 @@ class ExportImageActivity : AppCompatActivity() {
                             hasUploaded.set(true)
                         }
                     }
-//                hasUploaded.set(true)
 
                 }
             }
-//
-
 
         } catch (e: Exception) {
             Log.e("Embed error", "unknown error", e)
