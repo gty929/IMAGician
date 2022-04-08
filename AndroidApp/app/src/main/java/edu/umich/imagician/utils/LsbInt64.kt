@@ -2,7 +2,6 @@ package edu.umich.imagician.utils
 
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.core.graphics.createBitmap
 
 
 /**
@@ -29,25 +28,6 @@ fun ktencode64(oldImg: Bitmap, tag: Long): Bitmap? {
     val H = oldImg.height
     val W = oldImg.width
     val newImg = oldImg.copy( Bitmap.Config.ARGB_8888 , true)
-//    var msgPos = 0
-//    var bitPos = 0
-//    for (w in 0 until W) {
-//        for (h in 0 until H) {
-//            val newColor = oldImg.getPixel(w, h).let {
-//
-//            }
-//            newBitmap.setPixel(w, h, newColor)
-//            if (bitPos == 7) {
-//                bitPos = 0
-//                ++msgPos
-//                if (msgPos == msgLen) {
-//                    msgPos = 0
-//                }
-//            } else {
-//                ++bitPos
-//            }
-//        }
-//    }
     val locBufArr = IntArray(8)
     val msgBufArr = IntArray(32)
     for (w in 0 .. W-5 step 5) {
@@ -168,8 +148,9 @@ fun ktdecode64(img: Bitmap): Long? {
 //}
 
 fun calcHash(tag: Long): Long {
+    val nuance = 0xB5  // add nuance to avoid false positive for pure black image
     val FF = 0xFF.toLong()
-    var hash = 0.toLong()
+    var hash = nuance.toLong()
     var runningBytes = tag
     for (i in 0..6) {
         hash = hash xor (runningBytes and FF)
