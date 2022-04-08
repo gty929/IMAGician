@@ -154,11 +154,11 @@ class ExportImageActivity : AppCompatActivity() {
                 intent.putExtra("gohome", true)
                 startActivity(intent)
             } else {
+                Log.d("ExportActivity", "Encode tag start")
                 val newImg = withContext(Dispatchers.Default) {
 //                newImg = StegnoAlgo.encode(prevImg, tag)
                     ktencode64(prevImg, tag)
                 }
-                Log.d("ExportActivity", "Encode tag start")
                 if (newImg == null) {
                     val intent =
                         android.content.Intent(this, edu.umich.imagician.PopUpWindow::class.java)
