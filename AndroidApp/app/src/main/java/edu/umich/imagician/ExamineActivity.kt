@@ -94,9 +94,6 @@ class ExamineActivity : AppCompatActivity() {
 
     private suspend fun extractWatermark() {
         val img: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri);
-//        runOnUiThread {
-//            toast("decoding watermark")
-//        }
         speedRatio.set(img.width * img.height)
 //            val tag = StegnoAlgo.decode(img)
         val tag = withContext(Dispatchers.Default) {
@@ -113,10 +110,6 @@ class ExamineActivity : AppCompatActivity() {
             context.contentResolver.openInputStream(imageUri!!)?.buffered()?.use { Hasher.hash(it.readBytes()) }
         }
         hasChecked.set(true)
-        // yyzjason: update the new image
-//        runOnUiThread {
-//            toast("retrieving data with tag = $tag", false)
-//        }
 
         WatermarkPost.post = WatermarkPost(tag = tag.toString(), mode = Sendable.Mode.EMPTY)
         withContext(Dispatchers.IO) {
@@ -140,9 +133,6 @@ class ExamineActivity : AppCompatActivity() {
                     // check the checksum
                     // checksum of the post is the correct one (unmodified)
                     isModified = (checksum != WatermarkPost.post.checksum)
-//                    runOnUiThread {
-//                        toast("checksum = $checksum", false)
-//                    }
                 }
 
 
