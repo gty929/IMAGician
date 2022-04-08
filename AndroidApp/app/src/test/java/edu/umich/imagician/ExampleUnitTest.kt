@@ -1,8 +1,5 @@
 package edu.umich.imagician
 
-import android.graphics.Bitmap
-import edu.umich.imagician.utils.ktdecode
-import edu.umich.imagician.utils.ktencode
 import org.junit.Test
 
 import org.junit.Assert.*

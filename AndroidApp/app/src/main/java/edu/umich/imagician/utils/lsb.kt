@@ -71,7 +71,6 @@ fun ktencode(oldImg: Bitmap, message: String): Bitmap? {
                     if (msg.length >= 3 && msg.substring(msg.length - 3) == "###") {
 //                        if (msgStartingPos != -1) {
                             val retStr = msg.substring(msgStartingPos, msg.length - 3)
-                            Log.d("Candidate res:", retStr)
                             if (retStr.length == 14 && Regex("[0-9a-f]+").matches(retStr)) {
                                 return retStr
                             }

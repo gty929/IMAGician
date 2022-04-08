@@ -90,7 +90,7 @@ class ExamineActivity : AppCompatActivity() {
         speedRatio.set(img.width * img.height)
 //            val tag = StegnoAlgo.decode(img)
         val tag = withContext(Dispatchers.Default) {
-            ktdecode(img)
+            ktdecode64(img)
         }
         // yyzjason: checksum of the encoded image
         hasDecoded.set(true)
@@ -108,7 +108,7 @@ class ExamineActivity : AppCompatActivity() {
 //            toast("retrieving data with tag = $tag", false)
 //        }
 
-        WatermarkPost.post = WatermarkPost(tag = tag, mode = Sendable.Mode.EMPTY)
+        WatermarkPost.post = WatermarkPost(tag = tag.toString(), mode = Sendable.Mode.EMPTY)
         withContext(Dispatchers.IO) {
             ItemStore.httpCall(WatermarkPost.post) { code ->
                 if (code != 200) {

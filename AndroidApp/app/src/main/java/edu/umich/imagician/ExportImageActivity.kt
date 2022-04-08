@@ -38,7 +38,7 @@ class ExportImageActivity : AppCompatActivity() {
     private val uploadFailed = AtomicBoolean()
     private val speedRatio = AtomicInteger()
 
-    private val tag = SecureRandom().generateSeed(7).toHex()
+    private val tag = SecureRandom().nextLong().ushr(8)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,7 +124,7 @@ class ExportImageActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun embedWatermark(tag: String) {
+    private suspend fun embedWatermark(tag: Long) {
 //        val handler: Handler = Handler()
         try {
 
@@ -140,7 +140,7 @@ class ExportImageActivity : AppCompatActivity() {
                 MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
             speedRatio.set(prevImg.width * prevImg.height)
             val context = this
-            if (withContext(Dispatchers.Default) { ktdecode(prevImg) } != null) { // duplicate
+            if (withContext(Dispatchers.Default) { ktdecode64(prevImg) } != null) { // duplicate
                 runOnUiThread {
                     toast("Duplicate tag detected")
                 }
@@ -155,7 +155,7 @@ class ExportImageActivity : AppCompatActivity() {
             } else {
                 val newImg = withContext(Dispatchers.Default) {
 //                newImg = StegnoAlgo.encode(prevImg, tag)
-                    ktencode(prevImg, tag)
+                    ktencode64(prevImg, tag)
                 }
 
                 if (newImg == null) {
@@ -205,7 +205,7 @@ class ExportImageActivity : AppCompatActivity() {
 
                     Log.i("Export", "main scope")
                     val watermarkPost = WatermarkPost.post
-                    watermarkPost.tag = tag
+                    watermarkPost.tag = tag.toString()
                     watermarkPost.mode = Sendable.Mode.FULL // query by tag
 
 
