@@ -1,15 +1,19 @@
 package edu.umich.imagician
 
+import android.Manifest
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.*
-import android.view.View.VISIBLE
 import android.widget.Button
-import android.widget.EditText
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.gson.Gson
 import edu.umich.imagician.databinding.ActivityDisplayInfoBinding
@@ -105,11 +109,53 @@ class DisplayInfoActivity : AppCompatActivity() {
 
     fun onClickDownload(chip: View?) {
         // http.GET
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                downloadFile(
+                    URL("https://3.84.195.179/uploads/${watermarkPost.folder_pos}/"),
+                    "/storage/emulated/0/Download/${watermarkPost.folder}"
+                )
+            }
+            else -> {
+                // You can directly ask for the permission.
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1)
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        when (requestCode) {
+            1 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] ==
+                    PackageManager.PERMISSION_GRANTED) {
+                    downloadFile(
+                        URL("https://3.84.195.179/uploads/${watermarkPost.folder_pos}/"),
+                        "/storage/emulated/0/Download/${watermarkPost.folder}"
+                    )
+                } else {
+                    toast("Permission denied!")
+                }
+                return
+            }
+        }
+    }
+
+
+    private fun downloadFile(url: URL, fileName: String) {
+        Log.d("Download file", "url: $url, filename: $fileName")
         Thread {
-            downloadFile(
-                URL("https://3.84.195.179/uploads/${watermarkPost.folder_pos}/"),
-                "${getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)}/${watermarkPost.folder}"
-            )
+            try {
+                url.openStream().use { Files.copy(it, Paths.get(fileName)) }
+            } catch (e: Exception) {
+                Log.e("download exception", e.toString())
+            }
+
             runOnUiThread {
                 toast("The attachment has been saved...")
             }
@@ -120,15 +166,6 @@ class DisplayInfoActivity : AppCompatActivity() {
             intent.putExtra("darkstatusbar", true)
             startActivity(intent)
         }.start()
-    }
-
-    private fun downloadFile(url: URL, fileName: String) {
-        Log.d("Download file", "url: $url, filename: $fileName")
-        try {
-            url.openStream().use { Files.copy(it, Paths.get(fileName)) }
-        } catch (e: Exception) {
-            Log.e("download exception", e.toString())
-        }
     }
 
 
