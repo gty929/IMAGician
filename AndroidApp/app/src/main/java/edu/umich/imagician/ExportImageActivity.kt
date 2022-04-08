@@ -140,6 +140,7 @@ class ExportImageActivity : AppCompatActivity() {
                 MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
             speedRatio.set(prevImg.width * prevImg.height)
             val context = this
+            Log.d("ExportActivity", "Check existing tag start")
             if (withContext(Dispatchers.Default) { ktdecode64(prevImg) } != null) { // duplicate
                 runOnUiThread {
                     toast("Duplicate tag detected")
@@ -157,7 +158,7 @@ class ExportImageActivity : AppCompatActivity() {
 //                newImg = StegnoAlgo.encode(prevImg, tag)
                     ktencode64(prevImg, tag)
                 }
-
+                Log.d("ExportActivity", "Encode tag start")
                 if (newImg == null) {
                     val intent =
                         android.content.Intent(this, edu.umich.imagician.PopUpWindow::class.java)
@@ -173,10 +174,13 @@ class ExportImageActivity : AppCompatActivity() {
                 } else {
                     val bytes = ByteArrayOutputStream()
                     val checksum = withContext(Dispatchers.Default) {
+                        Log.d("ExportActivity","Encode tag finished and compress tagged image to png start")
                         newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+                        Log.d("ExportActivity","Compress tagged image to png finished, and start hashing")
 //                    StegnoAlgo.getChecksum(newImg)
                         Hasher.hash(bytes)
                     }
+                    Log.d("ExportActivity", "Hash finished")
                     withContext(Dispatchers.Default) {
                         newImageUri = mediaStoreAlloc(contentResolver, "image/png", "$title.png")
                         newImageUri?.let { it ->

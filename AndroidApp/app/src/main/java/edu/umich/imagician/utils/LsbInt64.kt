@@ -79,7 +79,7 @@ fun ktdecode64(img: Bitmap): Long? {
     val W = img.width
     var zzoCount = -1 //count of 0, 0, 1 pixel after a 0, 0, 0 pixel is found, initialized to -1 if no 0, 0, 0 found
     val msgBufArr = IntArray(32)
-    for (w in 0 until W) {
+    for (w in 0 .. W-5) {
         for (h in 0 until H) {
             val pixel = img.getPixel(w, h)
             val b1 = (pixel shr 16) and 1
@@ -107,6 +107,7 @@ fun ktdecode64(img: Bitmap): Long? {
                         if (zzoCount != -1) { // succeed
                             val tag = msg ushr 8
                             if (calcHash(tag) == msg and 0xFF) {
+                                Log.d("Retrieved tag", tag.toString())
                                 return tag
                             } else {
                                 Log.e("Decode", "hash don't match")
@@ -117,6 +118,7 @@ fun ktdecode64(img: Bitmap): Long? {
                 }
             }
         }
+        zzoCount = -1
     }
     return null
 }
