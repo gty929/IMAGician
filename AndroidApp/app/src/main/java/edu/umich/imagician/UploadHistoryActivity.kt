@@ -84,8 +84,13 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.imageInfo.removeView(view.pnumRow)
         watermarkPost.timestamp?.let { view.tstamp.text = it } ?:
         view.imageInfo.removeView(view.tsRow)
-        watermarkPost.message?.let { view.msg.text = it } ?:
-        view.imageInfo.removeView(view.msgRow)
+        if (!watermarkPost.msg_encrypted) {
+            watermarkPost.message?.let { view.msg.text = it } ?:
+            view.imageInfo.removeView(view.msgRow)
+        } else {
+            watermarkPost.message?.let { view.msg.text = "Message is encrypted." } ?:
+            view.imageInfo.removeView(view.msgRow)
+        }
 
         // history requests
         historyListAdapter = HistoryListAdapter(this, watermarkPost.pendingRequestList, this::seeMore)

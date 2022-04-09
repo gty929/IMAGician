@@ -6,8 +6,10 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
+import android.os.Message
 import android.provider.MediaStore
 import android.text.Editable
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -15,9 +17,12 @@ import android.widget.Toast
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import java.io.File
+import java.lang.Exception
 import java.security.MessageDigest
+import java.util.Arrays.copyOf
 import javax.crypto.Cipher
-import javax.crypto.spec.IvParameterSpec
+import java.util.Base64.getDecoder
+import java.util.Base64.getEncoder
 import javax.crypto.spec.SecretKeySpec
 
 
@@ -102,13 +107,48 @@ object Hasher {
 }
 
 
-fun decryptMSG(encryptMSG: String?, pwd: String?): String? {
-    val data = encryptMSG?.split("@*@")
-    val Text = data?.get(0)
-    val pre_pwd = data?.get(1)
-    if (pre_pwd.equals(pwd)) {
-        return Text
-    } else {
-        return null
+fun getCipher(pwd: String?, encryption: Boolean): Cipher {
+    val cipher = Cipher.getInstance("AES")
+    var new_pwd: String? = null
+    if (pwd != null) {
+        if (pwd.length >= 16) {
+            new_pwd = pwd.substring(0,17)
+        } else {
+            val padding_num = 16 - pwd.length
+            new_pwd = pwd + "0".repeat(padding_num)
+        }
     }
+    val keySpec = SecretKeySpec(new_pwd?.toByteArray(), "AES")
+    if (encryption) {
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec)
+    } else {
+        cipher.init(Cipher.DECRYPT_MODE, keySpec)
+    }
+
+    return cipher
+}
+
+fun encryptMSG_new(MSG: String?, pwd: String?): String {
+    val cipher = getCipher(pwd, true)
+    val message = "IMAGician$MSG"
+    val encrypt_MSG = cipher.doFinal(message.toByteArray())
+    val result = getEncoder().encodeToString(encrypt_MSG)
+    return result
+}
+
+fun decryptMSG_new(encryptMSG: String?, pwd: String?): String? {
+    try {
+        val cipher = getCipher(pwd, false)
+        val new_MSG = getDecoder().decode(encryptMSG)
+        val decrypt_msg = String(cipher.doFinal(new_MSG))
+        if (decrypt_msg.substring(0, 9).equals("IMAGician")) {
+            return decrypt_msg.substring(9)
+        } else {
+            return null
+        }
+    } catch (e: Exception) {
+        println("Error while decrypting: $e")
+
+    }
+    return null
 }

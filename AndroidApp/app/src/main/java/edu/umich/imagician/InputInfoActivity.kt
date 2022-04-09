@@ -112,7 +112,7 @@ class InputInfoActivity: AppCompatActivity()  {
         var message = editToStr(findViewById<EditText>(R.id.editMessage).text)
         if (IsMsgEncrypted) {
             val password = editToStr(findViewById<EditText>(R.id.editPassword).text)
-            message = "$message@*@$password"
+            message = encryptMSG_new(message, password)
         }
         WatermarkPost.post = WatermarkPost(
             username = LoginManager.info.username,

@@ -7,13 +7,11 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.*
-import android.view.View.VISIBLE
 import android.widget.Button
-import android.widget.EditText
 import androidx.core.view.isVisible
 import com.google.gson.Gson
 import edu.umich.imagician.databinding.ActivityDisplayInfoBinding
-import edu.umich.imagician.utils.decryptMSG
+import edu.umich.imagician.utils.decryptMSG_new
 import edu.umich.imagician.utils.editToStr
 import edu.umich.imagician.utils.toast
 import java.lang.Exception
@@ -88,10 +86,10 @@ class DisplayInfoActivity : AppCompatActivity() {
 
     fun onClickPasswordConfirm(chip: View?) {
         val pwd = editToStr(view.editTextTextPassword.text)
-        val msg = decryptMSG(watermarkPost.message, pwd)
-        if (msg == null) {
+        val msg = decryptMSG_new(watermarkPost.message, pwd)
+        if (msg === null) {
             view.editTextTextPassword.text.clear()
-            view.editTextTextPassword.hint = "Wrong Password"
+            view.editTextTextPassword.hint = "  Wrong Password"
         } else {
             findViewById<Button>(R.id.confirm_button_field).isVisible = false
             view.editTextTextPassword.isVisible = false
