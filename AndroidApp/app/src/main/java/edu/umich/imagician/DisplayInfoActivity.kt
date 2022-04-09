@@ -1,6 +1,9 @@
 package edu.umich.imagician
 
+import android.Manifest
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +11,10 @@ import android.os.Environment
 import android.util.Log
 import android.view.*
 import android.widget.Button
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.gson.Gson
 import edu.umich.imagician.databinding.ActivityDisplayInfoBinding
@@ -25,6 +32,32 @@ class DisplayInfoActivity : AppCompatActivity() {
     private lateinit var watermarkPost: WatermarkPost
     private var isModified = false
     private var imageUri: Uri?= null
+
+    // Register the permissions callback, which handles the user's response to the
+    // system permissions dialog. Save the return value, an instance of
+    // ActivityResultLauncher. You can use either a val, as shown in this snippet,
+    // or a lateinit var in your onAttach() or onCreate() method.
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission is granted. Continue the action or workflow in your
+                // app.
+                downloadFile(
+                    URL("https://3.84.195.179/uploads/${watermarkPost.folder_pos}/"),
+                    "/storage/emulated/0/Download/${watermarkPost.folder}"
+                )
+            } else {
+                // Explain to the user that the feature is unavailable because the
+                // features requires a permission that the user has denied. At the
+                // same time, respect the user's decision. Don't link to system
+                // settings in an effort to convince the user to change their
+                // decision.
+                toast("Permission denied")
+            }
+        }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,11 +136,36 @@ class DisplayInfoActivity : AppCompatActivity() {
 
     fun onClickDownload(chip: View?) {
         // http.GET
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                downloadFile(
+                    URL("https://3.84.195.179/uploads/${watermarkPost.folder_pos}/"),
+                    "/storage/emulated/0/Download/${watermarkPost.folder}"
+                )
+            }
+            else -> {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                requestPermissionLauncher.launch(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+        }
+    }
+
+
+    private fun downloadFile(url: URL, fileName: String) {
+        Log.d("Download file", "url: $url, filename: $fileName")
         Thread {
-            downloadFile(
-                URL("https://3.84.195.179/uploads/${watermarkPost.folder_pos}/"),
-                "${getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)}/${watermarkPost.folder}"
-            )
+            try {
+                url.openStream().use { Files.copy(it, Paths.get(fileName)) }
+            } catch (e: Exception) {
+                Log.e("download exception", e.toString())
+            }
+
             runOnUiThread {
                 toast("The attachment has been saved...")
             }
@@ -118,15 +176,6 @@ class DisplayInfoActivity : AppCompatActivity() {
             intent.putExtra("darkstatusbar", true)
             startActivity(intent)
         }.start()
-    }
-
-    private fun downloadFile(url: URL, fileName: String) {
-        Log.d("Download file", "url: $url, filename: $fileName")
-        try {
-            url.openStream().use { Files.copy(it, Paths.get(fileName)) }
-        } catch (e: Exception) {
-            Log.e("download exception", e.toString())
-        }
     }
 
 

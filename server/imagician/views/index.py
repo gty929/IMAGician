@@ -291,7 +291,7 @@ def post_tag():
         filename = flask.request.files['file'].filename
         if filename.find('/') != -1 or filename.find('\\') != -1:
             abort(400)
-        if filename.count('.') > 1:
+        if filename.count('..') > 0:
             abort(400)
         folder_name = uuid.uuid4().hex
         folder = imagician.app.config["UPLOAD_FOLDER"]/pathlib.Path(folder_name)
