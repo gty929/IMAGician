@@ -230,9 +230,13 @@ class ImportImageActivity: AppCompatActivity()  {
         // create a crop box:
         intent
             // enable zoom and crop
+            .setType("image/*")
             .putExtra("scale", true)
             .putExtra("crop", true)
             .putExtra("return-data", true)
+            .putExtra("return-data", false)
+            .putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+            .putExtra("noFaceDetection", true); // no face detection
 
         return intent
     }
