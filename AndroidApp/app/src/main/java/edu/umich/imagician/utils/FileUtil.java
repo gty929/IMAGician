@@ -61,7 +61,7 @@ public class FileUtil {
     }
 
     @SuppressLint("Range")
-    private static String getFileName(Context context, Uri uri) {
+    public static String getFileName(Context context, Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
             Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);

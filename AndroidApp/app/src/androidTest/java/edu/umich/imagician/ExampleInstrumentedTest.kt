@@ -5,10 +5,9 @@ import android.util.Log
 import androidx.core.graphics.createBitmap
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import edu.umich.imagician.utils.ktdecode
 import edu.umich.imagician.utils.ktdecode64
 import edu.umich.imagician.utils.ktencode64
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.system.measureTimeMillis

@@ -7,7 +7,7 @@ import edu.umich.imagician.R
  * Created by Tianyao Gu on 2022/3/12.
  * From https://codesource.io/create-a-password-strength-calculator-using-kotlin/
  */
-enum class PasswordStrength private constructor(internal var resId: Int, color: Int) {
+enum class PasswordStrength(internal var resId: Int, color: Int) {
 
     WEAK(R.string.password_strength_weak, Color.RED),
     MEDIUM(R.string.password_strength_medium, Color.argb(255, 220, 185, 0)),

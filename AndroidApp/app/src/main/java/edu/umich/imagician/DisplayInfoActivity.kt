@@ -161,7 +161,7 @@ class DisplayInfoActivity : AppCompatActivity() {
 
 
     private fun showEmbeddedInfo() {
-        Log.d("DisplayInfo", "watermarkPost = ${Gson().toJson(watermarkPost).toString()}")
+        Log.d("DisplayInfo", "watermarkPost = ${Gson().toJson(watermarkPost)}")
         watermarkPost.isModified = isModified
         watermarkPost.img_uri = imageUri
         // required

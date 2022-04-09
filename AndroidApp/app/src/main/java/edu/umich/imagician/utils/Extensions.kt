@@ -3,29 +3,22 @@ package edu.umich.imagician.utils
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
-import android.os.Message
 import android.provider.MediaStore
+import android.security.keystore.KeyProperties
 import android.text.Editable
-import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import com.chaquo.python.Python
-import com.chaquo.python.android.AndroidPlatform
 import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.OutputStream
-import java.io.Serializable
 import java.security.MessageDigest
-import java.util.Arrays.copyOf
-import javax.crypto.Cipher
 import java.util.Base64.getDecoder
 import java.util.Base64.getEncoder
+import javax.crypto.Cipher
+import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 
@@ -42,34 +35,6 @@ fun ImageView.display(uri: Uri) {
     visibility = View.VISIBLE
 }
 
-fun Uri.toFile(context: Context): File? {
-    Log.d("File", "Converting $this to file")
-//    if (!(authority == "media" || authority == "com.google.android.apps.photos.contentprovider")) {
-//        // for on-device media files only
-//        context.toast("Media file not on device")
-//        Log.d("Uri.toFile", authority.toString())
-//        return null
-//    }
-
-    if (scheme.equals("content")) {
-        var cursor: Cursor? = null
-        try {
-            cursor = context.getContentResolver().query(
-                this, arrayOf("_data"),
-                null, null, null
-            )
-
-            cursor?.run {
-                moveToFirst()
-                return File(getString(getColumnIndexOrThrow("_data")))
-            }
-        } finally {
-            cursor?.close()
-        }
-    }
-    return null
-}
-
 /*
     allocate space in the MediaStore to store the picture/video
      */
@@ -78,7 +43,7 @@ fun mediaStoreAlloc(contentResolver: ContentResolver, mediaType: String, filenam
     values.put(MediaStore.MediaColumns.MIME_TYPE, mediaType)
     values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
     filename.let {
-        values.put(MediaStore.MediaColumns.DISPLAY_NAME, it);
+        values.put(MediaStore.MediaColumns.DISPLAY_NAME, it)
     }
     return contentResolver.insert(
         if (mediaType.contains("video"))
@@ -88,12 +53,6 @@ fun mediaStoreAlloc(contentResolver: ContentResolver, mediaType: String, filenam
         values)
 }
 
-
-fun initPython(context: Context){
-    if (! Python.isStarted()) {
-        Python.start(AndroidPlatform(context));
-    }
-}
 
 fun editToStr(txt: Editable): String? {
     return if (txt.isEmpty()) null else txt.toString()
@@ -109,7 +68,7 @@ fun String.decodeHex(): ByteArray {
 fun ByteArray.toHex(): String = fold("") { str, it -> str + "%02x".format(it) }
 
 object Hasher {
-    val md = MessageDigest.getInstance("SHA-256")
+    val md: MessageDigest = MessageDigest.getInstance("SHA-256")
 
     fun hash(s: String): String {
         val bytes = s.toByteArray()
@@ -131,7 +90,10 @@ object Hasher {
 
 
 fun getCipher(pwd: String?, encryption: Boolean): Cipher {
-    val cipher = Cipher.getInstance("AES")
+    val KEY_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
+    val KEY_BLOCK_MODE = KeyProperties.BLOCK_MODE_GCM
+    val KEY_PADDING = KeyProperties.ENCRYPTION_PADDING_NONE // GCM requires no padding
+    val cipher = Cipher.getInstance("$KEY_ALGORITHM/$KEY_BLOCK_MODE/$KEY_PADDING")
     var new_pwd: String? = null
     if (pwd != null) {
         if (pwd.length >= 16) {
@@ -141,12 +103,8 @@ fun getCipher(pwd: String?, encryption: Boolean): Cipher {
             new_pwd = pwd + "0".repeat(padding_num)
         }
     }
-    val keySpec = SecretKeySpec(new_pwd?.toByteArray(), "AES")
-    if (encryption) {
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec)
-    } else {
-        cipher.init(Cipher.DECRYPT_MODE, keySpec)
-    }
+    val keySpec = SecretKeySpec(new_pwd?.toByteArray(), KEY_ALGORITHM)
+    cipher.init(if (encryption) Cipher.ENCRYPT_MODE else Cipher.DECRYPT_MODE, keySpec, GCMParameterSpec(128, "dongcidaci".toByteArray()))
 
     return cipher
 }

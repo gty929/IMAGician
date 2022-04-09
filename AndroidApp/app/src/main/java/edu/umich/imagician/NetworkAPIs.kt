@@ -1,8 +1,8 @@
-package edu.umich.imagician;
+package edu.umich.imagician
 
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.*
 
 /**

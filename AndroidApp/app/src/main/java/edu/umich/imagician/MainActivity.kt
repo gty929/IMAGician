@@ -13,7 +13,6 @@ import edu.umich.imagician.ItemStore.watermarkPosts
 import edu.umich.imagician.ItemStore.watermarkRequests
 
 import edu.umich.imagician.databinding.ActivityMainBinding
-import edu.umich.imagician.utils.initPython
 import edu.umich.imagician.utils.toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -57,11 +56,6 @@ class MainActivity : AppCompatActivity() {
         view.refreshPosts.setOnRefreshListener {
             refreshPos()
         }
-
-        // start python plugin
-        initPython(this)
-//        refreshPos()
-//        refreshReq()
 
         if (LoginManager.isLoggedIn.value != true) { // not logged in
             LoginManager.open(this)

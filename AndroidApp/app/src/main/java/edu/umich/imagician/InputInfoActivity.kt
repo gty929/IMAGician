@@ -1,7 +1,6 @@
 package edu.umich.imagician
 
 import android.annotation.SuppressLint
-import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,8 +12,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import edu.umich.imagician.utils.*
-import edu.umich.imagician.utils.FileUtilNoCopy.getFileName
+import edu.umich.imagician.utils.FileUtil
+import edu.umich.imagician.utils.FileUtil.getFileName
+import edu.umich.imagician.utils.editToStr
+import edu.umich.imagician.utils.encryptMSG_new
+import edu.umich.imagician.utils.toast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -86,9 +88,11 @@ class InputInfoActivity: AppCompatActivity()  {
             setWatermarkPost()
         } catch (e: IOException) {
             toast(e.message ?: "File IO Error")
+            e.printStackTrace()
             return false
         } catch (e: Exception) {
             toast(e.message ?: "Unknown Error")
+            e.printStackTrace()
             return false
         }
         // Handle item selection
@@ -160,7 +164,7 @@ class InputInfoActivity: AppCompatActivity()  {
             super.handleMessage(msg)
             when (msg.what) {
                 1 -> {
-                    val pattern = "yyyy-MM-dd hh:mm";
+                    val pattern = "yyyy-MM-dd hh:mm"
                     val simpleDateFormat = SimpleDateFormat(pattern)
                     val date = simpleDateFormat.format(Date())
                     timestampCheckBox.text= date

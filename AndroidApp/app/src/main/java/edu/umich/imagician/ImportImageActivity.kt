@@ -3,12 +3,10 @@ package edu.umich.imagician
 import android.Manifest
 import android.app.Activity
 import android.content.ComponentName
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -19,7 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import edu.umich.imagician.utils.mediaStoreAlloc
-
 import edu.umich.imagician.utils.toast
 
 
@@ -236,7 +233,7 @@ class ImportImageActivity: AppCompatActivity()  {
             .putExtra("return-data", true)
             .putExtra("return-data", false)
             .putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-            .putExtra("noFaceDetection", true); // no face detection
+            .putExtra("noFaceDetection", true) // no face detection
 
         return intent
     }

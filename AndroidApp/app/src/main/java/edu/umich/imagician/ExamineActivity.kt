@@ -93,7 +93,7 @@ class ExamineActivity : AppCompatActivity() {
     }
 
     private suspend fun extractWatermark() {
-        val img: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri);
+        val img: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
         speedRatio.set(img.width * img.height)
 //            val tag = StegnoAlgo.decode(img)
         val tag = withContext(Dispatchers.Default) {

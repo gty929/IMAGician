@@ -28,13 +28,10 @@ object LoginManager {
         MutableLiveData<Boolean>()
     }
     var info = UserInfo()
-    var expiration = Instant.EPOCH
+    var expiration: Instant = Instant.EPOCH
     var cookie: String? = null
         get() {
             return if (Instant.now() >= expiration) null else field
-        }
-        set(newValue) {
-            field = newValue
         }
     private const val ID_FILE = "IMAGician"
     private const val KEY_NAME = "UserID"
@@ -68,7 +65,7 @@ object LoginManager {
                 response.headers()["Set-Cookie"]?.let {
                     cookie = it
                     info.username = username
-                    expiration = Instant.now().plusSeconds(21*86400)
+                    expiration = Instant.now().plusSeconds((21*86400).toLong())
                     isLoggedIn.value = true
                     save(context)
                     onGetCookie(context)
@@ -129,7 +126,7 @@ object LoginManager {
     }
 
     private fun delete(context: Context) {
-        val folder = File(context.getFilesDir().getParent()?.toString() + "/shared_prefs/")
+        val folder = File(context.filesDir.parent?.toString() + "/shared_prefs/")
         val files = folder.list()
         files?.forEach {
             context.getSharedPreferences(it.replace(".xml", ""), Context.MODE_PRIVATE)

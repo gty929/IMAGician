@@ -16,7 +16,6 @@ import androidx.core.view.isVisible
 import edu.umich.imagician.utils.*
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
-import java.lang.Exception
 import java.security.SecureRandom
 import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicBoolean
