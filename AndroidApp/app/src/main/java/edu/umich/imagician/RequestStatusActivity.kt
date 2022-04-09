@@ -16,9 +16,9 @@ class RequestStatusActivity : AppCompatActivity() {
         view = ActivityRequestStatusBinding.inflate(layoutInflater)
         setContentView(view.root)
         var index = intent.getIntExtra("index", -1)
-        if (index == -1) {
-            toast("Error: incorrect request index!")
-        }
+//        if (index == -1) {
+//            toast("Error: incorrect request index!")
+//        }
         showRequest(index)
     }
 

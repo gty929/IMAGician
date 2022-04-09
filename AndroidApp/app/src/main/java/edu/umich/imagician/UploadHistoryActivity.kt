@@ -20,9 +20,9 @@ class UploadHistoryActivity : AppCompatActivity() {
         view = ActivityUploadHistoryBinding.inflate(layoutInflater)
         setContentView(view.root)
         val index = intent.getIntExtra("index", -1)
-        if (index == -1) {
-            toast("Error: incorrect post index!")
-        }
+//        if (index == -1) {
+//            toast("Error: incorrect post index!")
+//        }
         view.buttonBack.setOnClickListener {
             view.reqInfoPad.isVisible = false
             view.refreshReqs.isVisible = true
@@ -130,7 +130,7 @@ class UploadHistoryActivity : AppCompatActivity() {
 
     private fun postUpdateStatus() {
         // post change to server
-        toast("Update status of req_id: ${watermarkRequest.id}")
+//        toast("Update status of req_id: ${watermarkRequest.id}")
         WatermarkRequest.request = watermarkRequest
         ItemStore.handleRequest({
             Log.d("update status", "send action ${watermarkRequest.status}")

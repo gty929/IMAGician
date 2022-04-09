@@ -62,7 +62,7 @@ class SendRequestActivity : AppCompatActivity() {
         watermarkRequest.mode = Sendable.Mode.FULL
         ItemStore.httpCall(watermarkRequest) { code ->
             if (code == 200) {
-                toast("Successfully submit request!")
+//                toast("Successfully submit request!")
                 val intent = Intent(this, PopUpWindow::class.java)
                 intent.putExtra("popuptitle", "Sent")
                 intent.putExtra("popuptext", "Message successfully sent to image creator!")

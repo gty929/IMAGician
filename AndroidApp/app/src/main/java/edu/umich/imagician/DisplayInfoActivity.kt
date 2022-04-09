@@ -1,19 +1,15 @@
 package edu.umich.imagician
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.*
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.gson.Gson
@@ -95,26 +91,11 @@ class DisplayInfoActivity : AppCompatActivity() {
     }
 
     fun onClickEnter(chip: View?) {
-        toast("Please enter the password")
+//        toast("Please enter the password")
         view.chipEnter.isVisible = false
         view.editTextTextPassword.isVisible = true
         val password_button = findViewById<Button>(R.id.confirm_button_field)
         password_button.isVisible = true
-//        view.editTextTextPassword.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-//            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-//                // call crypto lib to decrypt
-//                //
-//                // skip this process
-//                toast("Password correct!")
-//                view.editTextTextPassword.isVisible = false
-//                view.msg.text = "Never gonna give you up"
-//                view.msg.isVisible = true
-//                view.locked.isVisible = false
-//                view.unlocked.isVisible = true
-//                return@OnKeyListener true
-//            }
-//            false
-//        })
     }
 
     fun onClickPasswordConfirm(chip: View?) {
@@ -166,12 +147,12 @@ class DisplayInfoActivity : AppCompatActivity() {
                 Log.e("download exception", e.toString())
             }
 
-            runOnUiThread {
-                toast("The attachment has been saved...")
-            }
+//            runOnUiThread {
+//                toast("The attachment has been saved...")
+//            }
             val intent = Intent(this, PopUpWindow::class.java)
             intent.putExtra("popuptitle", "Saved")
-            intent.putExtra("popuptext", "Attached file saved to Downloads folder.")
+            intent.putExtra("popuptext", "Attached file saved to $fileName.")
             intent.putExtra("popupbtn", "OK")
             intent.putExtra("darkstatusbar", true)
             startActivity(intent)

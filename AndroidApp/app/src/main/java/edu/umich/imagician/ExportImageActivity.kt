@@ -130,11 +130,11 @@ class ExportImageActivity : AppCompatActivity() {
             val context = this
             Log.d("ExportActivity", "Check existing tag start")
             if (withContext(Dispatchers.Default) { ktdecode64(prevImg) } != null) { // duplicate
-                runOnUiThread {
-                    toast("Duplicate tag detected")
-                }
+//                runOnUiThread {
+//                    toast("Duplicate tag detected")
+//                }
                 val intent =
-                    android.content.Intent(context, edu.umich.imagician.PopUpWindow::class.java)
+                    Intent(context, PopUpWindow::class.java)
                 intent.putExtra("popuptitle", "Error")
                 intent.putExtra("popuptext", "Tag detected in the image. Embedding aborted.")
                 intent.putExtra("popupbtn", "OK")
@@ -144,12 +144,11 @@ class ExportImageActivity : AppCompatActivity() {
             } else {
                 Log.d("ExportActivity", "Encode tag start")
                 val newImg = withContext(Dispatchers.Default) {
-//                newImg = StegnoAlgo.encode(prevImg, tag)
                     ktencode64(prevImg, tag)
                 }
                 if (newImg == null) {
                     val intent =
-                        android.content.Intent(this, edu.umich.imagician.PopUpWindow::class.java)
+                        Intent(this, PopUpWindow::class.java)
                     intent.putExtra("popuptitle", "Error")
                     intent.putExtra(
                         "popuptext",
@@ -165,7 +164,6 @@ class ExportImageActivity : AppCompatActivity() {
                         Log.d("ExportActivity","Encode tag finished and compress tagged image to png start")
                         newImg.compress(Bitmap.CompressFormat.PNG, 100, bytes)
                         Log.d("ExportActivity","Compress tagged image to png finished, and start hashing")
-//                    StegnoAlgo.getChecksum(newImg)
                         Hasher.hash(bytes)
                     }
                     Log.d("ExportActivity", "Hash finished")
