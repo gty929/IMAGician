@@ -135,7 +135,7 @@ fun getCipher(pwd: String?, encryption: Boolean): Cipher {
     var new_pwd: String? = null
     if (pwd != null) {
         if (pwd.length >= 16) {
-            new_pwd = pwd.substring(0,17)
+            new_pwd = pwd.substring(0,16)
         } else {
             val padding_num = 16 - pwd.length
             new_pwd = pwd + "0".repeat(padding_num)
