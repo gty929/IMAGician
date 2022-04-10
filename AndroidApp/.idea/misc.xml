@@ -31,6 +31,19 @@
         <entry key="..\:/Files/EXPLORE/Android Studio/IMAGician/AndroidApp/app/src/main/res/menu/login_menu.xml" value="0.28802083333333334" />
         <entry key="..\:/Users/THINKPAD/Desktop/Document/UM/Winter2022/EECS441/IMAGician/AndroidApp/app/src/main/res/layout/activity_export_image.xml" value="0.4" />
         <entry key="..\:/Users/THINKPAD/Desktop/Document/UM/Winter2022/EECS441/IMAGician/AndroidApp/app/src/main/res/layout/activity_import_image.xml" value="0.264" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/rounded_corner_view.xml" value="0.2745" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/shape_round_corner.xml" value="0.1225" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_display_info.xml" value="0.22745694022289767" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_examine.xml" value="0.22745694022289767" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_export_image.xml" value="0.22745694022289767" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_import_image.xml" value="0.22745694022289767" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_input_info.xml" value="0.2203125" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_login.xml" value="0.22745694022289767" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_main.xml" value="0.22745694022289767" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_pop_up_window.xml" value="0.22745694022289767" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_request_status.xml" value="0.22745694022289767" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_send_request.xml" value="0.22745694022289767" />
+        <entry key="..\:/Users/klxia/Documents/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/layout/activity_upload_history.xml" value="0.22745694022289767" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.275" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/bordershape.xml" value="0.25885416666666666" />
         <entry key="..\:/umstudy/eecs441/IMAGician/AndroidApp/app/src/main/res/drawable/buttonshape.xml" value="0.25885416666666666" />

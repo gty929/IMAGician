@@ -9,8 +9,6 @@ import android.provider.MediaStore
 import android.security.keystore.KeyProperties
 import android.text.Editable
 import android.util.Log
-import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
@@ -28,11 +26,6 @@ import javax.crypto.spec.SecretKeySpec
 fun Context.toast(message: String, short: Boolean = true) {
     Log.d("toasted", message)
     Toast.makeText(this, message, if (short) Toast.LENGTH_SHORT else Toast.LENGTH_LONG).show()
-}
-
-fun ImageView.display(uri: Uri) {
-    setImageURI(uri)
-    visibility = View.VISIBLE
 }
 
 /*
@@ -58,13 +51,6 @@ fun editToStr(txt: Editable): String? {
     return if (txt.isEmpty()) null else txt.toString()
 }
 
-fun String.decodeHex(): ByteArray {
-    check(length % 2 == 0) { "Must have an even length" }
-
-    return chunked(2)
-        .map { it.toInt(16).toByte() }
-        .toByteArray()
-}
 fun ByteArray.toHex(): String = fold("") { str, it -> str + "%02x".format(it) }
 
 object Hasher {
@@ -94,16 +80,16 @@ fun getCipher(pwd: String?, encryption: Boolean): Cipher {
     val KEY_BLOCK_MODE = KeyProperties.BLOCK_MODE_GCM
     val KEY_PADDING = KeyProperties.ENCRYPTION_PADDING_NONE // GCM requires no padding
     val cipher = Cipher.getInstance("$KEY_ALGORITHM/$KEY_BLOCK_MODE/$KEY_PADDING")
-    var new_pwd: String? = null
+    var newPwd: String? = null
     if (pwd != null) {
         if (pwd.length >= 16) {
-            new_pwd = pwd.substring(0,16)
+            newPwd = pwd.substring(0,16)
         } else {
             val padding_num = 16 - pwd.length
-            new_pwd = pwd + "0".repeat(padding_num)
+            newPwd = pwd + "0".repeat(padding_num)
         }
     }
-    val keySpec = SecretKeySpec(new_pwd?.toByteArray(), KEY_ALGORITHM)
+    val keySpec = SecretKeySpec(newPwd?.toByteArray(), KEY_ALGORITHM)
     cipher.init(if (encryption) Cipher.ENCRYPT_MODE else Cipher.DECRYPT_MODE, keySpec, GCMParameterSpec(128, "dongcidaci".toByteArray()))
 
     return cipher
