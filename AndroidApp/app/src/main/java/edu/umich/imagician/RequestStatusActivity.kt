@@ -15,14 +15,10 @@ class RequestStatusActivity : AppCompatActivity() {
         view = ActivityRequestStatusBinding.inflate(layoutInflater)
         setContentView(view.root)
         val index = intent.getIntExtra("index", -1)
-//        if (index == -1) {
-//            toast("Error: incorrect request index!")
-//        }
         showRequest(index)
     }
 
     private fun showRequest(index: Int) {
-//        getRequestDetail(index)
         watermarkRequest = watermarkRequests.requests[index]!!
         watermarkPost = watermarkRequest.watermarkPost!!
 

@@ -23,7 +23,7 @@ import edu.umich.imagician.utils.toast
 /**
  * Created by Tianyao Gu on 2022/3/6.
  */
-class ImportImageActivity: AppCompatActivity()  {
+class ImportImageActivity : AppCompatActivity() {
 
     private lateinit var forCropResult: ActivityResultLauncher<Intent>
     private lateinit var forCameraResult: ActivityResultLauncher<Uri?>
@@ -66,11 +66,14 @@ class ImportImageActivity: AppCompatActivity()  {
                     finish()
                 }
             }
-        }.launch(arrayOf(
-            /* launch the registered contract to ask access permission to the camera, mic, and
-            external storage */
-            Manifest.permission.CAMERA,
-            Manifest.permission.READ_EXTERNAL_STORAGE))
+        }.launch(
+            arrayOf(
+                /* launch the registered contract to ask access permission to the camera, mic, and
+                external storage */
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        )
 
         val cropIntent = initCropIntent()
         /* To pick an image or video from the device’s photo album or from Google Drive, we use the
@@ -88,30 +91,13 @@ class ImportImageActivity: AppCompatActivity()  {
                     if (it.toString().contains("video")) {
                         return
                     } else {
-//                        if (isCreate) {
-//                            val inStream = contentResolver.openInputStream(it) ?: return
-//                            imageUri = mediaStoreAlloc(contentResolver, "image/png")
-//                            imageUri?.let {
-//                                val outStream = contentResolver.openOutputStream(it) ?: return
-//                                val buffer = ByteArray(8192)
-//                                var read: Int
-//                                while (inStream.read(buffer).also{ read = it } != -1) {
-//                                    outStream.write(buffer, 0, read)
-//                                }
-//                                outStream.flush()
-//                                outStream.close()
-//                                inStream.close()
-//                            }
-//                            Log.d("imageUri", imageUri.toString())
-//
-//                            doCrop(cropIntent)
-//                        } else {
-                            // no need to crop
-                            val intent = if (isCreate) Intent(this, InputInfoActivity::class.java) else Intent(this, ExamineActivity::class.java)
-                            intent.putExtra("IMAGE_URI", it)
-                            startActivity(intent)
-//                        }
-
+                        val intent =
+                            if (isCreate) Intent(this, InputInfoActivity::class.java) else Intent(
+                                this,
+                                ExamineActivity::class.java
+                            )
+                        intent.putExtra("IMAGE_URI", it)
+                        startActivity(intent)
                     }
                 } ?: run { Log.d("Pick media", "failed") }
             })
@@ -153,18 +139,17 @@ class ImportImageActivity: AppCompatActivity()  {
             return
         }
 
-        forCameraResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success) {
-                doCrop(cropIntent)
-            } else {
-                Log.d("TakePicture", "failed")
+        forCameraResult =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                if (success) {
+                    doCrop(cropIntent)
+                } else {
+                    Log.d("TakePicture", "failed")
+                }
             }
-        }
 
 
     }
-
-
 
 
     /*
@@ -175,9 +160,10 @@ class ImportImageActivity: AppCompatActivity()  {
          */
 
     fun onClickCamera(view: View?) {
-            imageUri = mediaStoreAlloc(contentResolver,"image/png")
-            forCameraResult.launch(imageUri)
+        imageUri = mediaStoreAlloc(contentResolver, "image/png")
+        forCameraResult.launch(imageUri)
     }
+
     fun onClickAlbum(view: View?) {
         forPickedResult.launch("*/*")
     }
@@ -200,10 +186,11 @@ class ImportImageActivity: AppCompatActivity()  {
     }
 
     private fun updateExamineAndCreateButtonColor() {
-        findViewById<ImageButton>(R.id.scanningCodeButton).alpha =  if (isCreate) 0.2F else 1F
+        findViewById<ImageButton>(R.id.scanningCodeButton).alpha = if (isCreate) 0.2F else 1F
         findViewById<ImageButton>(R.id.newWatermarkButton).alpha = if (isCreate) 1F else 0.2F
         findViewById<Button>(R.id.from_camera).isVisible = isCreate
     }
+
     /*
     This function first searches for availability of external on-device Activity capable of
     cropping. If such an Activity exists, it creates an explicit intent to redirect the user to the
@@ -222,7 +209,8 @@ class ImportImageActivity: AppCompatActivity()  {
 
         intent.component = ComponentName(
             listofCroppers[0].activityInfo.packageName,
-            listofCroppers[0].activityInfo.name)
+            listofCroppers[0].activityInfo.name
+        )
 
         // create a crop box:
         intent
@@ -230,7 +218,6 @@ class ImportImageActivity: AppCompatActivity()  {
             .setType("image/*")
             .putExtra("scale", true)
             .putExtra("crop", true)
-            .putExtra("return-data", true)
             .putExtra("return-data", false)
             .putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
             .putExtra("noFaceDetection", true) // no face detection

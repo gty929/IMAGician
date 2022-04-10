@@ -13,7 +13,6 @@ object ItemStore {
     val watermarkPosts= WatermarkPosts()
     val watermarkRequests= WatermarkRequests()
 
-    // TODO 3/26
     fun getPostDetail(index: Int, successCallback: (() -> Unit), failureCallback: (() -> Unit)? = null) {
         // get the requests to the post
         val watermarkPost = watermarkPosts.posts[index]!!
@@ -51,9 +50,6 @@ object ItemStore {
             }
         }
     }
-//    fun getRequestDetail(index: Int) { // basically useless
-//        val watermarkRequest = watermarkRequests.requests[index]
-//    }
 
     /** http wrapper for both post and get during login state, cookie must be provided
      * should add a callback to handle the return code
@@ -68,7 +64,6 @@ object ItemStore {
                 try {
                     val request = data.getRequestBodyBuilder().build()
                     response = data.send(request)
-//                    Log.d("Receives response", response?.body()?.string() ?: "") // why cannot add the line?
                 } catch (e: Exception) {
                     Log.e("send", "send failed", e)
                 }

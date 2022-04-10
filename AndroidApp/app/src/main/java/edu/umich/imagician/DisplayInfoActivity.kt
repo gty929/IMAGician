@@ -91,7 +91,6 @@ class DisplayInfoActivity : AppCompatActivity() {
     }
 
     fun onClickEnter(chip: View?) {
-//        toast("Please enter the password")
         view.chipEnter.isVisible = false
         view.editTextTextPassword.isVisible = true
         val password_button = findViewById<Button>(R.id.confirm_button_field)
@@ -147,9 +146,6 @@ class DisplayInfoActivity : AppCompatActivity() {
                 Log.e("download exception", e.toString())
             }
 
-//            runOnUiThread {
-//                toast("The attachment has been saved...")
-//            }
             val intent = Intent(this, PopUpWindow::class.java)
             intent.putExtra("popuptitle", "Saved")
             intent.putExtra("popuptext", "Attached file saved to $fileName.")

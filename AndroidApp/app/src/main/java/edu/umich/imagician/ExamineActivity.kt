@@ -90,24 +90,18 @@ class ExamineActivity : AppCompatActivity() {
             intent.putExtra("gohome", true)
             startActivity(intent)
         }
-//        }).start()
     }
 
     private suspend fun extractWatermark() {
         val img: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
         speedRatio.set(img.width * img.height)
-//            val tag = StegnoAlgo.decode(img)
         val tag = withContext(Dispatchers.Default) {
             ktdecode64(img)
         }
-        // yyzjason: checksum of the encoded image
         hasDecoded.set(true)
         val context = this
         val checksum = withContext(Dispatchers.Default) {
-//            StegnoAlgo.getChecksum(img)
-//            val bytes = ByteArrayOutputStream()
-//            img.compress(Bitmap.CompressFormat.PNG, 100, bytes)
-//            Hasher.hash(bytes)
+
             context.contentResolver.openInputStream(imageUri!!)?.buffered()?.use { Hasher.hash(it.readBytes()) }
         }
         hasChecked.set(true)
@@ -127,9 +121,6 @@ class ExamineActivity : AppCompatActivity() {
 
 
                 if (tagFound.get()) {
-//                    runOnUiThread {
-//                        toast("checking integrity")
-//                    }
 
                     // check the checksum
                     // checksum of the post is the correct one (unmodified)

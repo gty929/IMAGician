@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 @ExperimentalCoroutinesApi
 class ExportImageActivity : AppCompatActivity() {
-    //    private var watermarkPostJsonStr: String? = null
     private var imageUri: Uri? = null
     private var newImageUri: Uri? = null
     private var title: String? = null
@@ -43,7 +42,6 @@ class ExportImageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_export_image)
         imageUri = intent.getParcelableExtra("IMAGE_URI")
-//        watermarkPostJsonStr = intent.extras?.getString("WATERMARK_POST_JSON_STR")
         progressBar = findViewById(R.id.progressBar)
 
         // progressing state
@@ -129,9 +127,6 @@ class ExportImageActivity : AppCompatActivity() {
             val context = this
             Log.d("ExportActivity", "Check existing tag start")
             if (withContext(Dispatchers.Default) { ktdecode64(prevImg) } != null) { // duplicate
-//                runOnUiThread {
-//                    toast("Duplicate tag detected")
-//                }
                 val intent =
                     Intent(context, PopUpWindow::class.java)
                 intent.putExtra("popuptitle", "Error")

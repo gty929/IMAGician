@@ -19,7 +19,6 @@ import java.time.Instant
  */
 @ExperimentalCoroutinesApi
 object LoginManager {
-//    var isLoggedIn = false
     val isLoggedIn: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }

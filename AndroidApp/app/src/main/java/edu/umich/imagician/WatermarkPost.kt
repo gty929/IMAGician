@@ -99,7 +99,6 @@ open class WatermarkPost (var tag: String? = null,
         try {
             val obj = JSONObject(jsonObjectStr)
             val f = { api:ApiStrings -> try {obj.getString(api.field).let { it.ifEmpty { null } }} catch (e: Exception) {null} }
-//            if (tag != f(TAG)) { throw error("Incorrect tag!") }
             tag = f(TAG)
             authorized = try { obj.getInt("authorized") == 1 } catch (e: Exception) {false}
             msg_encrypted = try { (obj.getInt("message_encrypted") == 1)} catch (e: Exception) {false}
@@ -135,7 +134,6 @@ open class WatermarkPost (var tag: String? = null,
     }
 
     private fun parseReqs(responseData: String) {
-        // pendingRequestList.clear() // do this before
         try {
             val objs = JSONObject(responseData).getJSONArray("requests")
             for (i in 0 until objs.length()) {

@@ -137,8 +137,6 @@ class InputInfoActivity: AppCompatActivity()  {
             fullnameFlag = findViewById<CheckBox>(R.id.fullnameCheckBox)?.isChecked ?: false, // it's possible that the row has been removed
             emailFlag = findViewById<CheckBox>(R.id.emailCheckBox)?.isChecked ?: false,
             phoneFlag = findViewById<CheckBox>(R.id.phoneCheckBox)?.isChecked ?: false,
-//            file = FileUtils.getPath(this, fileUri)?.let {File(it)},
-//            file = fileUri?.toFile(this),
             file = fileUri?.let { FileUtil.from(this, it)},
             filename = filename,
             msg_encrypted = IsMsgEncrypted

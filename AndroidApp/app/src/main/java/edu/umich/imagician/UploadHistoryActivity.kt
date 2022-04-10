@@ -19,9 +19,6 @@ class UploadHistoryActivity : AppCompatActivity() {
         view = ActivityUploadHistoryBinding.inflate(layoutInflater)
         setContentView(view.root)
         val index = intent.getIntExtra("index", -1)
-//        if (index == -1) {
-//            toast("Error: incorrect post index!")
-//        }
         view.buttonBack.setOnClickListener {
             view.reqInfoPad.isVisible = false
             view.refreshReqs.isVisible = true
@@ -33,12 +30,10 @@ class UploadHistoryActivity : AppCompatActivity() {
         view.buttonGrant.setOnClickListener {
             watermarkRequest.status = "GRANTED"
             postUpdateStatus()
-//            showStatus(reqIndex)
         }
         view.buttonReject.setOnClickListener {
             watermarkRequest.status = "REJECTED"
             postUpdateStatus()
-//            showStatus(reqIndex)
         }
 
         watermarkPost = ItemStore.watermarkPosts.posts[index]!!
@@ -52,7 +47,6 @@ class UploadHistoryActivity : AppCompatActivity() {
     }
 
     fun seeMore(idx: Int) {
-//        toast("index clicked: $idx")
         reqIndex = idx
         watermarkRequest = watermarkPost.pendingRequestList[reqIndex]!!
         // Request Info Fields
@@ -97,9 +91,6 @@ class UploadHistoryActivity : AppCompatActivity() {
     }
 
     private fun showHistory(index: Int) {
-//        if (LoginManager.isLoggedIn.value != true) {
-//            toast("You need to first login")
-//        }
         watermarkPost.pendingRequestList.clear()
 
         ItemStore.getPostDetail(index, {
@@ -129,7 +120,6 @@ class UploadHistoryActivity : AppCompatActivity() {
 
     private fun postUpdateStatus() {
         // post change to server
-//        toast("Update status of req_id: ${watermarkRequest.id}")
         WatermarkRequest.request = watermarkRequest
         ItemStore.handleRequest({
             Log.d("update status", "send action ${watermarkRequest.status}")
