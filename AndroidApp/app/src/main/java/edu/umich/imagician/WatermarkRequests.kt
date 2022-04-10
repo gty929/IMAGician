@@ -14,7 +14,7 @@ import retrofit2.Response
 class WatermarkRequests: Sendable {
     val requests = arrayListOf<WatermarkRequest?>()
 
-    override suspend fun send(request: RequestBody): Response<ResponseBody>? {
+    override suspend fun send(request: RequestBody): Response<ResponseBody> {
         return RetrofitManager.networkAPIs.getRequests()
     }
 

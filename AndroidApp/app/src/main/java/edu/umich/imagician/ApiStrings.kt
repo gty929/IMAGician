@@ -6,7 +6,6 @@ package edu.umich.imagician
 enum class ApiStrings (val field: String) {
     // account
     USERNAME("username"),
-    PASSWORD("password"),
     EMAIL("email"),
     PHONE_NUMBER("phone_number"),
     FULLNAME("fullname"),
@@ -21,7 +20,6 @@ enum class ApiStrings (val field: String) {
     CREATOR("owner"),
     PHONE("phone"),
     TIME("time"),
-    PENDING("num_pending"),
 
     // watermark request
     IMG_TAG("imgtag"),

@@ -207,7 +207,7 @@ class ExportImageActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e("Embed error", "unknown error", e)
             val intent =
-                android.content.Intent(parent, edu.umich.imagician.PopUpWindow::class.java)
+                Intent(parent, PopUpWindow::class.java)
             intent.putExtra("popuptitle", "Error")
             intent.putExtra("popuptext", "There is an error when embedding watermark, please try again.")
             intent.putExtra("popupbtn", "OK")

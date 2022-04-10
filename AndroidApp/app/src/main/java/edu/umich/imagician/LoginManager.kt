@@ -3,18 +3,14 @@ package edu.umich.imagician
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
 import edu.umich.imagician.RetrofitManager.networkAPIs
 import edu.umich.imagician.RetrofitManager.retrofitExCatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import java.io.File
-import java.lang.Exception
 import java.time.Instant
 
 
@@ -36,7 +32,6 @@ object LoginManager {
     private const val ID_FILE = "IMAGician"
     private const val KEY_NAME = "UserID"
     private const val INSTANT_LENGTH = 24
-    private const val IV_LENGTH = 12
 
     init {
         isLoggedIn.value = false

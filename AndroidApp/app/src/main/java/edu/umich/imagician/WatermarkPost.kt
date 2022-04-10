@@ -3,16 +3,15 @@ package edu.umich.imagician
 import android.net.Uri
 import android.util.Log
 import com.google.gson.Gson
+import edu.umich.imagician.ApiStrings.*
+import edu.umich.imagician.Sendable.Mode
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import retrofit2.Response
-import edu.umich.imagician.Sendable.Mode
-import org.json.JSONObject
-import edu.umich.imagician.ApiStrings.*
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import retrofit2.Response
 import java.io.File
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -86,7 +85,7 @@ open class WatermarkPost (var tag: String? = null,
     }
 
     override fun parse(responseData: String) {
-        Log.d("PostParser", "Parsing post ${responseData} with ${mode} mode")
+        Log.d("PostParser", "Parsing post $responseData with $mode mode")
         when (mode) {
             Mode.EMPTY -> parseAll(responseData)
             Mode.LAZY -> parseReqs(responseData)
@@ -99,7 +98,7 @@ open class WatermarkPost (var tag: String? = null,
         // parse all except pendingReqList
         try {
             val obj = JSONObject(jsonObjectStr)
-            val f = { api:ApiStrings -> try {obj.getString(api.field).let { if (it.isEmpty()) null else it }} catch (e: Exception) {null} }
+            val f = { api:ApiStrings -> try {obj.getString(api.field).let { it.ifEmpty { null } }} catch (e: Exception) {null} }
 //            if (tag != f(TAG)) { throw error("Incorrect tag!") }
             tag = f(TAG)
             authorized = try { obj.getInt("authorized") == 1 } catch (e: Exception) {false}

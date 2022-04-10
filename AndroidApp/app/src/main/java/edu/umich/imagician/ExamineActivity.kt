@@ -4,15 +4,16 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import edu.umich.imagician.utils.*
+import edu.umich.imagician.utils.Hasher
+import edu.umich.imagician.utils.ktdecode64
+import edu.umich.imagician.utils.myDelayBase
+import edu.umich.imagician.utils.toast
 import kotlinx.coroutines.*
-import java.io.ByteArrayOutputStream
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -35,7 +36,7 @@ class ExamineActivity : AppCompatActivity() {
         imageUri = intent.getParcelableExtra("IMAGE_URI")
         if (imageUri == null || contentResolver.getType(imageUri!!)?.startsWith("image") != true) {
             val intent =
-                android.content.Intent(this, edu.umich.imagician.PopUpWindow::class.java)
+                Intent(this, PopUpWindow::class.java)
             intent.putExtra("popuptitle", "Error")
             intent.putExtra("popuptext", "The file doesn't exist or is not an image")
             intent.putExtra("popupbtn", "OK")
@@ -78,7 +79,7 @@ class ExamineActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e("Examine error", "unknown error", e)
             val intent =
-                android.content.Intent(this, edu.umich.imagician.PopUpWindow::class.java)
+                Intent(this, PopUpWindow::class.java)
             intent.putExtra("popuptitle", "Error")
             intent.putExtra(
                 "popuptext",

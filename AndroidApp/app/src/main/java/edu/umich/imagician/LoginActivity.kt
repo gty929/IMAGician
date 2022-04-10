@@ -106,7 +106,7 @@ class LoginActivity : AppCompatActivity(), TextWatcher {
 
     private fun updatePasswordStrengthView(password: String) {
 
-        val progressBar = findViewById<ProgressBar>(R.id.progressBar) as ProgressBar
+        val progressBar = findViewById(R.id.progressBar) as ProgressBar
         val strengthView = findViewById<ProgressBar>(R.id.password_strength) as TextView
         if (TextView.VISIBLE != strengthView.visibility)
             return

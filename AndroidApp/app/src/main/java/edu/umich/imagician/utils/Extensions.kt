@@ -80,16 +80,8 @@ fun getCipher(pwd: String?, encryption: Boolean): Cipher {
     val KEY_BLOCK_MODE = KeyProperties.BLOCK_MODE_GCM
     val KEY_PADDING = KeyProperties.ENCRYPTION_PADDING_NONE // GCM requires no padding
     val cipher = Cipher.getInstance("$KEY_ALGORITHM/$KEY_BLOCK_MODE/$KEY_PADDING")
-    var newPwd: String? = null
-    if (pwd != null) {
-        if (pwd.length >= 16) {
-            newPwd = pwd.substring(0,16)
-        } else {
-            val padding_num = 16 - pwd.length
-            newPwd = pwd + "0".repeat(padding_num)
-        }
-    }
-    val keySpec = SecretKeySpec(newPwd?.toByteArray(), KEY_ALGORITHM)
+    val newPwd: String = Hasher.hash(pwd?:"").substring(0, 32)
+    val keySpec = SecretKeySpec(newPwd.toByteArray(), KEY_ALGORITHM)
     cipher.init(if (encryption) Cipher.ENCRYPT_MODE else Cipher.DECRYPT_MODE, keySpec, GCMParameterSpec(128, "dongcidaci".toByteArray()))
 
     return cipher
@@ -99,8 +91,7 @@ fun encryptMSG_new(MSG: String?, pwd: String?): String {
     val cipher = getCipher(pwd, true)
     val message = "IMAGician$MSG"
     val encrypt_MSG = cipher.doFinal(message.toByteArray())
-    val result = getEncoder().encodeToString(encrypt_MSG)
-    return result
+    return getEncoder().encodeToString(encrypt_MSG)
 }
 
 fun decryptMSG_new(encryptMSG: String?, pwd: String?): String? {
@@ -108,10 +99,10 @@ fun decryptMSG_new(encryptMSG: String?, pwd: String?): String? {
         val cipher = getCipher(pwd, false)
         val new_MSG = getDecoder().decode(encryptMSG)
         val decrypt_msg = String(cipher.doFinal(new_MSG))
-        if (decrypt_msg.substring(0, 9).equals("IMAGician")) {
-            return decrypt_msg.substring(9)
+        return if (decrypt_msg.substring(0, 9) == "IMAGician") {
+            decrypt_msg.substring(9)
         } else {
-            return null
+            null
         }
     } catch (e: Exception) {
         println("Error while decrypting: $e")

@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import edu.umich.imagician.utils.editToStr
@@ -46,16 +45,20 @@ class UserInfoActivity : AppCompatActivity() {
             )
             Log.d("NewInfo", Gson().toJson(newInfo))
             ItemStore.httpCall(newInfo.copy()) { code ->
-                if (code == 200) {
-                    LoginManager.info = newInfo
-                    toast("Successfully updated")
-                    startActivity(Intent(this, MainActivity::class.java)) // return to main menu
-                } else if (code == 403){
-                    toast("Please login again")
-                    LoginManager.logout(this)
-                    startActivity(Intent(this, MainActivity::class.java)) // return to main menu
-                } else {
-                    toast("Network error, please try again", false)
+                when (code) {
+                    200 -> {
+                        LoginManager.info = newInfo
+                        toast("Successfully updated")
+                        startActivity(Intent(this, MainActivity::class.java)) // return to main menu
+                    }
+                    403 -> {
+                        toast("Please login again")
+                        LoginManager.logout(this)
+                        startActivity(Intent(this, MainActivity::class.java)) // return to main menu
+                    }
+                    else -> {
+                        toast("Network error, please try again", false)
+                    }
                 }
 
             }

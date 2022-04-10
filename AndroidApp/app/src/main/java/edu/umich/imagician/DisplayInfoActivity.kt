@@ -117,11 +117,11 @@ class DisplayInfoActivity : AppCompatActivity() {
 
     fun onClickDownload(chip: View?) {
         // http.GET
-        when {
+        when (PackageManager.PERMISSION_GRANTED) {
             ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED -> {
+            ) -> {
                 // You can use the API that requires the permission.
                 downloadFile(
                     URL("https://3.84.195.179/uploads/${watermarkPost.folder_pos}/"),

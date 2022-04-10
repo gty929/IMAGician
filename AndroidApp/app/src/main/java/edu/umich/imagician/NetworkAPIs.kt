@@ -24,8 +24,6 @@ interface NetworkAPIs {
     suspend fun postWatermark(@Body requestBody:RequestBody): Response<ResponseBody>
     @GET("images/get_tag/{tag}")
     suspend fun getWatermark(@Path("tag") tag: String): Response<ResponseBody>
-    @GET("uploads/{folder}")
-    suspend fun getFolder(@Path("folder") tag: String): Response<ResponseBody>
 
     // authorization
     // creator side
@@ -40,8 +38,7 @@ interface NetworkAPIs {
     // viewer side
     @GET("requests/sent_request")
     suspend fun getRequests(): Response<ResponseBody>
-    @GET("requests/sent_request/{reqid}")
-    suspend fun getSentRequestDetail(@Path("reqid") tag: String): Response<ResponseBody>
+
     @POST("requests/post_request")
     suspend fun postRequest(@Body requestBody:RequestBody): Response<ResponseBody>
 }

@@ -39,7 +39,7 @@ class InputInfoActivity: AppCompatActivity()  {
         imageUri = intent.getParcelableExtra("IMAGE_URI")
         if (imageUri == null || contentResolver.getType(imageUri!!)?.startsWith("image") != true) {
             val intent =
-                android.content.Intent(this, edu.umich.imagician.PopUpWindow::class.java)
+                Intent(this, PopUpWindow::class.java)
             intent.putExtra("popuptitle", "Error")
             intent.putExtra("popuptext", "The file doesn't exist or is not an image")
             intent.putExtra("popupbtn", "OK")

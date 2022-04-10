@@ -1,12 +1,11 @@
 package edu.umich.imagician
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import edu.umich.imagician.databinding.ActivityUploadHistoryBinding
-import edu.umich.imagician.utils.toast
 
 class UploadHistoryActivity : AppCompatActivity() {
     private lateinit var view: ActivityUploadHistoryBinding

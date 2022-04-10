@@ -19,5 +19,5 @@
     two different transitions which are targeting specific views.
 -->
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
-    <explode android:duration="500"></explode>
+    <explode android:duration="500" />
 </transitionSet>

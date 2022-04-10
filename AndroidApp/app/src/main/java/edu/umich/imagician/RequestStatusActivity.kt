@@ -1,11 +1,10 @@
 package edu.umich.imagician
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import edu.umich.imagician.ItemStore.watermarkRequests
 import edu.umich.imagician.databinding.ActivityRequestStatusBinding
-import edu.umich.imagician.utils.toast
 
 class RequestStatusActivity : AppCompatActivity() {
     private lateinit var view: ActivityRequestStatusBinding
@@ -15,7 +14,7 @@ class RequestStatusActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         view = ActivityRequestStatusBinding.inflate(layoutInflater)
         setContentView(view.root)
-        var index = intent.getIntExtra("index", -1)
+        val index = intent.getIntExtra("index", -1)
 //        if (index == -1) {
 //            toast("Error: incorrect request index!")
 //        }

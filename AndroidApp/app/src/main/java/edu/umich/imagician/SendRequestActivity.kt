@@ -2,16 +2,13 @@ package edu.umich.imagician
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import edu.umich.imagician.databinding.ActivitySendRequestBinding
-import edu.umich.imagician.utils.toast
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 
 class SendRequestActivity : AppCompatActivity() {
     private lateinit var view: ActivitySendRequestBinding
