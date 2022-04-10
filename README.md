@@ -1,21 +1,15 @@
 # IMAGician
 An Android App for Copyright Protection Based on Steganography Technology - UMICH EECS 441 Project
 
-**Note**: To install Plugin for Python, add 
 
-```kotlin
-pluginManagement {
-    repositories {
-        maven { url "https://chaquo.com/maven" }
-    }
-}
-```
+# Table of Contents: 
 
- to `setting.gradle`.
+[Getting Started](https://github.com/gty929/IMAGician/wiki/0.-Getting-Started)
 
-And in `build.gradle(app)/defaultConfig/python`, set the following to `python3` on your device.
+[Model and Engine](https://github.com/gty929/IMAGician/wiki/1.-Model-and-Engine)
 
-```kotlin
-		buildPython "D:/Python38_64/python.exe" // change to your path to python3
-```
+[APIs and Controller](https://github.com/gty929/IMAGician/wiki/2.-APIs-and-Controller)
 
+[View UIUX](https://github.com/gty929/IMAGician/wiki/3.-View-UIUX)
+
+[Team Roster](https://github.com/gty929/IMAGician/wiki/Team-Roster)
