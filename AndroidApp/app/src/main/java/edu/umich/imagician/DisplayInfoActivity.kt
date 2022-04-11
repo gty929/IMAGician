@@ -148,7 +148,7 @@ class DisplayInfoActivity : AppCompatActivity() {
 
             val intent = Intent(this, PopUpWindow::class.java)
             intent.putExtra("popuptitle", "Saved")
-            intent.putExtra("popuptext", "Attached file saved to $fileName.")
+            intent.putExtra("popuptext", "Attached file saved to Downloads.")
             intent.putExtra("popupbtn", "OK")
             intent.putExtra("darkstatusbar", true)
             startActivity(intent)
